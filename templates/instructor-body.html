@@ -1,0 +1,120 @@
+<section>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>What you need to know when migrating to BrightSpace</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p>Somethings will work fine:</p>
+            <ol>
+                <li>Lessons</li>
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+            </ol>
+
+            <p>Need more info 
+                <span class="glyphicon glyphicon-question-sign"></span>
+                <a href="#" title="More info" target="_blank">more info</a>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p>Somethings aren't available in Brightspace</p>
+            <ol>                
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <h4>What is going to happen when I start this process</h4>
+            <ul style="margin-left: 60px;">                
+                <li>Completing the form below and clicking the "Get Started" button will start exporting <i>this</i> site.<br/>
+                    We will send you (and everyone in the notification list) that the migration process has started.</li>
+                <li>After export we will run some scripts to transform the exported files so that Brightspace can use them and re-create your content.</li>
+                <li>Import the site content into Brightspace.</li>
+                <li>The Final Report will be sent out detailing the process steps and the Brightspace course information.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="row">
+        <div class="col-md-9">
+            {% if ($state == "init") { %}    
+            <h4>Let's begin ...</h4>
+            {% } %}
+            <form class="form-inline text-left" method="post" target="_self" id="metadata">
+                <input type="hidden" name="state"  id="state" value="{{ $state }}"/>
+                <div class="row" style="margin-top: 1em;">
+                    <div class="col-md-3 col-xs-12 col-sm-11">
+                        {% if ($state == "init") { %}
+                            <label for="organizer">My Email</label>
+                        {% } else { %}
+                            <label for="organizer">Starter</label>
+                        {% } %}
+                    </div>
+                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
+                        <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
+                        <input type="text" name="organizer" id="organizer" disabled="true" class="form-control disabled" 
+                                value="{{ $name }} <{{ $email }}>" data-email="{{ $email }}"/>
+                        {% if ($state == "init") { %}<br><small style="color:#aaa">Will receive progress and final report.</small>{% } %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-12 col-sm-11">
+                        <label for="notifications">Email Notifications</label>
+                    </div>
+                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
+                        <textarea class="form-control" name="notifications" 
+                                    id="notifications" 
+                                    placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
+                        <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
+                    </div>
+                </div>
+                {% if ($state == "init") { %}
+                <div class="row terms">
+                    <div class="col-md-3 col-xs-12 col-sm-11">
+                        <label for="terms">My Responsibilities</label>
+                    </div>
+                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
+                        <label class="checkbox-inline" style="padding-left: 0px; font-size: 0.9em;">
+                            By clicking the "Get Started" button the migration process will start,<br/> 
+                            you will get notified of the progress and in the unlikely event that there is a problem will be contacted 
+                            so that together we can find a solution that will work for you.
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-12 col-sm-11">&nbsp;</div>
+                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
+                        <button id="btnAccept" class="btn btn-success" type="button">
+                            <i class="fa fa-check"></i>
+                            Get Started
+                        </button>
+                        <span id="info" class="text-info" style="display:none;"><small>This might take a couple of seconds.</small></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-3" id="message"></div>
+                </div>
+                {% } %}                
+            </form>
+        </div>
+    </div>
+    {% if ($state != "init") { %}         
+        <div class="row">
+            <div class="col-md-9 workflow">
+                <h4>Progress <span>({{ $state }})</span></h4>
+                {% $output = '';
+                if (gettype($workflow) === 'array') { 
+                    $ouput = join("<br/>",$workflow);
+                } %}
+                <div class="pre">{{ $ouput }}</div>
+            </div>
+        </div>
+    {% } %}
+</section>
