@@ -11,7 +11,7 @@ $menu = false; // We are not using a menu
 // Start of the output
 $OUTPUT->header();
 
-include("tool-header.html");
+Template::view('templates/header.html', $context);
 
 $OUTPUT->bodyStart();
 
