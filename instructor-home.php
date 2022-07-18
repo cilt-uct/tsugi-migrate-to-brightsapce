@@ -68,6 +68,11 @@ Template::view('templates/header.html', $context);
 $OUTPUT->bodyStart();
 $OUTPUT->topNav($menu);
 
+$is_admin = $LAUNCH->ltiRawParameter('custom_admin', false);
+$is_admin2 = $LAUNCH->ltiRawParameter('admin', false);
+
+echo '<pre>'; print_r($is_admin); echo '</pre>';
+echo '<pre>'; print_r($is_admin2); echo '</pre>';
 if ($tool['debug']) {
     echo '<pre>'; print_r($context); echo '</pre>';
 }
