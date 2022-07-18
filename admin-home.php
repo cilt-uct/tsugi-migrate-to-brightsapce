@@ -68,6 +68,8 @@ Template::view('templates/header.html', $context);
 $OUTPUT->bodyStart();
 $OUTPUT->topNav($menu);
 
+echo "<h1>Admin</h1>";
+
 if ($tool['debug']) {
     echo '<pre>'; print_r($context); echo '</pre>';
 }

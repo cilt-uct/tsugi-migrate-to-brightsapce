@@ -5,11 +5,18 @@ include 'tool-config.php';
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Settings;
 
-$launch = LTIX::requireData();
+$LAUNCH = LTIX::requireData();
+
+$is_admin = $LAUNCH->ltiRawParameter('custom_admin','true');
+custom_admin=true
 
 $menu = false; // We are not using a menu
 if ( $USER->instructor ) {
-    header( 'Location: '.addSession('instructor-home.php') ) ;
+    if $is_admin) {
+        header( 'Location: '.addSession('admin-home.php') ) ;
+    } else {
+        header( 'Location: '.addSession('instructor-home.php') ) ;
+    }
 } else {
     header( 'Location: '.addSession('student-home.php') ) ;
 }
