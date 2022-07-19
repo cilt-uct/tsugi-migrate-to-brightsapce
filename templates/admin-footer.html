@@ -40,29 +40,26 @@
             $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
             timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
-            var sites = $('#add_sites').val().split(/\r?\n/g);
+            var sites = $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 });
 
-            var data = { 
-                "type": 'add_sites',
-                "sites": sites
-            }
-
-            var jqxhr = $.post('{{ $submit }}', data, function(result) {
-                hideHelp();
-                if (result.success === 1) {
-                    $('#' + a).html('<i class="fa fa-check"></i> Refreshing page ...');
-                    setTimeout(function() { location.reload(); }, 300);
-                } else {
+            if (sites.length > 0) {
+                var jqxhr = $.post('{{ $submit }}', { "type": 'add_sites', "sites": sites }, function(result) {
+                    hideHelp();
+                    if (result.success === 1) {
+                        $('#' + a).html('<i class="fa fa-check"></i> Refreshing page ...');
+                        setTimeout(function() { location.reload(); }, 300);
+                    } else {
+                        showError(a);
+                    }
+                }, 'json')
+                .fail(function() {
+                    hideHelp();
                     showError(a);
-                }
-            }, 'json')
-            .fail(function() {
-                hideHelp();
-                showError(a);
-            })
-            .always(function() {
-                hideHelp();
-            });
+                })
+                .always(function() {
+                    hideHelp();
+                });
+            }
         }
 
         function getworkflow(site) {

@@ -88,21 +88,24 @@ class MigrateDAO {
 
         $result = [];
         foreach ($sites as $site) {
-            $now = date("Y-m-d H:i:s");
-            $workflow = ["$now,000 - [INFO] - Started Migration ($site)","$now,001 - [INFO] - Scheduled Export..."];
 
-            $query = "REPLACE INTO {$this->p}migration_site 
-               (site_id, link_id, user_id, started_at, started_by, active, state, workflow) 
-                VALUES (:siteId, :linkId, :userId, NOW(), :userId, 1, 'starting', :workflow);";
-            
-            $arr = array(':siteId' => $site, ':linkId' => $link_id, ':userId' => $user_id, ':workflow' => json_encode($workflow));
+            if (strlen($site) > 3) {
+                $now = date("Y-m-d H:i:s");
+                $workflow = ["$now,000 - [INFO] - Started Migration ($site)","$now,001 - [INFO] - Scheduled Export..."];
 
-            try {
-                $this->PDOX->queryDie($query, $arr);
-                array_push($result, 1);
-            } catch (PDOException $e) {
-                array_push($result, 0);
-            }
+                $query = "REPLACE INTO {$this->p}migration_site 
+                (site_id, link_id, user_id, started_at, started_by, active, state, workflow) 
+                    VALUES (:siteId, :linkId, :userId, NOW(), :userId, 1, 'starting', :workflow);";
+                
+                $arr = array(':siteId' => $site, ':linkId' => $link_id, ':userId' => $user_id, ':workflow' => json_encode($workflow));
+
+                try {
+                    $this->PDOX->queryDie($query, $arr);
+                    array_push($result, 1);
+                } catch (PDOException $e) {
+                    array_push($result, 0);
+                }
+                }
         }
 
         return $result;
