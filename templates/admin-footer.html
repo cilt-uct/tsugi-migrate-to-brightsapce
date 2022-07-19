@@ -37,12 +37,12 @@
         }
 
         function doPost(a, text) {
-            $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
-            timeout = setTimeout(function(){ $('#info').show(); }, 300);
-
             var sites = $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 });
 
             if (sites.length > 0) {
+                $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
+                timeout = setTimeout(function(){ $('#info').show(); }, 300);
+
                 var jqxhr = $.post('{{ $submit }}', { "type": 'add_sites', "sites": sites }, function(result) {
                     hideHelp();
                     if (result.success === 1) {
