@@ -212,3 +212,38 @@ section h3 {
   position: relative;
   margin: 0px;
 }
+
+.row #add_sites {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  height: 20vh;
+  padding: 8px;
+}
+
+.row a.site {
+  display: block;  
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.row a.site:hover, .row a.site:active {
+  background-color: #ddd;
+}
+
+.row a.site span{
+  font-size: 80%;
+  display: block;
+}
+
+.row .site span.title {
+
+}
+
+.row .site span.site_id {
+  
+}
+
+.row .site span.state {
+  
+}

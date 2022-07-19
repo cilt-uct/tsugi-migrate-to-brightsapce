@@ -10,6 +10,8 @@ use \Migration\DAO\MigrateDAO;
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
+$site_id = $LAUNCH->ltiRawParameter('context_id','none');
+
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
 
 $result = ['success' => 0, 'msg' => 'requires POST'];
@@ -22,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch($_POST['type']) {
             case 'init':
-                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $_POST['notification']) ? 1 : 0;
+                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, $_POST['notification']) ? 1 : 0;
                 break;
             case 'updating':    
             case 'starting':
@@ -32,9 +34,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'completed':
                 $result['success'] = $migrationDAO->updateMigration($LINK->id, $USER->id, $_POST['notification']) ? 1 : 0;
             case 'error':
-                break;                
+                break;
+            case 'add_sites':
+                $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites']) ? 1 : 0;
+                break;
         }
         $result['msg'] = $result['success'] ? 'Updated' : 'Error Updating';
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['type'])) {
+        switch($_GET['type']) {
+            case 'workflow':
+                $workflow = $migrationDAO->getWorkflow($LINK->id, $_GET['site']);
+
+                $result = [
+                        'success' => $workflow ? 1 : 0, 
+                        'msg' => $workflow ? json_decode($workflow['workflow']) : []
+                    ];
+                break;
+        }
     }
 }
 

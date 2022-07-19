@@ -33,16 +33,15 @@ if ($course_providers != $context_id) {
 
 
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider);
+$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true);
+$sites = $migrationDAO->getMigrationsPerLink($LINK->id);
 
 $menu = false; // We are not using a menu
-
-$workflow = $current_migration['workflow'] ? json_decode($current_migration['workflow']) : [];
 
 $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.css'), ],
-    'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
+    'scripts'    => [ ],
 
     'title'      => $CONTEXT->title,
     'current_email' => $USER->email,
@@ -50,8 +49,9 @@ $context = [
     'name'       => $current_migration['state'] == 'init' ? $USER->displayname : $current_migration['displayname'],
     'notifications' => $current_migration['notification'],
     'state'       => $current_migration['state'],
-    'workflow'   => $workflow,
+    'sites'      => $sites,
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
+    'fetch_workflow'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'provider'   => $provider,
     // 'current'    => $current_migration
 ];
@@ -68,22 +68,17 @@ Template::view('templates/header.html', $context);
 $OUTPUT->bodyStart();
 $OUTPUT->topNav($menu);
 
-echo "<h1>Admin</h1>";
-$is_admin = $LAUNCH->ltiRawParameter('custom_admin', false);
-$is_admin2 = $LAUNCH->ltiRawParameter('admin', false);
-
-echo '<pre>'; print_r($is_admin); echo '</pre>';
-echo '<pre>'; print_r($is_admin2); echo '</pre>';
+echo "<!--<h2>Admin</h2>-->";
 
 if ($tool['debug']) {
     echo '<pre>'; print_r($context); echo '</pre>';
 }
 
-Template::view('templates/instructor-body.html', $context);
+Template::view('templates/admin-body.html', $context);
 
 $OUTPUT->footerStart();
 
-Template::view('templates/instructor-footer.html', $context);
+Template::view('templates/admin-footer.html', $context);
 
 $OUTPUT->footerEnd();
 

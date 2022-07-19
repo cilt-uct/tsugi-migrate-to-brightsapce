@@ -12,7 +12,7 @@ $is_admin = $LAUNCH->ltiRawParameter('custom_admin', false);
 
 $menu = false; // We are not using a menu
 if ( $USER->instructor ) {
-    if ($is_admin === true) {
+    if ($is_admin == 'true') {
         header( 'Location: '.addSession('admin-home.php') ) ;
     } else {
         header( 'Location: '.addSession('instructor-home.php') ) ;
