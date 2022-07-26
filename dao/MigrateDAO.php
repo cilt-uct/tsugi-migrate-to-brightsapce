@@ -12,14 +12,23 @@ class MigrateDAO {
     }
 
     function getMigration($link_id, $user_id, $site_id, $provider, $is_admin) {
+
         $query = "SELECT 
-            `migration`.notification, 
-            `migration`.created_at, `migration`.started_at, `migration`.modified_at,
+            `site`.notification, 
+            `migration`.created_at, `site`.started_at, `site`.modified_at,
             `user`.displayname, `user`.email,
-            `migration`.state, `migration`.`active`, `migration`.workflow, `migration`.is_admin
+            `site`.state, `site`.`active`, `site`.workflow, `migration`.is_admin
             FROM {$this->p}migration `migration`
-            left join {$this->p}lti_user `user` on `user`.user_id = `migration`.started_by
-            WHERE link_id = :linkId limit 1;";
+            left join {$this->p}migration_site `site` on `site`.link_id = `migration`.link_id
+            left join {$this->p}lti_user `user` on `user`.user_id = `site`.started_by
+            WHERE `migration`.link_id = :linkId limit 1;";
+
+        if ($is_admin) {
+            $query = "SELECT `migration`.created_at, `migration`.is_admin, '' as `state`, '' as `email`, '' as `displayname`, '' as `notification`
+                FROM {$this->p}migration `migration`
+                WHERE link_id = :linkId limit 1;";
+        }
+
         $arr = array(':linkId' => $link_id);
         $rows = $this->PDOX->rowDie($query, $arr);
 
@@ -33,12 +42,16 @@ class MigrateDAO {
     }
 
     function createEmpty($link_id, $user_id, $site_id, $provider, $is_admin) {
-        $query = "INSERT INTO {$this->p}migration 
-               (link_id, user_id, created_at, created_by, modified_at, modified_by, provider, site_id, is_admin) 
-                VALUES (:linkId, :userId, NOW(), :userId, NOW(), :userId, :provider, :siteid, :isAdmin);";
         try {
-            $this->PDOX->queryDie($query, 
-                    array(':linkId' => $link_id, ':userId' => $user_id, ':provider' => $provider, ':siteid' => $site_id, ':isAdmin' => ($is_admin ? 1 : 0)));
+            $this->PDOX->queryDie("INSERT INTO {$this->p}migration 
+                        (link_id, user_id, created_at, created_by, is_admin) 
+                        VALUES (:linkId, :userId, NOW(), :userId, :isAdmin)", 
+                    array(':linkId' => $link_id, ':userId' => $user_id, ':isAdmin' => ($is_admin ? 1 : 0)));
+
+            $this->PDOX->queryDie("INSERT INTO {$this->p}migration_site 
+                    (link_id, site_id, modified_at, modified_by, provider) 
+                    VALUES (:linkId, :siteid, NOW(), :userId, :provider)", 
+                array(':linkId' => $link_id, ':siteid' => $site_id, ':userId' => $user_id, ':provider' => $provider));
         } catch (PDOException $e) {
             return false;
         }
@@ -47,7 +60,7 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id,`site`.title, `site`.state 
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state 
             FROM {$this->p}migration `main`
             left join {$this->p}migration_site `site` on `site`.link_id = `main`.link_id
             where `main`.link_id = :linkId;";
@@ -60,7 +73,7 @@ class MigrateDAO {
         $now = date("Y-m-d H:i:s");
         $workflow = ["$now,000 - [INFO] - Started Migration ($site_id)","$now,001 - [INFO] - Scheduled Export..."];
 
-        $query = "UPDATE {$this->p}migration 
+        $query = "UPDATE {$this->p}migration_site
                 SET modified_at = NOW(), modified_by = :userId, started_at = NOW(), started_by = :userId, 
                     workflow = :workflow, active = 1, state='starting', notification = :notifications
                  WHERE link_id = :linkId;";
@@ -70,7 +83,7 @@ class MigrateDAO {
     }
 
     function updateMigration($link_id, $user_id, $notifications) {
-        $query = "UPDATE {$this->p}migration 
+        $query = "UPDATE {$this->p}migration_site
                 SET modified_at = NOW(), modified_by = :userId, notification = :notifications
                  WHERE link_id = :linkId;";
         $arr = array(':linkId' => $link_id, ':userId' => $user_id, ':notifications' => $notifications);
@@ -78,14 +91,6 @@ class MigrateDAO {
     }
 
     function addSitesMigration($link_id, $user_id, $sites) {
-        $query = "UPDATE {$this->p}migration 
-                SET modified_at = NOW(), modified_by = :userId, started_at = NOW(), started_by = :userId, 
-                    active = 0, state='running'
-                 WHERE link_id = :linkId;";
-
-        $arr = array(':linkId' => $link_id, ':userId' => $user_id);
-        $this->PDOX->queryDie($query, $arr);
-
         $result = [];
         foreach ($sites as $site) {
 
@@ -94,8 +99,8 @@ class MigrateDAO {
                 $workflow = ["$now,000 - [INFO] - Started Migration ($site)","$now,001 - [INFO] - Scheduled Export..."];
 
                 $query = "REPLACE INTO {$this->p}migration_site 
-                (site_id, link_id, user_id, started_at, started_by, active, state, workflow) 
-                    VALUES (:siteId, :linkId, :userId, NOW(), :userId, 1, 'starting', :workflow);";
+                (site_id, link_id, started_at, started_by, modified_at, modified_by, active, state, workflow) 
+                    VALUES (:siteId, :linkId, NOW(), :userId, NOW(), :userId, 1, 'starting', :workflow);";
                 
                 $arr = array(':siteId' => $site, ':linkId' => $link_id, ':userId' => $user_id, ':workflow' => json_encode($workflow));
 

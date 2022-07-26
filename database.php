@@ -20,38 +20,32 @@ array(
     "CREATE TABLE `{$CFG->dbprefix}migration` (
         `link_id` int NOT NULL DEFAULT '0',
         `user_id` int NOT NULL DEFAULT '0',
-        `notification` mediumtext,
+
         `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `created_by` int NOT NULL DEFAULT '0',
-        `started_at` datetime DEFAULT NULL,
-        `started_by` int NOT NULL DEFAULT '0',
-        `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `modified_by` int NOT NULL DEFAULT '0',
-        `site_id` varchar(255) NOT NULL DEFAULT '',
-        `provider` mediumtext,
-        `active` tinyint(1) NOT NULL DEFAULT '0',
-        `state` enum('init','starting','exporting','running','importing','completed','error') NOT NULL DEFAULT 'init',
-        `workflow` mediumtext,
         `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-        UNIQUE KEY `link_id` (`link_id`),
-        KEY `idx_site` (`site_id`) /*!80000 INVISIBLE */,
-        KEY `idx_site_link` (`site_id`,`link_id`)
+
+        UNIQUE KEY `link_id` (`link_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3"
 ),  
 array( "{$CFG->dbprefix}migration_site",
 "CREATE TABLE `{$CFG->dbprefix}migration_site` (
-    `site_id` varchar(99) NOT NULL,
     `link_id` int NOT NULL,
-    `user_id` int NOT NULL,
-    `started_at` datetime DEFAULT CURRENT_TIMESTAMP,
-    `started_by` int NOT NULL,
+    `site_id` varchar(99) NOT NULL,
+    `started_at` datetime DEFAULT NULL,
+    `started_by` int NOT NULL DEFAULT '0',
+    `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_by` int NOT NULL DEFAULT '0',        
+    `provider` mediumtext,
     `active` tinyint(1) DEFAULT '0',
     `state` enum('init','starting','exporting','running','importing','completed','error') NOT NULL DEFAULT 'init',
     `title` VARCHAR(99),
     `workflow` mediumtext,
-    
+    `notification` mediumtext,
+
     PRIMARY KEY (`site_id`,`link_id`),
-    KEY `idx_user` (`user_id`),
+    KEY `idx_started_by` (`started_by`),
+    KEY `idx_modified_by` (`modified_by`),
 
     CONSTRAINT `{$CFG->dbprefix}migration_link_ibfk` 
         FOREIGN KEY (`link_id`) 
