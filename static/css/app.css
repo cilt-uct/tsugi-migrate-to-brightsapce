@@ -217,8 +217,10 @@ section h3 {
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
-  height: 14vh;
+  height: 140px;
   padding: 8px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .row a.site {

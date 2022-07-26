@@ -15,6 +15,10 @@ use \Migration\DAO\MigrateDAO;
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
+if (!$USER->instructor) {
+    header('Location: ' . addSession('student-home.php'));
+}
+
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 $course_providers  = $LAUNCH->ltiRawParameter('lis_course_section_sourcedid','none');
 $context_id = $LAUNCH->ltiRawParameter('context_id','none');
@@ -31,6 +35,7 @@ if ($course_providers != $context_id) {
     }
 }
 
+$debug = $tool['debug'] == true || $LAUNCH->ltiRawParameter('custom_debug', false) == true;
 
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
 $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true);
@@ -42,7 +47,9 @@ $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.css'), ],
     'scripts'    => [ ],
-
+    'debug'      => $debug,
+    'custom_debug' => $LAUNCH->ltiRawParameter('custom_debug', false),
+    'tool_debug' => $tool['debug'],
     'title'      => $CONTEXT->title,
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
@@ -56,10 +63,6 @@ $context = [
     // 'current'    => $current_migration
 ];
 
-if (!$USER->instructor) {
-    header('Location: ' . addSession('student-home.php'));
-}
-
 // Start of the output
 $OUTPUT->header();
 
@@ -70,7 +73,7 @@ $OUTPUT->topNav($menu);
 
 echo "<!--<h2>Admin</h2>-->";
 
-if ($tool['debug']) {
+if ($debug) {
     echo '<pre>'; print_r($context); echo '</pre>';
 }
 

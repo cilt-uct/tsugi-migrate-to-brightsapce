@@ -38,7 +38,7 @@ array( "{$CFG->dbprefix}migration_site",
     `modified_by` int NOT NULL DEFAULT '0',        
     `provider` mediumtext,
     `active` tinyint(1) DEFAULT '0',
-    `state` enum('init','starting','exporting','running','importing','completed','error') NOT NULL DEFAULT 'init',
+    `state` enum('init','starting','exporting','running','importing','completed','error','admin') NOT NULL DEFAULT 'init',
     `title` VARCHAR(99),
     `workflow` mediumtext,
     `notification` mediumtext,
@@ -70,6 +70,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration', 'is_admin', 'TINYINT(1) NOT NULL DEFAULT 0'),
 
         array('migration_site', 'title', 'VARCHAR(99)'),
+        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','completed','error','admin')"),
     );
 
     foreach ( $add_some_fields as $add_field ) {

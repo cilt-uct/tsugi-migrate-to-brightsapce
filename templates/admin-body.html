@@ -23,7 +23,7 @@
             {% if ($state != "init") { %}
             <h4>Progress ({{ count($sites) }})</h4>
             <div class="row">
-                <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 60vh;">
+                <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 400px;">
                     <ul id="sites">
                         {% foreach ($sites as $site) { %}
                         <li>
@@ -39,7 +39,7 @@
                     </ul>
                 </div>
                 <div class="col-md-8 col-xs-12">
-                    <div class="pre" style="height: 60vh;"></div>
+                    <div class="pre" style="height: 400px;"></div>
                 </div>
             </div>
             {% } %}             
