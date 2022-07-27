@@ -64,14 +64,16 @@
 
         function getworkflow(site) {
             var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
+                const _pre = $('#pre');
+
                 if (result.success === 1) {
-                    $('.pre').html(result.msg.join("<br/>"));
+                    _pre.html(result.msg.join("<br/>"));
                 } else {
-                    $('.pre').html("Could not load workflow for site.");
+                    _pre.html("Could not load workflow for site.");
                 }
             })
             .fail(function() {
-                $('.pre').html("Could not load workflow for site.");
+                $('#pre').html("Could not load workflow for site.");
             });
         }
 
@@ -83,10 +85,38 @@
 
         $('#sites').on('click', 'a.site', function(event) {
             event.preventDefault();
-            let _me = $(this);
-            $('.pre').html("Loading ("+ (_me.data('title') ? _me.data('title') +" : " : "" ) + _me.attr('rel') +") ...");
-            getworkflow(_me.attr('rel'));
+            const _me = $(this),
+                  _pre = $('#pre');
+
+            if (!_me.parent().hasClass('active')) {
+                _me.parent().siblings().removeClass('active');
+                _me.parent().addClass('active');
+
+                _pre.html("Loading ("+ (_me.data('title') ? _me.data('title') +" : " : "" ) + _me.attr('rel') +") ...");
+                getworkflow(_me.attr('rel'));
+            }
         });
         
+        $('#stats > li > a').on('click', function(event) {
+            event.preventDefault();
+            const _me = $(this),
+                  _sites = $('#sites'),
+                  _pre = $('#pre');
+            
+            if (!_me.parent().hasClass('active')) {
+                _me.parent().siblings().removeClass('active');
+                _me.parent().addClass('active');
+                
+                _sites.children().removeClass('active');
+                _pre.html('');
+                if (_me.attr('rel') == 'all') {
+                    _sites.children().show();
+                } else {
+                    _sites.children().hide();
+                    _sites.children('[data-state="'+_me.attr('rel')+'"]').show();
+                }
+            }
+        });
+        // 'all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'completed' => 0,'error' => 0
     });
 </script>

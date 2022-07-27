@@ -40,6 +40,12 @@ $debug = $tool['debug'] == true || $LAUNCH->ltiRawParameter('custom_debug', fals
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
 $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true);
 $sites = $migrationDAO->getMigrationsPerLink($LINK->id);
+$site_stats = array();
+$site_stats_raw = $migrationDAO->getMigrationsPerLinkStats($LINK->id);
+foreach ($site_stats_raw as $v) {
+    $site_stats[$v['state']] = $v['n'];
+}
+$stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'completed' => 0,'error' => 0);
 
 $menu = false; // We are not using a menu
 
@@ -55,7 +61,8 @@ $context = [
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
     'name'       => $current_migration['state'] == 'init' ? $USER->displayname : $current_migration['displayname'],
     'notifications' => $current_migration['notification'],
-    'state'       => $current_migration['state'],
+    'state'      => $current_migration['state'],
+    'site_stats' => array_merge($stats, $site_stats),
     'sites'      => $sites,
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),

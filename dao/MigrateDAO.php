@@ -57,12 +57,23 @@ class MigrateDAO {
         return true;
     }
 
+    function getMigrationsPerLinkStats($link_id) {
+
+        $query = "SELECT `site`.`state`, count(*) as n 
+            FROM {$this->p}migration_site `site`
+            where `site`.link_id = :linkId
+            group by `state`
+            having `site`.state <> 'admin';";
+
+        $arr = array(':linkId' => $link_id);
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
     function getMigrationsPerLink($link_id) {
 
         $query = "SELECT `site`.site_id, `site`.title, `site`.state 
-            FROM {$this->p}migration `main`
-            left join {$this->p}migration_site `site` on `site`.link_id = `main`.link_id
-            where `main`.link_id = :linkId
+            FROM {$this->p}migration_site `site`
+            where `site`.link_id = :linkId
             having `site`.state <> 'admin';";
 
         $arr = array(':linkId' => $link_id);

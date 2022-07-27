@@ -21,12 +21,12 @@
             </form>
             
             {% if ($state != "init") { %}
-            <h4>Progress ({{ count($sites) }})</h4>
             <div class="row">
-                <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 400px;">
+                <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 435px;">
+                    <h4>Progress ({{ count($sites) }})</h4>
                     <ul id="sites">
                         {% foreach ($sites as $site) { %}
-                        <li>
+                        <li data-state="{{ $site['state'] }}">
                             <a href="#" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}" class="site">
                                 {% if (! is_null($site['title'])) { %}
                                     <span class="title">{{ $site['title'] }}</span>
@@ -39,7 +39,12 @@
                     </ul>
                 </div>
                 <div class="col-md-8 col-xs-12">
-                    <div class="pre" style="height: 400px;"></div>
+                    <ul id="stats" class="nav nav-pills" role="tablist">
+                        {% foreach ($site_stats as $x => $val) { %}
+                        <li role="presentation" {% if ($x =='all') { %}class="active"{% } %}><a href="#" rel="{{ $x }}">{{ $x }} <span class="badge">{{ $val }}</span></a></li>
+                        {% } %}
+                    </ul>
+                    <div id="pre" style="height: 400px;"></div>
                 </div>
             </div>
             {% } %}             

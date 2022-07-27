@@ -187,7 +187,7 @@ section h3 {
   width: 60%;
 }
 
-.row .pre {
+.row #pre {
   min-height: 100px;
   max-height: 400px;
   display: block;
@@ -223,6 +223,13 @@ section h3 {
   overflow-y: scroll;
 }
 
+#sites > li.active > a, 
+#sites > li.active > a:focus, 
+#sites > li.active > a:hover {
+  color: #fff;
+  background-color: #337ab7;
+}
+
 .row a.site {
   display: block;  
   padding: 5px;
@@ -248,4 +255,16 @@ section h3 {
 
 .row .site span.state {
   
+}
+
+.row #stats {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  margin-bottom: 4px;
+}
+
+.row #stats > li > a {
+    padding: 2px 5px;
+    font-size: 80%;
 }
