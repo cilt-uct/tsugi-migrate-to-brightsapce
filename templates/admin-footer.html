@@ -6,7 +6,11 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
-        var timeout = null;
+        const progress_interval = 60000;
+        let timeout = null,
+            progress_timer = null,
+            progress_inc = 1;
+            progress = 0;
 
         function setError(st) {
             $(st).removeClass('text-success text-info').addClass('text-danger').children('i').removeClass('fa-ellipsis-h fa-check').addClass('fa-times');
@@ -36,9 +40,8 @@
             $('#message').html('<p class="bg-danger">An error occurred while performing this action, please contact <a href="mailto:help@vula.uct.ac.za?subject=Vula - Please help with: Lecture Recording Setup">help@vula.uct.ac.za</a><br/> or call 021-650-5500 weekdays 8:30 - 17:00.</p>');
         }
 
-        function doPost(a, text) {
-            var sites = $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 });
-
+        function submit_sites(sites, a, text) {
+            
             if (sites.length > 0) {
                 $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);
@@ -62,12 +65,17 @@
             }
         }
 
+        function doPost(a, text) {
+            submit_sites( $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 }), a, text);
+        }
+
         function getworkflow(site) {
             var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
                 const _pre = $('#pre');
 
                 if (result.success === 1) {
                     _pre.html(result.msg.join("<br/>"));
+                    setProgress(true);
                 } else {
                     _pre.html("Could not load workflow for site.");
                 }
@@ -77,8 +85,48 @@
             });
         }
 
+        function doTimer () {
+            const _container = $('.progress-container');
+            progress += progress_inc;
 
-        $('#btnAccept').click( function(event) {
+            _container.children('.progress').width((progress / _container.width() * 100) + '%');
+
+            if (progress >= _container.width()) {
+                window.clearInterval(progress_timer);
+                // time to reload selected pre
+                if ($('#sites .active a').exists()) {
+                    const _me = $('#sites .active a'),
+                          _pre = $('#pre');
+                    
+                    _pre.html("Loading ("+ (_me.data('title') ? _me.data('title') +" : " : "" ) + _me.attr('rel') +") ...");
+                    getworkflow(_me.attr('rel'));
+                }
+            }
+        }
+
+        function setProgress(run) {
+            const _container = $('.progress-container'),
+                  _autoreload = $('#autoreload').is(':checked');
+            progress = 0;
+            progress_inc = _container.width() / 100 / 2;
+            _container.children('.progress').width((progress / _container.width() * 100) + '%');
+            
+            window.clearInterval(progress_timer);
+            if (run && _autoreload) {
+                progress_timer = window.setInterval(doTimer, progress_interval / 600);
+            }
+        }
+
+        $('#autoreload').click(function(event) {
+            const _autoreload = $('#autoreload').is(':checked');
+            if (_autoreload && $('#sites .active a').exists()) {
+                setProgress(true);
+            } else {
+                setProgress(false);
+            }
+        });
+
+        $('#btnAccept').click(function(event) {
             event.preventDefault();
             doPost('btnAccept', 'Adding sites ...');
         });
@@ -97,6 +145,18 @@
             }
         });
         
+        $('#sites').on('click', 'a.btn', function(event) {
+            event.preventDefault();
+            const _me = $(this);
+
+            submit_sites([_me.attr('rel')], 'btnAccept', 'Adding sites ...');
+        });
+
+        $('#btn_reload_progress').on('click', function(event) {
+            event.preventDefault();
+            location.reload();
+        });
+
         $('#stats > li > a').on('click', function(event) {
             event.preventDefault();
             const _me = $(this),
@@ -115,6 +175,7 @@
                     _sites.children().hide();
                     _sites.children('[data-state="'+_me.attr('rel')+'"]').show();
                 }
+                setProgress(false);
             }
         });
         // 'all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'completed' => 0,'error' => 0

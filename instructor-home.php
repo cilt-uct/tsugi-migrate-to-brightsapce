@@ -40,16 +40,18 @@ $workflow = $current_migration['workflow'] ? json_decode($current_migration['wor
 
 $context = [
     'instructor' => $USER->instructor, 
-    'styles'     => [ addSession('static/css/app.css'), ],
+    'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
 
     'title'      => $CONTEXT->title,
+    'site_id'    => $site_id,
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
     'name'       => $current_migration['state'] == 'init' ? $USER->displayname : $current_migration['displayname'],
     'notifications' => $current_migration['notification'],
     'state'       => $current_migration['state'],
     'workflow'   => $workflow,
+    'years'      => range(date("Y"), date("Y")+3),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'provider'   => $provider,
     // 'current'    => $current_migration

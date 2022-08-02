@@ -62,10 +62,8 @@
                 _el.hide();
             }
         }
-        function doPost(a, text, type) {
-            $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
-            timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
+        function migrateSite(a, type) {
             var organizer = $('#organizer').val().trim().replace(/\r?\n/g, ', ');
             var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
 
@@ -93,49 +91,71 @@
             });
         }
 
-        $('#btnAccept').click( function(event) {
-            event.preventDefault();
-            doPost('btnAccept', 'Starting migration...', 'init');
-        });
+        if ($('#notifications').exists()) {
+            $("#notifications").on('change', function(event) {
+                var i = $(this).val();
+                if (i != tmp_inp) {
+                    tmp_inp = i;
+                    setSaving('label[for=notifications]');
+                    check_if_im_in_notification(false);
 
-        $("#notifications").on('change', function(event) {
-            var i = $(this).val();
-            if (i != tmp_inp) {
-                tmp_inp = i;
-                setSaving('label[for=notifications]');
-                check_if_im_in_notification(false);
-
-                var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
-                var data = { 
-                    "type": "updating",
-                    "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
-                }
-
-                $.ajax({
-                    url: '{{ $submit }}',
-                    method: 'POST',
-                    data: data,
-                    dataType: 'json'
-                }).done(function(data) {
-                    if (!data.success) {
-                        console.log(data);
-                        console.log("Could not save email");
-                        setError('label[for=notifications]');
-                    } else {
-                        setSaved('label[for=notifications]');
+                    var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
+                    var data = { 
+                        "type": "updating",
+                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
                     }
-                }).fail(function(xhr) {
-                    console.log(xhr);
-                    setError('label[for=notifications]');
-                });
-            }
-        }).email_multiple({ data: $('#notifications').val().split(';'), inputPlaceholder: $('#notifications').attr('placeholder') });
-        tmp_inp = $('#notifications').val();
 
-        $("#btn_add_me").click( function(event) {
+                    $.ajax({
+                        url: '{{ $submit }}',
+                        method: 'POST',
+                        data: data,
+                        dataType: 'json'
+                    }).done(function(data) {
+                        if (!data.success) {
+                            console.log(data);
+                            console.log("Could not save email");
+                            setError('label[for=notifications]');
+                        } else {
+                            setSaved('label[for=notifications]');
+                        }
+                    }).fail(function(xhr) {
+                        console.log(xhr);
+                        setError('label[for=notifications]');
+                    });
+                }
+            }).email_multiple({ data: $('#notifications').val().split(';'), inputPlaceholder: $('#notifications').attr('placeholder') });
+            tmp_inp = $('#notifications').val();
+
+            $("#btn_add_me").click( function(event) {
+                event.preventDefault();
+                check_if_im_in_notification(true);
+            });
+            check_if_im_in_notification(false);
+        }
+        
+        $('#year').on('change', function(event){
+            const _y = $('#year_selected');
+            console.log($('#year').val());
+            _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full'))
+        })
+
+        $('#btn_option1, #btn_option2').click( function(event) {
             event.preventDefault();
-            check_if_im_in_notification(true);
+            const _me = $(this);
+    
+            _me.html('<i class="fa fa-cog fa-spin"></i>Starting process...').addClass('disabled').attr('disabled', true);
+            timeout = setTimeout(function(){ $('#info').show(); }, 300);
+
+            switch(_me.data('path')){
+                case 'a':
+                    $('#option-b').hide();
+                    migrateSite(_me.attr('id'), 'init');
+                    break;
+                case 'b':
+                    $('#option-a').hide();
+                    migrateSite(_me.attr('id'), 'site');
+                    break;    
+            }
         });
-        check_if_im_in_notification(false);
     });
 </script>

@@ -1,120 +1,223 @@
 <section>
-    <div class="row">
-        <div class="col-xs-12">
-            <h3>What you need to know when migrating to BrightSpace</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <p>Somethings will work fine:</p>
-            <ol>
-                <li>Lessons</li>
-                <li>...</li>
-                <li>...</li>
-                <li>...</li>
-            </ol>
+    <h1>Vula <span>to</span> Amathuba</h1>
 
-            <p>Need more info 
-                <span class="glyphicon glyphicon-question-sign"></span>
-                <a href="#" title="More info" target="_blank">more info</a>
-            </p>
-        </div>
-        <div class="col-md-6">
-            <p>Somethings aren't available in Brightspace</p>
-            <ol>                
-                <li>...</li>
-                <li>...</li>
-                <li>...</li>
-            </ol>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-9">
-            <h4>What is going to happen when I start this process</h4>
-            <ul style="margin-left: 60px;">                
-                <li>Completing the form below and clicking the "Get Started" button will start exporting <i>this</i> site.<br/>
-                    We will send you (and everyone in the notification list) that the migration process has started.</li>
-                <li>After export we will run some scripts to transform the exported files so that Brightspace can use them and re-create your content.</li>
-                <li>Import the site content into Brightspace.</li>
-                <li>The Final Report will be sent out detailing the process steps and the Brightspace course information.</li>
-            </ul>
-        </div>
-    </div>
-</section>
-<section>
-    <div class="row">
-        <div class="col-md-9">
-            {% if ($state == "init") { %}    
-            <h4>Let's begin ...</h4>
-            {% } %}
-            <form class="form-inline text-left" method="post" target="_self" id="metadata">
-                <input type="hidden" name="state"  id="state" value="{{ $state }}"/>
-                <div class="row" style="margin-top: 1em;">
-                    <div class="col-md-3 col-xs-12 col-sm-11">
-                        {% if ($state == "init") { %}
-                            <label for="organizer">My Email</label>
-                        {% } else { %}
-                            <label for="organizer">Starter</label>
-                        {% } %}
-                    </div>
-                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
-                        <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
-                        <input type="text" name="organizer" id="organizer" disabled="true" class="form-control disabled" 
-                                value="{{ $name }} <{{ $email }}>" data-email="{{ $email }}"/>
-                        {% if ($state == "init") { %}<br><small style="color:#aaa">Will receive progress and final report.</small>{% } %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-xs-12 col-sm-11">
-                        <label for="notifications">Email Notifications</label>
-                    </div>
-                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
-                        <textarea class="form-control" name="notifications" 
-                                    id="notifications" 
-                                    placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
-                        <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
-                    </div>
-                </div>
-                {% if ($state == "init") { %}
-                <div class="row terms">
-                    <div class="col-md-3 col-xs-12 col-sm-11">
-                        <label for="terms">My Responsibilities</label>
-                    </div>
-                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
-                        <label class="checkbox-inline" style="padding-left: 0px; font-size: 0.9em;">
-                            By clicking the "Get Started" button the migration process will start,<br/> 
-                            you will get notified of the progress and in the unlikely event that there is a problem will be contacted 
-                            so that together we can find a solution that will work for you.
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-xs-12 col-sm-11">&nbsp;</div>
-                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-0">
-                        <button id="btnAccept" class="btn btn-success" type="button">
-                            <i class="fa fa-check"></i>
-                            Get Started
-                        </button>
-                        <span id="info" class="text-info" style="display:none;"><small>This might take a couple of seconds.</small></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8 col-xs-12 col-sm-11 col-md-offset-3" id="message"></div>
-                </div>
-                {% } %}                
-            </form>
-        </div>
-    </div>
-    {% if ($state != "init") { %}         
+    {% if ($state == "init") { %}
+    <form class="form-inline text-left" method="post" target="_self" id="metadata"> 
+        <input type="hidden" name="state"  id="state" value="{{ $state }}"/>           
         <div class="row">
-            <div class="col-md-9 workflow">
-                <h4>Progress <span>({{ $state }})</span></h4>
-                {% $output = '';
-                if (gettype($workflow) === 'array') { 
-                    $ouput = join("<br/>",$workflow);
-                } %}
-                <div id="pre">{{ $ouput }}</div>
+            <div class="col-xs-12">
+                <h3>You're about to migrate your course to Amathuba!</h3>
+
+                <select id="year" name="year" class="form-control">
+                    <option selected value="0">Please select a year </option>
+                    {% foreach ($years as $val) { %}
+                        <option value="{{$val}}">{{$val}}</option>
+                    {% } %}
+                </select>
+                <span id="year_selected" style="padding-left: 6px;" 
+                    data-full="is the year for this course in Amathuba (subject to Faculty approval)."
+                    data-empty="that you will be teaching this course on Amathuba (subject to Faculty approval).">
+                    that you will be teaching this course on Amathuba (subject to Faculty approval).</span>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-9">
+                <h4>What will transfer from Vula to Amathuba in the conversion process?</h4>
+                <ul style="margin-left: 60px;">                
+                    <li>Announcements</li>
+                    <li>Assignments</li>
+                    <li>Discussions</li>
+                    <li>Gradebook</li>
+                    <li>Lessons</li>
+                    <li>Resources</li>
+                    <li>Rubrics</li>
+                    <li>Tests & Quizzes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-md-9 col-xs-offset-1">
+                <label for="organizer">My Email</label>
+                <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
+                <input type="text" name="organizer" id="organizer" disabled="true" class="form-control disabled" 
+                        value="{{ $name }} <{{ $email }}>" data-email="{{ $email }}"/>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-md-9 col-xs-offset-1">
+                <label for="notifications">Email Notifications <small>(Will also receive progress and final report)</small></label>
+                <textarea class="form-control" name="notifications" 
+                            id="notifications" 
+                            placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
+                <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-md-9 col-xs-offset-1">
+                <!-- <h4>Choose an option:</h4> -->
+                <!-- <div class="col-xs-offset-1" id="option-a"> -->
+                    <button id="btn_option1" class="btn btn-success" type="button" data-path="a">
+                        <i class="fa fa-check"></i>
+                        Yes, <small>I want to run the conversion process ...</small>
+                    </button>
+                <!-- </div> -->
+                <!-- <div class="col-xs-offset-1" id="option-b">
+                    <button id="btn_option2" class="btn btn-default" type="button" data-path="b" style="margin-bottom: 0px;">
+                        No thanks, <small>I want to start from scratch in Amathuba</small>
+                    </button>
+                    <br/>
+                    <i>I don't need any of my Vula content converted, and only want a course site.</i>
+                </div> -->
+                <div class="col-xs-offset-1">
+                    <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% } elseif (in_array($state, ['starting','exporting','running','importing','error'])) { %} 
+        <div class="row">
+            <div class="col-md-9">
+                <ul>                
+                    <li>You have successfully initiated the migration process </li>
+                    <li>The duration of the process depends on the size of your Resources folder in Vula.</li>
+                    <li>You will receive a confirmation email once the conversion is complete.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="migrate-progress workflow">
+                <div class="vula">
+                    <div data-step="1">
+                        <div class="title">
+                            <strong>Starting</strong>
+                            Schedule Migration
+                        </div>
+                        <div class="desc">
+                            {% if (in_array($state,['starting'])) { %}
+                                The site is scheduled to be exported, you will be <i>notified</i> when it starts.
+                            {% } else { %}
+                                <span class="glyphicon glyphicon-ok"></span>
+                            {% } %}
+                        </div>
+                    </div>
+                    <div data-step="2" {% if ($state == 'starting') { %}class="disabled"{% } %}>
+                        <div class="title">
+                            <strong>Exporting</strong>
+                            Vula Course Site
+                        </div>
+                        <div class="desc">
+                            {% if (in_array($state,['starting','exporting'])) { %}
+                                Course content is exported into a package that will be processed and imported.
+                            {% } else { %}
+                                <span class="glyphicon glyphicon-ok"></span>
+                            {% } %}
+                        </div>
+                    </div>
+                    <div data-step="3" {% if ($state == 'error') { %}class="error"{% } %}
+                        {% if (in_array($state,['starting','exporting'])) { %}class="disabled"{% } %}>
+                        <div class="title">
+                            {% if ($state == 'error') { %}
+                                <i class="fas fa-exclamation"></i>
+                                <strong>Error</strong>    
+                            {% } else { %}
+                            <strong>Running</strong>
+                            Conversion Workflow
+                            {% } %}
+                        </div>
+                        <div class="desc">
+                            {% if ($state == 'error') { %}
+                                There was an error in converting this site, the <strong>Administrator</strong> has been notified.
+                            {% } elseif (in_array($state,['starting','exporting','running'])) { %}
+                                Running some conversion steps to make sure we import the content from the course site correctly.
+                            {% } else { %}
+                                <span class="glyphicon glyphicon-ok"></span>
+                            {% } %}
+                        </div>
+                    </div>
+                </div>
+                <div class="amathuba">
+                    <div data-step="-" {% if (in_array($state,['starting','exporting','running','error'])) { %}class="disabled"{% } %}>
+                        <div class="title">
+                            <strong>Importing</strong>
+                            To Auto-converted Site
+                        </div>
+                        <div class="desc">
+                            {% if (in_array($state,['starting','exporting','running','importing','error'])) { %}
+                                Importing content into the auto-converted site.
+                            {% } else { %}
+                                <span class="glyphicon glyphicon-ok"></span>
+                            {% } %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    {% } elseif (in_array($state, ['completed'])) { %} 
+        <div class="row">
+            <div class="migrate-progress">
+                <div class="vula">
+                    <div data-step="1">
+                        <div class="title">
+                            <strong>Convert</strong>
+                            Vula Course Site
+                        </div>
+                        <div class="desc">
+                            <a href="#">
+                                <i class="far fa-file-alt"></i>
+                                <span>Review the conversion report for remediation steps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="amathuba">
+                    <div data-step="2" style="grid-area: 1 / 1 / 2 / 2;">
+                        <div class="title">
+                            <strong>Copy</strong>
+                            Auto-converted Site
+                        </div>
+                        <div class="desc">
+                            Staff go to the new course site and <br/>copy the content from the reference site to the course site
+                        </div>
+                    </div>
+                    <div data-step="3" style="grid-area: 1 / 2 / 2 / 3;">
+                        <div class="title">
+                            <strong>Revise</strong>
+                            New Course Site
+                        </div>
+                        <div class="desc">
+                            Staff review & update content
+                        </div>
+                    </div>
+                    <div data-step="4" style="grid-area: 1 / 3 / 2 / 4;">
+                        <div class="title">
+                            <strong>Ready</strong>
+                            for Teaching
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    {% } %}
+    <div class="row">
+        <div class="col-xs-12 footer">
+            If you need help, consult the 
+            <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a> 
+            or contact 
+            <a href="mailto:help@vula.uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">help@vula.uct.ac.za</a>.
+        </div>
+    </div>
+
+    {% if (in_array($state, ['starting','exporting','running','importing','error'])) { %}
+    <div class="row">
+        <div class="col-xs-12 workflow">
+            <h4>Progress <span>({{ $state }})</span></h4>
+            {% $output = '';
+            if (gettype($workflow) === 'array') { 
+                $ouput = join("<br/>",$workflow);
+            } %}
+            <div id="pre">{{ $ouput }}</div>
+        </div>
+    </div>
     {% } %}
 </section>

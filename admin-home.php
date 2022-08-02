@@ -51,7 +51,7 @@ $menu = false; // We are not using a menu
 
 $context = [
     'instructor' => $USER->instructor, 
-    'styles'     => [ addSession('static/css/app.css'), ],
+    'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ ],
     'debug'      => $debug,
     'custom_debug' => $LAUNCH->ltiRawParameter('custom_debug', false),
@@ -64,6 +64,7 @@ $context = [
     'state'      => $current_migration['state'],
     'site_stats' => array_merge($stats, $site_stats),
     'sites'      => $sites,
+    'reload_url'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('index.php')) ),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'provider'   => $provider,
