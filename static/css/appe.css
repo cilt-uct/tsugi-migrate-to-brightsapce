@@ -292,7 +292,7 @@ form#metadata button {
   border-radius: 50%;
   z-index: 100;
   top: -8%;
-  right: -12%;
+  left: 98%;
 }
 .row .migrate-progress .vula > div > .title, .row .migrate-progress .amathuba > div > .title {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
