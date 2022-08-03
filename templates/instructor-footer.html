@@ -63,9 +63,9 @@
             }
         }
 
-        function migrateSite(a, type) {
+        function migrateSite(a, type, alt) {
             var organizer = $('#organizer').val().trim().replace(/\r?\n/g, ', ');
-            var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
+            var notification = $('#'+ alt).val().trim().replace(/\r?\n/g, ', ');
 
             var data = { 
                 "type": type,
@@ -139,6 +139,13 @@
             _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full'))
         })
 
+        $('#restart_wrokflow').on('click', function(event) {
+            event.preventDefault();
+            const _me = $(this);
+
+            migrateSite(_me.attr('id'), 'init', 'notifications_hidden');
+        });
+
         $('#btn_option1, #btn_option2').click( function(event) {
             event.preventDefault();
             const _me = $(this);
@@ -149,11 +156,11 @@
             switch(_me.data('path')){
                 case 'a':
                     $('#option-b').hide();
-                    migrateSite(_me.attr('id'), 'init');
+                    migrateSite(_me.attr('id'), 'init', 'notifications');
                     break;
                 case 'b':
                     $('#option-a').hide();
-                    migrateSite(_me.attr('id'), 'site');
+                    migrateSite(_me.attr('id'), 'site', 'notifications');
                     break;    
             }
         });

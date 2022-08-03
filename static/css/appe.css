@@ -300,7 +300,7 @@ form#metadata button {
   border-radius: 8px 8px 0px 0px;
   height: 90px;
   text-align: center;
-  font-size: 120%;
+  font-size: 1em;
   padding: 8px;
 }
 .row .migrate-progress .vula > div > .title > strong, .row .migrate-progress .amathuba > div > .title > strong {
