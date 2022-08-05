@@ -145,12 +145,35 @@
             }
         });
         
-        $('#sites').on('click', 'a.btn', function(event) {
+        $('#sites').on('click', 'a.reload', function(event) {
             event.preventDefault();
             const _me = $(this);
 
             submit_sites([_me.attr('rel')], 'btnAccept', 'Adding sites ...');
         });
+
+        $('#sites').on('click', 'a.delete', function(event) {
+            event.preventDefault();
+            const _me = $(this),
+                  _title = _me.data('title') === '' ? _me.attr('rel') : _me.data('title');
+
+            if (confirm(`Do you want to delete ${_title}?`) == true) {
+
+                var jqxhr = $.post('{{ $submit }}', { "type": 'delete', "site": _me.attr('rel') }, function(result) {
+                    if (result.success === 1) {
+                        location.reload();
+                    } else {
+                        alert('Error removing: ' + _title);
+                    }
+                }, 'json')
+                .fail(function() {
+                    alert('Error removing: ' + _title);
+                })
+                .always(function() {
+                    hideHelp();
+                });
+            }
+        });        
 
         $('#btn_reload_progress').on('click', function(event) {
             event.preventDefault();

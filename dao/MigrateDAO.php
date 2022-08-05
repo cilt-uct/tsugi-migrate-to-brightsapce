@@ -50,8 +50,8 @@ class MigrateDAO {
 
         $this->PDOX->queryDie("REPLACE INTO {$this->p}migration_site 
                 (link_id, site_id, modified_at, modified_by, provider, state) 
-                VALUES (:linkId, :siteid, NOW(), :userId, :provider, :state)", 
-            array(':linkId' => $link_id, ':siteid' => $site_id, ':userId' => $user_id, ':provider' => $is_admin ? b'1' : b'0', 
+                VALUES (:linkId, :siteId, NOW(), :userId, :provider, :state)", 
+            array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, ':provider' => $is_admin ? b'1' : b'0', 
                     ':state' => $is_admin ? 'admin' : 'init' ));
 
         return true;
@@ -79,6 +79,24 @@ class MigrateDAO {
         $arr = array(':linkId' => $link_id);
         return $this->PDOX->allRowsDie($query, $arr);
     }
+
+    function setAdmin($link_id, $user_id, $site_id) {
+
+        $this->PDOX->queryDie("UPDATE {$this->p}migration SET `is_admin` = 1 " .
+                                "WHERE `link_id` = :linkId;", 
+                                array(':linkId' => $link_id));
+                                
+        $this->PDOX->queryDie("UPDATE {$this->p}migration_site SET `state` = 'admin' " .
+                                "WHERE `link_id` = :linkId and `site_id` = :siteId;", 
+                                array(':linkId' => $link_id, ':siteId' => $site_id));
+    }
+
+    function removeSite($link_id, $user_id, $site_id) {
+                                
+        return $this->PDOX->queryDie("DELETE FROM {$this->p}migration_site " .
+                                "WHERE `link_id` = :linkId and `site_id` = :siteId;", 
+                                array(':linkId' => $link_id, ':siteId' => $site_id));
+    }    
 
     function startMigration($link_id, $user_id, $site_id, $notifications) {
         $now = date("Y-m-d H:i:s");

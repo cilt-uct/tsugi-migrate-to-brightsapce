@@ -38,6 +38,10 @@ if ($course_providers != $context_id) {
 $debug = $tool['debug'] == true || $LAUNCH->ltiRawParameter('custom_debug', false) == true;
 
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$current_site_id = $LAUNCH->ltiRawParameter('context_id','none');
+
+$migrationDAO->setAdmin($LINK->id, $USER->id, $current_site_id);
+
 $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true);
 $sites = $migrationDAO->getMigrationsPerLink($LINK->id);
 $site_stats = array();

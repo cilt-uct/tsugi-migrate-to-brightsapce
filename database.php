@@ -32,6 +32,7 @@ array( "{$CFG->dbprefix}migration_site",
 "CREATE TABLE `{$CFG->dbprefix}migration_site` (
     `link_id` int NOT NULL,
     `site_id` varchar(99) NOT NULL,
+    `transfer_site_id` varchar(255) NOT NULL,
     `started_at` datetime DEFAULT NULL,
     `started_by` int NOT NULL DEFAULT '0',
     `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -42,6 +43,8 @@ array( "{$CFG->dbprefix}migration_site",
     `title` VARCHAR(99),
     `workflow` mediumtext,
     `notification` mediumtext,
+    `report` mediumtext,
+    `site_url` VARCHAR(255),
 
     PRIMARY KEY (`site_id`,`link_id`),
     KEY `idx_started_by` (`started_by`),
@@ -71,6 +74,9 @@ $DATABASE_UPGRADE = function($oldversion) {
 
         array('migration_site', 'title', 'VARCHAR(99)'),
         array('migration_site', 'state', "enum('init','starting','exporting','running','importing','completed','error','admin')"),
+        array('migration_site', 'transfer_site_id', 'varchar(255)'),
+        array('migration_site', 'report', 'mediumtext'),
+        array('migration_site', 'site_url', 'VARCHAR(255)'),
     );
 
     foreach ( $add_some_fields as $add_field ) {

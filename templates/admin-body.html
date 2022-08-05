@@ -31,10 +31,16 @@
             <ul id="sites">
                 {% foreach ($sites as $site) { %}
                 <li data-state="{{ $site['state'] }}">
-                    <a class="btn btn-default btn-xs" href="#" 
-                        role="button" style="float: right; z-index: 1000;" title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
-                        <i class="glyphicon glyphicon-repeat"></i>
-                    </a>
+                    <div style="float: right; z-index: 1000;">
+                        <a class="btn btn-default btn-xs reload" href="#" 
+                            role="button" style="display: block; font-size: 1rem" title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
+                            <i class="glyphicon glyphicon-repeat"></i>
+                        </a>
+                        <a class="btn btn-default btn-xs delete" href="#" 
+                            role="button" style="display: block; font-size: 1rem" title="Remove site" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </div>
 
                     <a href="#" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}" class="site">
                         {% if (! is_null($site['title'])) { %}

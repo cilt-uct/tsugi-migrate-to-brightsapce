@@ -38,6 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'add_sites':
                 $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites']) ? 1 : 0;
                 break;
+            case 'delete':
+                $result['success'] = $migrationDAO->removeSite($LINK->id, $USER->id, $_POST['site']) ? 1 : 0;
+                break;
         }
         $result['msg'] = $result['success'] ? 'Updated' : 'Error Updating';
     }
