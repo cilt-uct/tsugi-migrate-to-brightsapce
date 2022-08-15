@@ -43,8 +43,8 @@ $title = $CONTEXT->title;
 // $title = 'Pan-African Ensemble 2021';
 // $provider = array('MUZ1366H,2021','MUZ2366H,2021','MUZ3366H,2021');
 
-$title = 'Med Gen 2 PTY5006S,2021';
-$provider = 'none';
+// $title = 'Med Gen 2 PTY5006S,2021';
+// $provider = 'none';
 
 $provider_details = get_provider_object($provider, $title);
 
