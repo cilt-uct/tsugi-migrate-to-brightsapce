@@ -38,22 +38,37 @@ $menu = false; // We are not using a menu
 
 $workflow = $current_migration['workflow'] ? json_decode($current_migration['workflow']) : [];
 
+$title = $CONTEXT->title;
+
+// $title = 'Pan-African Ensemble 2021';
+// $provider = array('MUZ1366H,2021','MUZ2366H,2021','MUZ3366H,2021');
+
+$title = 'Med Gen 2 PTY5006S,2021';
+$provider = 'none';
+
+$provider_details = get_provider_object($provider, $title);
+
 $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
 
-    'title'      => $CONTEXT->title,
+    'title'      => $title,
     'site_id'    => $site_id,
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
     'name'       => $current_migration['state'] == 'init' ? $USER->displayname : $current_migration['displayname'],
     'notifications' => $current_migration['notification'],
-    'state'       => $current_migration['state'],
+
+                 // 'init','starting','exporting','running','importing','completed','error','admin'
+    'state'      => $current_migration['state'],
     'workflow'   => $workflow,
-    'years'      => range(date("Y"), date("Y")+3),
+    'years'      => range(date("Y")+1, date("Y")+2),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'provider'   => $provider,
+    'provider_details'=> $provider_details,
+
+    'departments' => $departments
     // 'current'    => $current_migration
 ];
 

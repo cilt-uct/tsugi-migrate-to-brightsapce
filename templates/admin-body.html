@@ -1,12 +1,23 @@
 <section>
     <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12">
             <h2>Admin <small>(Migrate list of sites)</small></h2>
 
             <form class="form-inline text-left" method="post" target="_self" id="metadata">
                 <div class="row">
-                    <div class="col-xs-8">
+                    <div class="col-xs-6">
                         <textarea id="add_sites" names="add_sites" placeholder="Add Site ID per line ..."></textarea>
+                    </div>
+                    <div class="col-xs-6 admin">
+                        <label for="notifications" style="left: 0px;">
+                            Email Notifications 
+                            <i class="fas fa-question-circle" title="Will also receive progress and final report - for ALL sites."></i>
+                        </label>
+                        <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
+                        <textarea class="form-control" name="notifications" id="notifications" 
+                                    style="width: 100%"
+                                    placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
+                        <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
                     </div>
                 </div>
                 <div class="row">
@@ -23,11 +34,38 @@
     </div>
     {% if ($state != "init") { %}
     <div class="row">
-        <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 435px;">
-            <h4>Progress ({{ count($sites) }}) 
+        <div class="col-md-4 col-xs-12">
+            <h4 id="progress-title">Progress ({{ count($sites) }}) 
                 <small>
                     <a class="btn btn-default btn-xs" href="{{ $reload_url }}" id="btn_reload_progress" role="button" style="font-size: 0.8rem;float: right;">Reload Progress</a>
-                </small></h4>
+                </small>
+            </h4>
+            <!-- <div class="row" id="search_form">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default disabled" disabled="true" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+            </div>   -->
+        </div>
+        <div class="col-md-8">
+            <ul id="stats" class="nav nav-pills" role="tablist">
+                {% foreach ($site_stats as $x => $val) { %}
+                <li role="presentation" {% if ($x =='all') { %}class="active"{% } %}><a href="#" rel="{{ $x }}">{{ $x }} <span class="badge">{{ $val }}</span></a></li>
+                {% } %}
+                <li style="padding-top: 3px;">
+                    <input type="checkbox" title="Autoreload" id="autoreload"/>
+                    <i class="glyphicon glyphicon-refresh" style="display: inline-block;padding-left: 2px;"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 440px;">            
             <ul id="sites">
                 {% foreach ($sites as $site) { %}
                 <li data-state="{{ $site['state'] }}">
@@ -54,19 +92,11 @@
             </ul>
         </div>
         <div class="col-md-8">
-            <ul id="stats" class="nav nav-pills" role="tablist">
-                {% foreach ($site_stats as $x => $val) { %}
-                <li role="presentation" {% if ($x =='all') { %}class="active"{% } %}><a href="#" rel="{{ $x }}">{{ $x }} <span class="badge">{{ $val }}</span></a></li>
-                {% } %}
-                <li style="padding-top: 3px;">
-                    <input type="checkbox" title="Autoreload" id="autoreload"/>
-                    <i class="glyphicon glyphicon-refresh" style="display: inline-block;padding-left: 2px;"></i>
-                </li>
-            </ul>
-            
-            <div class="progress-container"><span class="progress" style="width:0%"></span></div>
+            <div class="progress-container">
+                <span class="progress" style="width:0%"></span>
+            </div>
 
-            <div id="pre" style="height: 400px;"></div>
+            <div id="pre" style="height: 438px; max-height: 438px;"></div>
         </div>
     </div>
     {% } %}             

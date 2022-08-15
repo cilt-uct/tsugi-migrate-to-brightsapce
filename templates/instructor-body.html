@@ -1,23 +1,14 @@
 <section>
     <h1>Vula <span>to</span> Amathuba</h1>
 
+    <pre>|{{ json_encode($provider_details) }}|</pre>
+
     {% if ($state == "init") { %}
     <form class="form-inline text-left" method="post" target="_self" id="metadata"> 
         <input type="hidden" name="state"  id="state" value="{{ $state }}"/>           
         <div class="row">
             <div class="col-xs-12">
-                <h3>You're about to migrate your course to Amathuba!</h3>
-
-                <select id="year" name="year" class="form-control">
-                    <option selected value="0">Please select a year </option>
-                    {% foreach ($years as $val) { %}
-                        <option value="{{$val}}">{{$val}}</option>
-                    {% } %}
-                </select>
-                <span id="year_selected" style="padding-left: 6px;" 
-                    data-full="is the year for this course in Amathuba (subject to Faculty approval)."
-                    data-empty="that you will be teaching this course on Amathuba (subject to Faculty approval).">
-                    that you will be teaching this course on Amathuba (subject to Faculty approval).</span>
+                <h3>You're about to migrate your course to Amathuba!</h3>              
             </div>
         </div>
         <div class="row">
@@ -36,6 +27,77 @@
             </div>
         </div>
         
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-md-9 col-xs-offset-1">
+                <label for="organizer">My Site: <span id="site-title">{{ $title }}</span></label>
+                {%  $full = 'is the year for this course in Amathuba.';
+                    $empty = 'that you will be teaching this course on Amathuba.';
+
+                    if (count($provider_details) == 0) { %}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <select class="form-control" name="provider" id="provider" style="width: 420px">
+                                <option selected value="0">Please select a department</option>
+                                {%
+                                    foreach ($departments as $el) {
+                                        $str = $el[1] ." - ". $el[2];
+                                        print "<option value=\"". $el[0] ."\">". $str ."</option>";
+                                    }
+                                %}
+                            </select>
+                            <!-- <span>Additional course codes can be added later</span> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                {% } else { %}
+                    <div class="row">
+                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
+                            <div class="col-xs-2" style="padding: 0px;">
+                                <input type="text" 
+                                    data-full="{{ $el['full'] }}"
+                                    data-dept="{{ $el['dept'] }}"
+                                    data-year="{{ $el['year'] }}"
+                                    data-period="{{ $el['period'] }}"
+                                    data-term="{{ $el['term'] }}"
+                                    value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" class="form-control disabled" disabled
+                                    style="width: 100%; text-align: center;"/>
+                            </div>
+                            <div class="col-xs-10">
+                        {% } else { %}
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <select class="form-control" name="provider" id="provider" style="width: 320px">
+                                    <option selected value="0">Please select the primary course code...</option>
+                                    {%
+                                        foreach ($provider_details as $el) {
+                                            $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
+                                            print "<option value=\"". $str ."\">". $str ."</option>";
+                                        }
+                                    %}
+                                </select>
+                                <!-- <span>Additional course codes can be added later</span> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                        {% } %}
+                {% } %}
+                        <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;">
+                            <option selected value="0">Please select a year </option>
+                            {% foreach ($years as $val) { %}
+                                <option value="{{$val}}">{{$val}}</option>
+                            {% } %}
+                        </select>
+                        <span id="year_selected" style="padding-left: 6px;" data-full="{{ $full }}" data-empty="{{ $empty }}">
+                            {{ $empty }} <i class="fas fa-question-circle" title="Subject to Faculty approval."></i>
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    
         <div class="row" style="margin-top: 1em;">
             <div class="col-md-9 col-xs-offset-1">
                 <label for="organizer">My Email</label>
@@ -87,9 +149,9 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-lg-11">
-                <div class="migrate-progress workflow">
-                    <div class="vula">
-                        <div data-step="1">
+                <div class="migrate-progress workflow {{ $state }}">
+                    <div class="vula" >
+                        <div>
                             <div class="title">
                                 <strong>Starting</strong>
                                 Schedule Migration
@@ -102,7 +164,7 @@
                                 {% } %}
                             </div>
                         </div>
-                        <div data-step="2" {% if ($state == 'starting') { %}class="disabled"{% } %}>
+                        <div {% if ($state == 'starting') { %}class="disabled"{% } %}>
                             <div class="title">
                                 <strong>Exporting</strong>
                                 Vula Course Site
@@ -115,7 +177,7 @@
                                 {% } %}
                             </div>
                         </div>
-                        <div data-step="3" {% if ($state == 'error') { %}class="error"{% } %}
+                        <div {% if ($state == 'error') { %}class="error"{% } %}
                             {% if (in_array($state,['starting','exporting'])) { %}class="disabled"{% } %}>
                             <div class="title">
                                 {% if ($state == 'error') { %}
@@ -138,7 +200,7 @@
                         </div>
                     </div>
                     <div class="amathuba">
-                        <div data-step="-" {% if (in_array($state,['starting','exporting','running','error'])) { %}class="disabled"{% } %}>
+                        <div {% if (in_array($state,['starting','exporting','running','error'])) { %}class="disabled"{% } %}>
                             <div class="title">
                                 <strong>Importing</strong>
                                 To Auto-converted Site
@@ -158,7 +220,7 @@
     {% } elseif (in_array($state, ['completed'])) { %} 
         <div class="row">
             <div class="col-xs-12 col-lg-11">
-                <div class="migrate-progress">
+                <div class="migrate-progress {{ $state }}">
                     <div class="vula">
                         <div data-step="1">
                             <div class="title">

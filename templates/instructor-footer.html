@@ -136,7 +136,7 @@
         $('#year').on('change', function(event){
             const _y = $('#year_selected');
             console.log($('#year').val());
-            _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full'))
+            _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full') + '<i class="fas fa-question-circle" title="Subject to Faculty approval."></i>');
         })
 
         $('#restart_wrokflow').on('click', function(event) {

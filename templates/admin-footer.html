@@ -117,6 +117,75 @@
             }
         }
 
+    function check_if_im_in_notification(add_me) {
+            const _el = $('#btn_add_me'),
+                  _state = $('#state').val(),
+                  _email = $('#current_user').val(),
+                  _email_starter = $('#organizer').data('email'),
+                  _notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ').split(';');
+            
+            if (_email === _email_starter) return;
+
+            let in_list = _notification.includes(_email);      
+
+            if ((in_list === false) && (_state !== 'init')) {
+                _el.show();
+                console.log(`showing ${add_me}`);
+                if (add_me) {
+                    try {
+                        console.log(`adding ${_email}`);
+                        $('#notifications')[0].insert(_email);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            } else {
+                _el.hide();
+            }
+        }
+
+        if ($('#notifications').exists()) {
+            $("#notifications").on('change', function(event) {
+                var i = $(this).val();
+                if (i != tmp_inp) {
+                    tmp_inp = i;
+                    setSaving('label[for=notifications]');
+                    check_if_im_in_notification(false);
+
+                    var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
+                    var data = { 
+                        "type": "updating",
+                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
+                    }
+
+                    $.ajax({
+                        url: '{{ $submit }}',
+                        method: 'POST',
+                        data: data,
+                        dataType: 'json'
+                    }).done(function(data) {
+                        if (!data.success) {
+                            console.log(data);
+                            console.log("Could not save email");
+                            setError('label[for=notifications]');
+                        } else {
+                            setSaved('label[for=notifications]');
+                        }
+                    }).fail(function(xhr) {
+                        console.log(xhr);
+                        setError('label[for=notifications]');
+                    });
+                }
+            }).email_multiple({ data: $('#notifications').val().split(';'), inputPlaceholder: $('#notifications').attr('placeholder') });
+            tmp_inp = $('#notifications').val();
+
+            $("#btn_add_me").click( function(event) {
+                event.preventDefault();
+                check_if_im_in_notification(true);
+            });
+            check_if_im_in_notification(false);
+        }
+
         $('#autoreload').click(function(event) {
             const _autoreload = $('#autoreload').is(':checked');
             if (_autoreload && $('#sites .active a').exists()) {
@@ -173,7 +242,29 @@
                     hideHelp();
                 });
             }
-        });        
+        });
+
+        $('#search_form input[type="text"]').keyup(function(){
+            event.preventDefault();
+
+            let _input = $('#search_form input[type="text"]'),
+                _btn = $('#search_form .btn');
+
+            if (_input.val().length > 2) {
+                _btn.removeClass('disabled').removeAttr('disabled');
+            } else {
+                _btn.addClass('disabled').attr('disabled', true);
+            }
+        });
+
+        $('#search_form .btn').on('click', function(event) {
+            event.preventDefault();
+
+            let _input = $('#search_form input[type="text"]'),
+                _btn = $('#search_form .btn');
+
+            console.log("search button");
+        });
 
         $('#btn_reload_progress').on('click', function(event) {
             event.preventDefault();

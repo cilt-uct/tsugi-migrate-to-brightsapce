@@ -24,7 +24,8 @@ class MigrateDAO {
             WHERE `migration`.link_id = :linkId and `site`.state is not null limit 1;";
 
         if ($is_admin) {
-            $query = "SELECT `migration`.created_at, `migration`.is_admin, `site`.state, '' as `email`, '' as `displayname`, '' as `notification`
+            $query = "SELECT `migration`.created_at, `migration`.is_admin, `site`.state, 
+                            '' as `email`, '' as `displayname`, `site`.notification as `notification`
                 FROM {$this->p}migration `migration`
                 left join {$this->p}migration_site `site` on `site`.link_id = `migration`.link_id
                 WHERE `migration`.link_id = :linkId limit 1;";
@@ -112,14 +113,36 @@ class MigrateDAO {
     }
 
     function updateMigration($link_id, $user_id, $notifications) {
+        $is_admin = FALSE; // Update all records at the same time
+
+        // $is_admin = $this->PDOX->rowDie("SELECT is_admin FROM {$this->p}migration where link_id = :linkId limit 1;",
+        //                                     array(':linkId' => $link_id));
+
+        // if (gettype($is_admin) == "boolean") {
+        //     $is_admin = FALSE;
+        // } else {
+        //     $is_admin = $is_admin['is_admin'] === 1;
+        // }
+
         $query = "UPDATE {$this->p}migration_site
                 SET modified_at = NOW(), modified_by = :userId, notification = :notifications
-                 WHERE link_id = :linkId;";
+                WHERE link_id = :linkId " . ($is_admin ? " and state = 'admin' " : "") .";";
+        
         $arr = array(':linkId' => $link_id, ':userId' => $user_id, ':notifications' => $notifications);
         return $this->PDOX->queryDie($query, $arr);
     }
 
     function addSitesMigration($link_id, $user_id, $sites) {
+
+        $notifications = $this->PDOX->rowDie("SELECT notification FROM {$this->p}migration_site where state = 'admin' and link_id = :linkId limit 1;", 
+                                            array(':linkId' => $link_id));
+
+        if (gettype($notifications) == "boolean") {
+            $notifications = '';
+        } else {
+            $notifications = $notifications['notification'];
+        }
+
         $result = [];
         foreach ($sites as $site) {
 
@@ -128,10 +151,11 @@ class MigrateDAO {
                 $workflow = ["$now,000 - [INFO] - Started Migration ($site)","$now,001 - [INFO] - Scheduled Export..."];
 
                 $query = "REPLACE INTO {$this->p}migration_site 
-                (site_id, link_id, started_at, started_by, modified_at, modified_by, active, state, workflow) 
-                    VALUES (:siteId, :linkId, NOW(), :userId, NOW(), :userId, 1, 'starting', :workflow);";
+                (site_id, link_id, started_at, started_by, modified_at, modified_by, active, state, workflow, notification) 
+                    VALUES (:siteId, :linkId, NOW(), :userId, NOW(), :userId, 1, 'starting', :workflow, :notification);";
                 
-                $arr = array(':siteId' => $site, ':linkId' => $link_id, ':userId' => $user_id, ':workflow' => json_encode($workflow));
+                $arr = array(':siteId' => $site, ':linkId' => $link_id, ':userId' => $user_id, 
+                                ':workflow' => json_encode($workflow), ':notification' => $notifications);
 
                 try {
                     $this->PDOX->queryDie($query, $arr);

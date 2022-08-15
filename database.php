@@ -62,11 +62,6 @@ array( "{$CFG->dbprefix}migration_site",
 $DATABASE_UPGRADE = function($oldversion) {
     global $CFG, $PDOX;
 
-    $sql= "UPDATE {$CFG->dbprefix}tdiscus_comment SET parent_id = 0 WHERE parent_id IS NULL";
-    echo("Upgrading: ".$sql."<br/>\n");
-    error_log("Upgrading: ".$sql);
-    $q = $PDOX->queryReturnError($sql);
-
     // This is a place to make sure added fields are present
     // if you add a field to a table, put it in here and it will be auto-added
     $add_some_fields = array(
@@ -105,9 +100,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryReturnError($sql);
     }
 
-
-    return 202012101330;
-
+    return 202208011200;
 }; // Don't forget the semicolon on anonymous functions :)
 
 // Do the actual migration if we are not in admin/upgrade.php
