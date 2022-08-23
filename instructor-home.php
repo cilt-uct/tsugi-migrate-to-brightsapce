@@ -65,7 +65,7 @@ $context = [
     'notifications' => $current_migration['notification'],
 
                  // 'init','starting','exporting','running','importing','completed','error','admin'
-    'state'      => 'starting', //$current_migration['state'],
+    'state'      => $current_migration['state'],
     'workflow'   => $workflow,
     'years'      => range(date("Y")+1, date("Y")+2),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
