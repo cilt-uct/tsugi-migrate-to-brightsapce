@@ -102,6 +102,7 @@
                         {% } %}
                         <span class="site_id">{{ $site['site_id'] }}</span>
                         <span class="state">{{ $site['state'] }}</span>
+                        {% if ($site['report'] == "1") { %}<i class="far fa-file-alt"></i>{% } %}
                     </a>
                 </li>
                 {% } %}

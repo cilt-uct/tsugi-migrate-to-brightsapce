@@ -80,7 +80,7 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id, `site`.title, `site`.state 
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state, if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report
             FROM {$this->p}migration_site `site`
             where `site`.link_id = :linkId
             having `site`.state <> 'admin';";
