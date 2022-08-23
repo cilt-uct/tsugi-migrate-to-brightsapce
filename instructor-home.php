@@ -46,12 +46,16 @@ $title = $CONTEXT->title;
 // $title = 'Med Gen 2 PTY5006S,2021';
 // $provider = 'none';
 
+// $title = 'EDN4507F,2022 Test';
+// $provider = 'EDN4507F,2022';
+
 $provider_details = get_provider_object($provider, $title);
 
 $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.min.css'), ],
-    'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
+    'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), addSession('static/js/jquery.validate.min.js'),  ],
+    
 
     'title'      => $title,
     'site_id'    => $site_id,
@@ -61,12 +65,20 @@ $context = [
     'notifications' => $current_migration['notification'],
 
                  // 'init','starting','exporting','running','importing','completed','error','admin'
-    'state'      => $current_migration['state'],
+    'state'      => 'starting', //$current_migration['state'],
     'workflow'   => $workflow,
     'years'      => range(date("Y")+1, date("Y")+2),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
+    'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
+    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_report.php')) ),
+    
+    'has_report' => $current_migration['report'] == "1",
     'provider'   => $provider,
     'provider_details'=> $provider_details,
+    
+    'current_provider' => $current_migration['provider'],
+    'current_dept'     => $current_migration['dept'],
+    'current_term'     => $current_migration['term'],
 
     'departments' => $departments
     // 'current'    => $current_migration

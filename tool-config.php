@@ -11,9 +11,13 @@ function get_provider_object($provider, $title) {
     }
 
     $test = $provider;
-    if ($test == 'none') {
+    if ($provider == 'none') {
         # see if we can get it from the title ???
         $test = [ strtoupper($title) ];
+    }
+
+    if (gettype($test) == "string") {
+        $test = [ $test ];
     }
 
     $list = array();

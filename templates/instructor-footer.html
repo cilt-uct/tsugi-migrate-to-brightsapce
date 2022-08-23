@@ -64,15 +64,27 @@
         }
 
         function migrateSite(a, type, alt) {
-            var organizer = $('#organizer').val().trim().replace(/\r?\n/g, ', ');
-            var notification = $('#'+ alt).val().trim().replace(/\r?\n/g, ', ');
-
+            const organizer = $('#organizer').val().trim().replace(/\r?\n/g, ', '),
+                  notification = $('#'+ alt).val().trim().replace(/\r?\n/g, ', '),
+                  _provider = $('#provider').exists() ? $('#provider') : undefined, 
+                  _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
+            
+            let provider = _provider ? _provider.val() : '',
+                dept = _provider ? 
+                            (_provider.prop('nodeName') == 'SELECT' ? _provider.find('option:selected').data('dept') : _provider.data('dept'))
+                            : (_provider_select ? _provider_select.val() : ''),
+                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear();
+        
             var data = { 
                 "type": type,
                 "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
-                "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
+                "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
+                "provider": provider,
+                "dept": dept,
+                "term": term,
             }
 
+            // console.log(data);
             var jqxhr = $.post('{{ $submit }}', data, function(result) {
                 hideHelp();
                 if (result.success === 1) {
@@ -90,6 +102,20 @@
                 hideHelp();
             });
         }
+
+        $('#year, #provider, #provider_select').on("change", function(event) {
+            if ($(this).val != '') {
+                $(this).find('option[data-type=default]').remove();
+            }
+        });
+
+        $("#metadata").validate({
+            rules: {
+                provider_select : { required: true },
+                provider : { required: true },
+                year : { required: true }
+            }
+        });
 
         if ($('#notifications').exists()) {
             $("#notifications").on('change', function(event) {
@@ -135,7 +161,6 @@
         
         $('#year').on('change', function(event){
             const _y = $('#year_selected');
-            console.log($('#year').val());
             _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full') + '<i class="fas fa-question-circle" title="Subject to Faculty approval."></i>');
         })
 
@@ -150,18 +175,20 @@
             event.preventDefault();
             const _me = $(this);
     
-            _me.html('<i class="fa fa-cog fa-spin"></i>Starting process...').addClass('disabled').attr('disabled', true);
-            timeout = setTimeout(function(){ $('#info').show(); }, 300);
+            if ($("#metadata").valid()) {
+                _me.html('<i class="fa fa-cog fa-spin"></i>Starting process...').addClass('disabled').attr('disabled', true);
+                timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
-            switch(_me.data('path')){
-                case 'a':
-                    $('#option-b').hide();
-                    migrateSite(_me.attr('id'), 'init', 'notifications');
-                    break;
-                case 'b':
-                    $('#option-a').hide();
-                    migrateSite(_me.attr('id'), 'site', 'notifications');
-                    break;    
+                switch(_me.data('path')){
+                    case 'a':
+                        $('#option-b').hide();
+                        migrateSite(_me.attr('id'), 'init', 'notifications');
+                        break;
+                    case 'b':
+                        $('#option-a').hide();
+                        migrateSite(_me.attr('id'), 'site', 'notifications');
+                        break;    
+                }
             }
         });
     });

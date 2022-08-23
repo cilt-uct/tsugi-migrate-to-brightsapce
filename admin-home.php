@@ -68,9 +68,14 @@ $context = [
     'state'      => $current_migration['state'],
     'site_stats' => array_merge($stats, $site_stats),
     'sites'      => $sites,
-    'reload_url'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('index.php')) ),
+    'reload_url' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('index.php')) ),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
-    'fetch_workflow'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
+    'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
+    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_report.php')) ),
+
+    'years'         => range(date("Y"), date("Y")+3),
+    'current_term'  => $current_migration['term'] < 2000 ? date("Y") : $current_migration['term'],
+
     'provider'   => $provider,
     // 'current'    => $current_migration
 ];

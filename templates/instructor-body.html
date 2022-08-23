@@ -4,7 +4,7 @@
     <!-- <pre>|{{ json_encode($provider_details) }}|</pre> -->
 
     {% if ($state == "init") { %}
-    <form class="form-inline text-left" method="post" target="_self" id="metadata"> 
+    <form class="form-inline text-left needs-validation" method="post" target="_self" id="metadata"> 
         <input type="hidden" name="state"  id="state" value="{{ $state }}"/>           
         <div class="row">
             <div class="col-xs-12">
@@ -29,19 +29,21 @@
         
         <div class="row" style="margin-top: 1em;">
             <div class="col-md-9 col-xs-offset-1">
-                <label for="organizer">My Site: <span id="site-title">{{ $title }}</span></label>
+                <label for="provider">My Site: <span id="site-title">{{ $title }}</span></label>
                 {%  $full = 'is the year for this course in Amathuba.';
                     $empty = 'that you will be teaching this course on Amathuba.';
 
                     if (count($provider_details) == 0) { %}
                     <div class="row">
                         <div class="col-xs-12">
-                            <select class="form-control" name="provider" id="provider" style="width: 420px">
-                                <option selected value="0">Please select a department</option>
-                                {%
+                            <select class="form-control" name="provider_select" id="provider_select" style="width: 420px" required>
+                                {% if ($current_dept == '') { %}
+                                <option selected data-type="default" value="">Please select a department</option>
+                                {% } 
                                     foreach ($departments as $el) {
                                         $str = $el[1] ." - ". $el[2];
-                                        print "<option value=\"". $el[0] ."\">". $str ."</option>";
+                                        $selected = ($current_dept == $el[0] ? 'selected' : '');
+                                        print "<option value=\"". $el[0] ."\" ". $selected .">". $str ."</option>";
                                     }
                                 %}
                             </select>
@@ -54,7 +56,7 @@
                     <div class="row">
                         {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
                             <div class="col-xs-2" style="padding: 0px;">
-                                <input type="text" 
+                                <input type="text" name="provider" id="provider"
                                     data-full="{{ $el['full'] }}"
                                     data-dept="{{ $el['dept'] }}"
                                     data-year="{{ $el['year'] }}"
@@ -67,26 +69,29 @@
                         {% } else { %}
                         <div class="row">
                             <div class="col-xs-10">
-                                <select class="form-control" name="provider" id="provider" style="width: 320px">
-                                    <option selected value="0">Please select the primary course code...</option>
-                                    {%
+                                <select class="form-control" name="provider" id="provider" style="width: 320px" required>
+                                    {% if ($current_provider == '') { %}
+                                    <option selected data-type="default" value="">Please select the primary course code...</option>
+                                    {% } 
                                         foreach ($provider_details as $el) {
                                             $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
-                                            print "<option value=\"". $str ."\">". $str ."</option>";
+                                            $selected = ($current_provider == $str ? 'selected' : '');
+                                            print "<option data-dept=\"". $el['dept'] ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
                                         }
                                     %}
                                 </select>
-                                <!-- <span>Additional course codes can be added later</span> -->
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                         {% } %}
                 {% } %}
-                        <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;">
-                            <option selected value="0">Please select a year </option>
-                            {% foreach ($years as $val) { %}
-                                <option value="{{$val}}">{{$val}}</option>
+                        <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;" required>
+                            {% if ($current_term  <= 2000) { %}
+                            <option selected value="" data-type="default" >Please select a year </option>
+                            {% }
+                            foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
+                                <option value="{{$val}}" {{$selected}}>{{$val}}</option>
                             {% } %}
                         </select>
                         <span id="year_selected" style="padding-left: 6px;" data-full="{{ $full }}" data-empty="{{ $empty }}">
@@ -102,8 +107,11 @@
             <div class="col-md-9 col-xs-offset-1">
                 <label for="organizer">My Email</label>
                 <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
+                {% 
+                    $value = $email != '' ? $name .' <'. $email .'>' : ''; 
+                %}
                 <input type="text" name="organizer" id="organizer" disabled="true" class="form-control disabled" 
-                        value="{{ $name }} <{{ $email }}>" data-email="{{ $email }}"/>
+                        value="{{ $value }}" data-email="{{ $email }}"/>
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
@@ -131,20 +139,28 @@
                     <br/>
                     <i>I don't need any of my Vula content converted, and only want a course site.</i>
                 </div> -->
-                <div class="col-xs-offset-1">
+                <!-- <div class="col-xs-offset-1"> -->
                     <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </form>
     {% } elseif (in_array($state, ['starting','exporting','running','importing','error'])) { %} 
+        <input type="hidden" name="provider" id="provider" data-dept="{{$current_dept}}" value="{{$current_provider}}"/>
+        <input type="hidden" name="year" id="year" value="{{$current_term}}"/>
+
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <ul>                
                     <li>You have successfully initiated the migration process </li>
                     <li>The duration of the process depends on the size of your Resources folder in Vula.</li>
                     <li>You will receive a confirmation email once the conversion is complete.</li>
                 </ul>
+            </div>
+            <div class="col-md-4">
+                <button id="show-report" type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportModal">
+                    <i class="far fa-file-alt"></i> View Conversion Report
+                </button>
             </div>
         </div>
         <div class="row">
@@ -297,4 +313,24 @@
         </div>
     </div>
     {% } %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel" style="display: inline-block;">Conversion Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <iframe id="reportModal-iframe" src="{{$fetch_report}}" style="width:100%; height: 420px;border:0px;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

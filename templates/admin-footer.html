@@ -46,7 +46,7 @@
                 $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
-                var jqxhr = $.post('{{ $submit }}', { "type": 'add_sites', "sites": sites }, function(result) {
+                var jqxhr = $.post('{{ $submit }}', { "type": 'add_sites', "sites": sites, 'term': $('#year').val() }, function(result) {
                     hideHelp();
                     if (result.success === 1) {
                         $('#' + a).html('<i class="fa fa-check"></i> Refreshing page ...');
@@ -71,10 +71,22 @@
 
         function getworkflow(site) {
             var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
-                const _pre = $('#pre');
+                const _pre = $('#pre'),
+                      _btn = $('#show-report'),
+                      _iframe = $('#reportModal-iframe'),
+                      _report_url = '{{ $fetch_report }}';
 
                 if (result.success === 1) {
-                    _pre.html(result.msg.join("<br/>"));
+                    _pre.html(result.workflow.join("<br/>"));
+
+                    if (result.report.length > 2) {
+                        _btn.show();
+                        _iframe.attr('src', _report_url +'&site=' + site);
+                        console.log(_report_url +'&site=' + site);
+                    } else {
+                        _btn.hide();
+                    }
+                    
                     setProgress(true);
                 } else {
                     _pre.html("Could not load workflow for site.");
@@ -117,7 +129,7 @@
             }
         }
 
-    function check_if_im_in_notification(add_me) {
+        function check_if_im_in_notification(add_me) {
             const _el = $('#btn_add_me'),
                   _state = $('#state').val(),
                   _email = $('#current_user').val(),
@@ -155,8 +167,9 @@
                     var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
                     var data = { 
                         "type": "updating",
-                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
-                    }
+                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
+                        "term": $('#year').val()
+                    };
 
                     $.ajax({
                         url: '{{ $submit }}',
@@ -185,6 +198,33 @@
             });
             check_if_im_in_notification(false);
         }
+
+        $('#year').on('change', function(event){
+            const _y = $('#year');
+            var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
+            var data = { 
+                "type": "updating",
+                "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
+                "term": $('#year').val()
+            };
+
+            $.ajax({
+                url: '{{ $submit }}',
+                method: 'POST',
+                data: data,
+                dataType: 'json'
+            }).done(function(data) {
+                if (!data.success) {
+                    // console.log("Could not save term");
+                    setError('label[for=year]');
+                } else {
+                    setSaved('label[for=year]');
+                }
+            }).fail(function(xhr) {
+                // console.log(xhr);
+                setError('label[for=year]');
+            });
+        })
 
         $('#autoreload').click(function(event) {
             const _autoreload = $('#autoreload').is(':checked');
@@ -293,5 +333,6 @@
             }
         });
         // 'all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'completed' => 0,'error' => 0
+        // $('#reportModal').modal('show');
     });
 </script>

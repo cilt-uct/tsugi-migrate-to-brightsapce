@@ -24,7 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch($_POST['type']) {
             case 'init':
-                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, $_POST['notification']) ? 1 : 0;
+                $dept = isset($_POST['dept']) ? $_POST['dept'] : '';
+                $term = isset($_POST['term']) ? $_POST['term'] : date("Y");
+                $provider = isset($_POST['provider']) ? $_POST['provider'] : '';
+
+                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, $_POST['notification'], $dept, $term, $provider) ? 1 : 0;
                 break;
             case 'updating':    
             case 'starting':
@@ -32,11 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'running':
             case 'importing':
             case 'completed':
-                $result['success'] = $migrationDAO->updateMigration($LINK->id, $USER->id, $_POST['notification']) ? 1 : 0;
+                $result['success'] = $migrationDAO->updateMigration($LINK->id, $USER->id, $_POST['notification'], $_POST['term']) ? 1 : 0;
             case 'error':
                 break;
             case 'add_sites':
-                $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites']) ? 1 : 0;
+                $term = isset($_POST['term']) ? $_POST['term'] : date("Y");
+
+                $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites'], $term) ? 1 : 0;
                 break;
             case 'delete':
                 $result['success'] = $migrationDAO->removeSite($LINK->id, $USER->id, $_POST['site']) ? 1 : 0;
@@ -50,11 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['type'])) {
         switch($_GET['type']) {
             case 'workflow':
-                $workflow = $migrationDAO->getWorkflow($LINK->id, $_GET['site']);
+                $result = $migrationDAO->getWorkflowAndReport($LINK->id, $_GET['site']);
 
                 $result = [
-                        'success' => $workflow ? 1 : 0, 
-                        'msg' => $workflow ? json_decode($workflow['workflow']) : []
+                        'success' => $result ? 1 : 0, 
+                        'workflow' => $result ? json_decode($result['workflow']) : [],
+                        'report' => $result['report'] ? $result['report'] : ''
                     ];
                 break;
         }
