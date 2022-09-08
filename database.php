@@ -33,6 +33,7 @@ array( "{$CFG->dbprefix}migration_site",
     `link_id` int NOT NULL,
     `site_id` varchar(99) NOT NULL,
     `transfer_site_id` varchar(255) NOT NULL,
+    `imported_site_id` int DEFAULT NULL,
     `started_at` datetime DEFAULT NULL,
     `started_by` int NOT NULL DEFAULT '0',
     `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -41,12 +42,11 @@ array( "{$CFG->dbprefix}migration_site",
     `term` int,
     `dept` VARCHAR(25),
     `active` tinyint(1) DEFAULT '0',
-    `state` enum('init','starting','exporting','running','importing','completed','error','admin') NOT NULL DEFAULT 'init',
+    `state` enum('init','starting','exporting','running','importing','updating','completed','error','admin') DEFAULT NULL,
     `title` VARCHAR(99),
     `workflow` mediumtext,
     `notification` mediumtext,
     `report` mediumtext,
-    `site_url` VARCHAR(255),
     `files` mediumtext,
 
     PRIMARY KEY (`site_id`,`link_id`),
@@ -71,10 +71,10 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration', 'is_admin', 'TINYINT(1) NOT NULL DEFAULT 0'),
 
         array('migration_site', 'title', 'VARCHAR(99)'),
-        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','completed','error','admin')"),
+        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','updating','completed','error','admin')"),
         array('migration_site', 'transfer_site_id', 'varchar(255)'),
+        array('migration_site', 'imported_site_id', 'int'),
         array('migration_site', 'report', 'mediumtext'),
-        array('migration_site', 'site_url', 'VARCHAR(255)'),
         array('migration_site', 'files', 'mediumtext'),
         array('migration_site', 'term', 'int'),
         array('migration_site', 'dept', 'VARCHAR(25)'),
@@ -106,7 +106,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryReturnError($sql);
     }
 
-    return 202208011200;
+    return 202209008200;
 }; // Don't forget the semicolon on anonymous functions :)
 
 // Do the actual migration if we are not in admin/upgrade.php

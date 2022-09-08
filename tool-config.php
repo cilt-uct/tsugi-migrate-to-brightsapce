@@ -3,6 +3,7 @@
 # The configuration file - stores the paths to the scripts
 $tool = array();
 $tool['debug'] = FALSE;
+$tool['brightspace_url'] = 'https://amathuba.uct.ac.za/d2l/home/';
 
 function get_provider_object($provider, $title) {
 
