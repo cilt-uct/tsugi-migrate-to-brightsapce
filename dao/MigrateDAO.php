@@ -19,7 +19,7 @@ class MigrateDAO {
             `migration`.created_at, `site`.started_at, `site`.modified_at,
             ifnull(`user`.displayname,'') as displayname, ifnull(`user`.email,'') as email,
             if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report,
-            `site`.state, `site`.`active`, `site`.workflow, `migration`.is_admin,
+            `site`.state, `site`.`active`, `site`.workflow, `migration`.is_admin, `site`.imported_site_id,
             ifnull(`site`.`provider`, '') as `provider`, 
             ifnull(`site`.`term`, 0) as `term`, 
             ifnull(`site`.`dept`, '') as `dept`
@@ -80,7 +80,7 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id, `site`.title, `site`.state, if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report
             FROM {$this->p}migration_site `site`
             where `site`.link_id = :linkId
             having `site`.state <> 'admin';";
@@ -114,7 +114,7 @@ class MigrateDAO {
         $query = "UPDATE {$this->p}migration_site
                 SET modified_at = NOW(), modified_by = :userId, started_at = NOW(), started_by = :userId, 
                     workflow = :workflow, active = 1, state='starting', notification = :notifications,
-                    term =  :term, provider = :provider, dept = :dept, report = NULL, files = NULL
+                    term =  :term, provider = :provider, dept = :dept, report = NULL, imported_site_id = NULL, files = NULL
                 WHERE `link_id` = :linkId and `site_id` = :siteId;";
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
@@ -188,7 +188,7 @@ class MigrateDAO {
     }
     
     function getWorkflowAndReport($link_id, $site_id) {
-        $query = "SELECT workflow, report FROM {$this->p}migration_site where link_id = :linkId and site_id = :siteId;";
+        $query = "SELECT workflow, report, imported_site_id FROM {$this->p}migration_site where link_id = :linkId and site_id = :siteId;";
         $rows = $this->PDOX->rowDie($query, array(':siteId' => $site_id, ':linkId' => $link_id));
 
         return ($rows == 0 ? [] : $rows);

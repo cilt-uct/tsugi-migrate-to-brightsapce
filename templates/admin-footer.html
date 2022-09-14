@@ -73,14 +73,18 @@
             var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
                 const _pre = $('#pre'),
                       _btn = $('#show-report'),
+                      _btn_vula = $('#show-vula'),
+                      _btn_amathuba = $('#show-amathuba'),
                       _iframe = $('#reportModal-iframe'),
                       _report_url = '{{ $fetch_report }}';
 
                 if (result.success === 1) {
                     _pre.html(result.workflow.join("<br/>"));
+                    _btn_vula.show();
 
                     if (result.report.length > 2) {
                         _btn.show();
+                        _btn_amathuba.show();
                         _iframe.attr('src', _report_url +'&site=' + site);
                         console.log(_report_url +'&site=' + site);
                     } else {

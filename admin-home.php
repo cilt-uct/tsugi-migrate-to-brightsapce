@@ -49,7 +49,7 @@ $site_stats_raw = $migrationDAO->getMigrationsPerLinkStats($LINK->id);
 foreach ($site_stats_raw as $v) {
     $site_stats[$v['state']] = $v['n'];
 }
-$stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'completed' => 0,'error' => 0);
+$stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'updating' => 0,'completed' => 0,'error' => 0);
 
 $menu = false; // We are not using a menu
 

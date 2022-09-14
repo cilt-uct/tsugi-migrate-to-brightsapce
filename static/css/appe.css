@@ -621,21 +621,55 @@ form#metadata button {
   top: 24px;
 }
 #show-report.btn-primary.admin {
-  right: 32px;
+  right: 65px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   top: 2px;
   margin: 0px;
   padding: 4px;
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
 }
 #show-report.btn-primary.admin i {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+#show-vula {
+  margin-top: 32px;
+  padding-left: 26px;
+}
+#show-vula.admin {
+  right: 20px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  background-image: url(../img/vula.svg);
+}
+
+#show-amathuba {
+  margin-top: 20px;
+  padding-left: 16px;
+}
+#show-amathuba.admin {
+  right: 115px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  background-image: url(../img/amathuba_woodmark.svg);
 }
 
 .form-control.error {
