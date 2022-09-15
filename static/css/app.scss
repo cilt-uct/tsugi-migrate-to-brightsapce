@@ -795,7 +795,7 @@ form#metadata {
     }
 
     &.admin {
-        right: 65px;
+        right: 35px;
         border-top-right-radius: 0px;
         border-top-left-radius: 0px;
         top: 2px;
@@ -814,12 +814,13 @@ form#metadata {
     }
 }
 
-#show-vula{
+#show-vula {
     margin-top: 32px;
     padding-left: 26px;     
+    background-color:lightgrey;
 
     &.admin {
-        right: 20px;
+        right: 78px;
         border-top-right-radius: 0px;
         border-top-left-radius: 0px;
         top: 2px;
@@ -832,12 +833,13 @@ form#metadata {
     }
 }
 
-#show-amathuba{
+#show-amathuba {
     margin-top: 20px;
-    padding-left: 16px;      
+    padding-left: 16px; 
+    background-color:lightgrey;     
 
     &.admin {
-        right: 115px;
+        right: 123px;
         border-top-right-radius: 0px;
         border-top-left-radius: 0px;
         top: 2px;
