@@ -741,6 +741,9 @@ table#allstats tbody td {
   width: 100px;
   text-align: center;
 }
+table#allstats tbody td a {
+  display: block;
+}
 table#allstats tbody td.zero {
   color: #ccc;
 }
@@ -749,6 +752,9 @@ table#allstats tbody td.error {
 }
 table#allstats tbody td.completed {
   color: green;
+}
+table#allstats tbody tr:hover td, table#allstats tbody tr.single:hover td {
+  background-color: rgba(210, 222, 255, 0.5);
 }
 table#allstats tbody tr > td:first-child {
   width: 200px;

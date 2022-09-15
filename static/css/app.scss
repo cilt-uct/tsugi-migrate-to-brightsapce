@@ -924,6 +924,10 @@ table#allstats {
             width: 100px;
             text-align: center;
 
+            a {
+                display: block;
+            }
+            
             &.zero {
                 color: #ccc;
             }
@@ -936,6 +940,12 @@ table#allstats {
                 color: green;
             }
         }   
+
+        tr:hover, tr.single:hover {
+            td {
+                background-color: rgba(210, 222, 255, 0.5);
+            }
+        }
 
         tr > td:first-child {
             width: 200px;
