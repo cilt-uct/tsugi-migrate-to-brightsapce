@@ -22,6 +22,7 @@ if (!$USER->instructor) {
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 $course_providers  = $LAUNCH->ltiRawParameter('lis_course_section_sourcedid','none');
 $context_id = $LAUNCH->ltiRawParameter('context_id','none');
+$context_title = $LAUNCH->ltiRawParameter('context_title','No Title');
 $provider = "none";
 
 if ($course_providers != $context_id) {
@@ -42,7 +43,7 @@ $current_site_id = $LAUNCH->ltiRawParameter('context_id','none');
 
 $migrationDAO->setAdmin($LINK->id, $USER->id, $current_site_id);
 
-$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true);
+$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, true, $context_title);
 $sites = $migrationDAO->getMigrationsPerLink($LINK->id);
 $site_stats = array();
 $site_stats_raw = $migrationDAO->getMigrationsPerLinkStats($LINK->id);

@@ -18,6 +18,7 @@ $is_super_admin = $LAUNCH->ltiRawParameter('custom_superadmin', false);
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 $course_providers  = $LAUNCH->ltiRawParameter('lis_course_section_sourcedid','none');
 $context_id = $LAUNCH->ltiRawParameter('context_id','none');
+$context_title = $LAUNCH->ltiRawParameter('context_title','No Title');
 $provider = "none";
 
 if ($course_providers != $context_id) {
@@ -38,7 +39,7 @@ if ( $USER->instructor ) {
         header( 'Location: '.addSession('superadmin-home.php') ) ;
     } else {
         $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-        $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, $is_admin);
+        $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, $is_admin, $context_title);
     
         if (($is_admin == 'true') || ($current_migration['is_admin'] === 1)) {
             header( 'Location: '.addSession('admin-home.php') ) ;

@@ -145,7 +145,7 @@
             </div>
         </div>
     </form>
-    {% } elseif (in_array($state, ['starting','exporting','running','importing','error'])) { %} 
+    {% } elseif (in_array($state, ['starting','exporting','running','importing','updating','error'])) { %} 
         <input type="hidden" name="provider" id="provider" data-dept="{{$current_dept}}" value="{{$current_provider}}"/>
         <input type="hidden" name="year" id="year" value="{{$current_term}}"/>
 

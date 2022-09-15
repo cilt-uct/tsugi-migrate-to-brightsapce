@@ -11,7 +11,10 @@ class MigrateDAO {
         $this->p = $p;
     }
 
-    function getMigration($link_id, $user_id, $site_id, $provider, $is_admin) {
+    function getMigration($link_id, $user_id, $site_id, $provider, $is_admin, $title) {
+
+        $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':title' => $title);
+        $this->PDOX->queryDie("Update {$this->p}migration_site set title = :title where link_id = :linkId and site_id = :siteId;", $arr);
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id);
         $query = "SELECT 

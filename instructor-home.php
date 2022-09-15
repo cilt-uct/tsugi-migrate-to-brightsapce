@@ -18,6 +18,7 @@ $LAUNCH = LTIX::requireData();
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 $course_providers  = $LAUNCH->ltiRawParameter('lis_course_section_sourcedid','none');
 $context_id = $LAUNCH->ltiRawParameter('context_id','none');
+$context_title = $LAUNCH->ltiRawParameter('context_title','No Title');
 $provider = "none";
 
 if ($course_providers != $context_id) {
@@ -32,7 +33,7 @@ if ($course_providers != $context_id) {
 }
 
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, false);
+$current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, false, $context_title);
 
 $menu = false; // We are not using a menu
 
