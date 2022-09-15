@@ -193,4 +193,37 @@ class MigrateDAO {
 
         return ($rows == 0 ? [] : $rows);
     }    
+
+    #### SUPER ADMIN
+    function getAdminSiteIDs() {
+        $query = "SELECT `A`.link_id, `B`.site_id, ifnull(`B`.title, 'No Title') as title, `A`.created_at
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state = 'admin' 
+            where `A`.is_admin = 1 order by title, `A`.created_at asc;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
+    function getAdminSiteStatus() {
+        $query = "SELECT `B`.link_id, `B`.state, count(*) as n
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state <> 'admin' 
+            where `A`.is_admin = 1
+            group by `B`.link_id, `B`.state;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
+    function getSingleSiteStatus() {
+        $query = "SELECT `B`.state, count(*) as n
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state <> 'admin' 
+            where `A`.is_admin = 0
+            group by `B`.state;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
 }

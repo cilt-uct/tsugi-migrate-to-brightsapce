@@ -1,0 +1,11 @@
+{% foreach($scripts as $script): %}
+    <script src="{{$script}}" type="text/javascript"></script>
+{% endforeach; %}
+
+<script type="text/javascript">
+    jQuery.fn.exists = function(){ return this.length > 0; }
+
+    $(function() {
+
+    });
+</script>

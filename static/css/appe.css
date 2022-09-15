@@ -731,3 +731,41 @@ form#metadata button {
 #provider-error {
   width: 320px;
 }
+
+table#allstats thead > tr > th {
+  text-transform: capitalize;
+  text-align: center;
+  border-bottom: 1px solid #1f2123;
+}
+table#allstats tbody td {
+  width: 100px;
+  text-align: center;
+}
+table#allstats tbody td.zero {
+  color: #ccc;
+}
+table#allstats tbody td.error {
+  color: #4b0004;
+}
+table#allstats tbody td.completed {
+  color: green;
+}
+table#allstats tbody tr > td:first-child {
+  width: 200px;
+  text-align: left;
+  padding-left: 8px;
+}
+table#allstats tbody tr.single td {
+  background-color: #eaeaea;
+}
+table#allstats tfoot td {
+  border-top: 1px solid #1f2123;
+  border-bottom: 1px double #1f2123;
+  text-align: center;
+  font-weight: bold;
+}
+table#allstats tfoot tr > td:first-child {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 10px;
+}

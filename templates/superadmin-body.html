@@ -1,0 +1,51 @@
+<section>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Amathuba Migration Statistics</h3>
+            <hr style="margin: 5px 0px;"/>
+
+            {% $totals = $states; 
+                
+                function getClass($val, $default) {
+                    return $val <= 0 ? "zero" : $default;
+                }
+            %}
+            <table id="allstats">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        {% foreach ($states as $key => $val) { %}
+                            <th class="{{$key}}">{{$key}}</th>
+                        {% } %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% foreach ($admin_sites as $row) { %}
+                      <tr>
+                        <td>
+                            <a href="https://vula.uct.ac.za/portal/site/{{$row['site_id']}}/" target="_blank">{{$row['title']}}</a></td>
+                        {% foreach ($states as $key => $val) { $totals[$key] += $row['stats'][$key]; %}
+                            <td class="{{ getClass($row['stats'][$key], $key) }}">{{ $row['stats'][$key] }}</td>
+                        {% } %}
+                      </tr>
+                    {% } %}
+                    <tr class="single">
+                        <td>Single</td>
+                        {% foreach ($states as $key => $val) { $totals[$key] += $single_sites[$key]; %}
+                            <td class="{{$key}}">{{ $single_sites[$key] }}</td>
+                        {% } %}
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        {% foreach ($states as $key => $val) { %}
+                            <td class="{{$key}}">{{ $totals[$key] }}</td>
+                        {% } %}
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</section>

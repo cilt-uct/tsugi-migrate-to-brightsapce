@@ -11,6 +11,8 @@ use \Migration\DAO\MigrateDAO;
 $LAUNCH = LTIX::requireData();
 
 $is_admin = $LAUNCH->ltiRawParameter('custom_admin', false);
+$is_super_admin = $LAUNCH->ltiRawParameter('custom_superadmin', false);
+
 // custom_admin=true
 
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
@@ -31,13 +33,18 @@ if ($course_providers != $context_id) {
 
 $menu = false; // We are not using a menu
 if ( $USER->instructor ) {
-    $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-    $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, $is_admin);
 
-    if (($is_admin == 'true') || ($current_migration['is_admin'] === 1)) {
-        header( 'Location: '.addSession('admin-home.php') ) ;
+    if ($is_super_admin) {
+        header( 'Location: '.addSession('superadmin-home.php') ) ;
     } else {
-        header( 'Location: '.addSession('instructor-home.php') ) ;
+        $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+        $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, $is_admin);
+    
+        if (($is_admin == 'true') || ($current_migration['is_admin'] === 1)) {
+            header( 'Location: '.addSession('admin-home.php') ) ;
+        } else {
+            header( 'Location: '.addSession('instructor-home.php') ) ;
+        }
     }
 } else {
     header( 'Location: '.addSession('student-home.php') ) ;
