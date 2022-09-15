@@ -232,6 +232,9 @@ form#metadata button {
   font-size: 80%;
   display: block;
 }
+.row a.site span.state {
+  text-transform: capitalize;
+}
 .row a.site i.far {
   position: absolute;
   top: 4px;
@@ -259,6 +262,7 @@ form#metadata button {
 .row #stats > li > a {
   padding: 2px 5px;
   font-size: 80%;
+  text-transform: capitalize;
 }
 .row #search_form {
   margin-bottom: 16px;
@@ -281,7 +285,8 @@ form#metadata button {
   font-size: 1rem;
   padding: 3px 10px 2px;
 }
-.row #search_form .input-group-btn > .btn:focus, .row #search_form .form-control:focus {
+.row #search_form .input-group-btn > .btn:focus,
+.row #search_form .form-control:focus {
   outline: none;
   border-color: #555;
 }
@@ -302,16 +307,19 @@ form#metadata button {
   grid-column-gap: 14px;
   grid-row-gap: 0px;
 }
-.row .migrate-progress .vula, .row .migrate-progress .amathuba {
+.row .migrate-progress .vula,
+.row .migrate-progress .amathuba {
   position: relative;
   border-radius: 8px;
   padding: 184px 0.4rem 0.4rem;
 }
-.row .migrate-progress .vula > div, .row .migrate-progress .amathuba > div {
+.row .migrate-progress .vula > div,
+.row .migrate-progress .amathuba > div {
   position: relative;
   border-radius: 8px;
 }
-.row .migrate-progress .vula > div:before, .row .migrate-progress .amathuba > div:before {
+.row .migrate-progress .vula > div:before,
+.row .migrate-progress .amathuba > div:before {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   content: attr(data-step);
   font-size: 3.6rem;
@@ -321,7 +329,8 @@ form#metadata button {
   font-weight: bold;
   top: -18px;
 }
-.row .migrate-progress .vula > div:after, .row .migrate-progress .amathuba > div:after {
+.row .migrate-progress .vula > div:after,
+.row .migrate-progress .amathuba > div:after {
   content: "";
   background-color: #0f476a;
   background-image: url(../img/right-arrow.svg);
@@ -337,7 +346,8 @@ form#metadata button {
   top: -8%;
   left: 98%;
 }
-.row .migrate-progress .vula > div > .title, .row .migrate-progress .amathuba > div > .title {
+.row .migrate-progress .vula > div > .title,
+.row .migrate-progress .amathuba > div > .title {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   text-transform: uppercase;
   border-radius: 8px 8px 0px 0px;
@@ -346,19 +356,22 @@ form#metadata button {
   font-size: 1em;
   padding: 8px;
 }
-.row .migrate-progress .vula > div > .title > strong, .row .migrate-progress .amathuba > div > .title > strong {
+.row .migrate-progress .vula > div > .title > strong,
+.row .migrate-progress .amathuba > div > .title > strong {
   display: block;
   font-size: 160%;
   padding: 5px;
 }
-.row .migrate-progress .vula > div > .desc, .row .migrate-progress .amathuba > div > .desc {
+.row .migrate-progress .vula > div > .desc,
+.row .migrate-progress .amathuba > div > .desc {
   font-family: Arial, Helvetica, sans-serif;
   border-radius: 0px 0px 8px 8px;
   text-align: center;
   padding: 12px;
   height: 144px;
 }
-.row .migrate-progress .vula > div > .desc a, .row .migrate-progress .amathuba > div > .desc a {
+.row .migrate-progress .vula > div > .desc a,
+.row .migrate-progress .amathuba > div > .desc a {
   text-align: left !important;
   display: block;
   margin: auto;
@@ -368,7 +381,8 @@ form#metadata button {
   border-radius: 8px;
   border: 1px solid #cedbe3;
 }
-.row .migrate-progress .vula > div > .desc a .far, .row .migrate-progress .amathuba > div > .desc a .far {
+.row .migrate-progress .vula > div > .desc a .far,
+.row .migrate-progress .amathuba > div > .desc a .far {
   float: left;
   font-size: 4rem;
   color: #20376b;
@@ -376,55 +390,70 @@ form#metadata button {
   top: 10px;
   margin: 0px 16px 38px 0px;
 }
-.row .migrate-progress .vula > div > .desc a:hover, .row .migrate-progress .vula > div > .desc a:active, .row .migrate-progress .amathuba > div > .desc a:hover, .row .migrate-progress .amathuba > div > .desc a:active {
+.row .migrate-progress .vula > div > .desc a:hover, .row .migrate-progress .vula > div > .desc a:active,
+.row .migrate-progress .amathuba > div > .desc a:hover,
+.row .migrate-progress .amathuba > div > .desc a:active {
   border: 1px solid #20376b;
 }
-.row .migrate-progress .vula > div > .desc .glyphicon, .row .migrate-progress .amathuba > div > .desc .glyphicon {
+.row .migrate-progress .vula > div > .desc .glyphicon,
+.row .migrate-progress .amathuba > div > .desc .glyphicon {
   font-size: 6rem;
 }
-.row .migrate-progress .vula > div.disabled .title, .row .migrate-progress .amathuba > div.disabled .title {
+.row .migrate-progress .vula > div.disabled .title,
+.row .migrate-progress .amathuba > div.disabled .title {
   background: #8b8b8b;
   color: #eee;
 }
-.row .migrate-progress .vula > div.disabled .title:after, .row .migrate-progress .amathuba > div.disabled .title:after {
+.row .migrate-progress .vula > div.disabled .title:after,
+.row .migrate-progress .amathuba > div.disabled .title:after {
   background-color: #8b8b8b;
 }
-.row .migrate-progress .vula > div.disabled .desc, .row .migrate-progress .amathuba > div.disabled .desc {
+.row .migrate-progress .vula > div.disabled .desc,
+.row .migrate-progress .amathuba > div.disabled .desc {
   background: #cecece;
   color: #888;
 }
-.row .migrate-progress .vula > div.disabled:before, .row .migrate-progress .amathuba > div.disabled:before {
+.row .migrate-progress .vula > div.disabled:before,
+.row .migrate-progress .amathuba > div.disabled:before {
   color: #8b8b8b;
 }
-.row .migrate-progress .vula > div.disabled:after, .row .migrate-progress .amathuba > div.disabled:after {
+.row .migrate-progress .vula > div.disabled:after,
+.row .migrate-progress .amathuba > div.disabled:after {
   background-color: #8b8b8b;
 }
-.row .migrate-progress .vula > div.error .title, .row .migrate-progress .amathuba > div.error .title {
+.row .migrate-progress .vula > div.error .title,
+.row .migrate-progress .amathuba > div.error .title {
   background: #6b160c;
   color: #fff;
 }
-.row .migrate-progress .vula > div.error .title strong, .row .migrate-progress .amathuba > div.error .title strong {
+.row .migrate-progress .vula > div.error .title strong,
+.row .migrate-progress .amathuba > div.error .title strong {
   z-index: 100;
   padding-top: 20px;
 }
-.row .migrate-progress .vula > div.error .title i, .row .migrate-progress .amathuba > div.error .title i {
+.row .migrate-progress .vula > div.error .title i,
+.row .migrate-progress .amathuba > div.error .title i {
   color: rgba(255, 255, 255, 0.3);
   position: absolute;
   font-size: 5rem;
   left: 44%;
   z-index: 30;
 }
-.row .migrate-progress .vula > div.error .title:after, .row .migrate-progress .amathuba > div.error .title:after {
+.row .migrate-progress .vula > div.error .title:after,
+.row .migrate-progress .amathuba > div.error .title:after {
   background-color: #6b160c;
 }
-.row .migrate-progress .vula > div.error .desc, .row .migrate-progress .amathuba > div.error .desc {
+.row .migrate-progress .vula > div.error .desc,
+.row .migrate-progress .amathuba > div.error .desc {
   background: #b59191;
   color: #300;
 }
-.row .migrate-progress .vula > div.error:before, .row .migrate-progress .amathuba > div.error:before {
+.row .migrate-progress .vula > div.error:before,
+.row .migrate-progress .amathuba > div.error:before {
   color: #6b160c;
 }
-.row .migrate-progress .vula > div.error:after, .row .migrate-progress .amathuba > div.error:after {
+.row .migrate-progress .vula > div.error:after,
+.row .migrate-progress .amathuba > div.error:after {
   background-image: url("../img/cross.svg");
   background-color: #6b160c;
 }
@@ -601,11 +630,12 @@ form#metadata button {
   height: 148px;
 }
 
-#sites > li.active > a.site,
-#sites > li.active > a.site:focus,
-#sites > li.active > a.site:hover {
+#sites > li.active > a.site, #sites > li.active > a.site:focus, #sites > li.active > a.site:hover {
   color: #fff;
   background-color: #337ab7;
+}
+#sites > li div > a {
+  margin-bottom: 10px;
 }
 
 #show-report.btn-primary {
@@ -621,15 +651,15 @@ form#metadata button {
   top: 24px;
 }
 #show-report.btn-primary.admin {
-  right: 32px;
+  right: 35px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   top: 2px;
   margin: 0px;
   padding: 4px;
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
 }
 #show-report.btn-primary.admin i {
   position: absolute;
@@ -638,13 +668,47 @@ form#metadata button {
   transform: translate(-50%, -50%);
 }
 
+#show-vula,
+#show-amathuba {
+  margin-top: 32px;
+  padding-left: 26px;
+  background-color: lightgrey;
+}
+#show-vula.admin,
+#show-amathuba.admin {
+  right: 78px;
+  border-radius: 0px 0px 4px 4px;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  background-image: url(../img/vula.svg);
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+#show-amathuba {
+  margin-top: 20px;
+  padding-left: 16px;
+  background-color: lightgrey;
+}
+#show-amathuba.admin {
+  right: 123px;
+  background-image: url(../img/amathuba_woodmark.svg);
+}
+
 .form-control.error {
   border-color: #4b0004;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
 
-#year-error, #provider_select-error, #provider-error {
+#year-error,
+#provider_select-error,
+#provider-error {
   color: #4b0004;
   position: relative;
   background-color: rgba(75, 0, 4, 0.2);

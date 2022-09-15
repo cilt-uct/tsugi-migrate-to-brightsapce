@@ -73,11 +73,24 @@
             var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
                 const _pre = $('#pre'),
                       _btn = $('#show-report'),
+                      _btn_vula = $('#show-vula'),
+                      _btn_amathuba = $('#show-amathuba'),
                       _iframe = $('#reportModal-iframe'),
-                      _report_url = '{{ $fetch_report }}';
+                      _report_url = '{{ $fetch_report }}',
+                      _amathuba_url = 'https://amathuba.uct.ac.za/d2l/home/',
+                      _vula_url = 'https://vula.uct.ac.za/portal/site/';
+
+                if(result.amathuba_site) {
+                    _btn_amathuba.show();
+                    _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
+                } else {
+                    _btn_amathuba.hide();
+                }
 
                 if (result.success === 1) {
                     _pre.html(result.workflow.join("<br/>"));
+                    _btn_vula.show();
+                    _btn_vula.attr('href', _vula_url + site);
 
                     if (result.report.length > 2) {
                         _btn.show();
