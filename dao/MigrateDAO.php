@@ -114,7 +114,7 @@ class MigrateDAO {
         $query = "UPDATE {$this->p}migration_site
                 SET modified_at = NOW(), modified_by = :userId, started_at = NOW(), started_by = :userId, 
                     workflow = :workflow, active = 1, state='starting', notification = :notifications,
-                    term =  :term, provider = :provider, dept = :dept, report = NULL, imported_site_id = NULL, files = NULL
+                    term =  :term, provider = :provider, dept = :dept, report = NULL, files = NULL, imported_site_id = 0, transfer_site_id = NULL
                 WHERE `link_id` = :linkId and `site_id` = :siteId;";
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
