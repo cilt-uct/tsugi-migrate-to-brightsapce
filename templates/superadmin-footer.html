@@ -7,5 +7,9 @@
 
     $(function() {
 
+        $('.single').on('click', function(event){
+            event.preventDefault();
+            $('.single_expand').toggle();
+        })
     });
 </script>

@@ -747,11 +747,18 @@ table#allstats tbody td a {
 table#allstats tbody td.zero {
   color: #ccc;
 }
+table#allstats tbody td.completed, table#allstats tbody td.error {
+  font-weight: bold;
+}
 table#allstats tbody td.error {
   color: #4b0004;
 }
 table#allstats tbody td.completed {
   color: green;
+}
+table#allstats tbody td.total {
+  font-weight: bold;
+  color: #848484;
 }
 table#allstats tbody tr:hover td, table#allstats tbody tr.single:hover td {
   background-color: rgba(210, 222, 255, 0.5);
@@ -763,6 +770,9 @@ table#allstats tbody tr > td:first-child {
 }
 table#allstats tbody tr.single td {
   background-color: #eaeaea;
+}
+table#allstats tbody tr.single_expand {
+  display: none;
 }
 table#allstats tfoot td {
   border-top: 1px solid #1f2123;

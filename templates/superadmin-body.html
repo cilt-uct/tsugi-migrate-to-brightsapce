@@ -5,7 +5,7 @@
             <hr style="margin: 5px 0px;"/>
 
             {% $totals = $states; 
-                
+               $total_t = 0;
                 function getClass($val, $default) {
                     return $val <= 0 ? "zero" : $default;
                 }
@@ -17,6 +17,7 @@
                         {% foreach ($states as $key => $val) { %}
                             <th class="{{$key}}">{{$key}}</th>
                         {% } %}
+                        <th>Totals</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,16 +25,25 @@
                       <tr>
                         <td>
                             <a href="https://vula.uct.ac.za/portal/site/{{$row['site_id']}}/" target="_blank">{{$row['title']}}</a></td>
-                        {% foreach ($states as $key => $val) { $totals[$key] += $row['stats'][$key]; %}
+                        {% $t = 0; 
+                           foreach ($states as $key => $val) { $totals[$key] += $row['stats'][$key]; $t += $row['stats'][$key]; %}
                             <td class="{{ getClass($row['stats'][$key], $key) }}">{{ $row['stats'][$key] }}</td>
-                        {% } %}
+                        {% } 
+                        $total_t += $t; %}
+                        <td class="total">{{$t}}</td>
                       </tr>
                     {% } %}
                     <tr class="single">
                         <td>Single</td>
-                        {% foreach ($states as $key => $val) { $totals[$key] += $single_sites[$key]; %}
+                        {% $t = 0; 
+                            foreach ($states as $key => $val) { $totals[$key] += $single_sites[$key]; $t += $single_sites[$key]; %}
                             <td class="{{$key}}">{{ $single_sites[$key] }}</td>
-                        {% } %}
+                        {% } 
+                        $total_t += $t; %}
+                        <td class="total">{{$t}}</td>
+                    </tr>
+                    <tr class="single_expand">
+                        <td colspan="{% print(2 + count($states)); %}">asdad</td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -42,6 +52,7 @@
                         {% foreach ($states as $key => $val) { %}
                             <td class="{{$key}}">{{ $totals[$key] }}</td>
                         {% } %}
+                        <td class="total">{{$total_t}}</td>
                     </tr>
                 </tfoot>
             </table>

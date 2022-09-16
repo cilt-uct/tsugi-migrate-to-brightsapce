@@ -932,12 +932,21 @@ table#allstats {
                 color: #ccc;
             }
 
+            &.completed, &.error {
+                font-weight: bold;
+            }
+
             &.error {
                 color:#4b0004;
             }
 
             &.completed {
                 color: green;
+            }
+
+            &.total {
+                font-weight: bold;
+                color: #848484;
             }
         }   
 
@@ -957,6 +966,10 @@ table#allstats {
             td {
                 background-color: #eaeaea;
             }
+        }
+
+        tr.single_expand {
+            display: none;
         }
     }
 
