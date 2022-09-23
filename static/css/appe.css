@@ -612,13 +612,13 @@ form#metadata button {
   background-image: url("../img/amathuba_woodmark.svg");
   grid-template-columns: 1fr;
 }
-.row .migrate-progress.completed .vula::after {
+.row .migrate-progress.completed .vula::after, .row .migrate-progress.updating .vula::after {
   display: none;
 }
-.row .migrate-progress.completed .vula > div > .desc {
+.row .migrate-progress.completed .vula > div > .desc, .row .migrate-progress.updating .vula > div > .desc {
   height: 148px;
 }
-.row .migrate-progress.completed .amathuba > div > .desc {
+.row .migrate-progress.completed .amathuba > div > .desc, .row .migrate-progress.updating .amathuba > div > .desc {
   height: 148px;
 }
 

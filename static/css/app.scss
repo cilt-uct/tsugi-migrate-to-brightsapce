@@ -758,7 +758,8 @@ form#metadata {
             }
         }
 
-        &.completed {
+        &.completed,
+        &.updating {
 
             .vula {
                 &::after {
