@@ -301,14 +301,15 @@
             event.preventDefault();
 
             let _input = $('#search_form input[type="text"]'),
-                _filter = _input.val().toLowerCase(),
+                _filter = _input.val(),
                 _btn = $('#search_form .btn');
 
             if (_input.val().length > 0) {
                 _btn.removeClass('disabled').removeAttr('disabled');
                 $('#sites>li').each(function(){
-                     let _title = $(this).data('title').toLowerCase();                
-                    (_title.indexOf(_filter) == 0) ? $(this).show() : $(this).hide();    
+                     let _title = $(this).data('title').toLowerCase(),
+                        _siteid = $(this).data('siteid');           
+                    (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
                 });
             } else {
                 $('#sites>li').each(function(){
@@ -322,13 +323,14 @@
             event.preventDefault();
 
             let _input = $('#search_form input[type="text"]'),
-                _filter = _input.val().toLowerCase(),
+                _filter = _input.val(),
                 _btn = $('#search_form .btn');
 
                 if (_input.val().length > 0) {
                     $('#sites>li').each(function(){
-                        let _title = $(this).data('title').toLowerCase();                
-                        (_title.indexOf(_filter) == 0) ? $(this).show() : $(this).hide();    
+                        let _title = $(this).data('title').toLowerCase(),
+                            _siteid = $(this).data('siteid');           
+                        (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
                     });
                 }
         });
