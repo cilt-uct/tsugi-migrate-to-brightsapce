@@ -304,13 +304,16 @@
                 _filter = _input.val().toLowerCase(),
                 _btn = $('#search_form .btn');
 
-            if (_input.val().length > 2) {
+            if (_input.val().length > 0) {
                 _btn.removeClass('disabled').removeAttr('disabled');
                 $('#sites>li').each(function(){
                      let _title = $(this).data('title').toLowerCase();                
                     (_title.indexOf(_filter) == 0) ? $(this).show() : $(this).hide();    
                 });
             } else {
+                $('#sites>li').each(function(){
+                    $(this).show();
+                });
                 _btn.addClass('disabled').attr('disabled', true);
             }
         });
