@@ -297,14 +297,19 @@
             }
         });
 
-        $('#search_form input[type="text"]').keyup(function(){
+        $('#search_form input[type="text"]').keyup(function(event){
             event.preventDefault();
 
             let _input = $('#search_form input[type="text"]'),
+                _filter = _input.val().toLowerCase(),
                 _btn = $('#search_form .btn');
 
             if (_input.val().length > 2) {
                 _btn.removeClass('disabled').removeAttr('disabled');
+                $('#sites>li').each(function(){
+                     let _title = $(this).data('title').toLowerCase();                
+                    (_title.indexOf(_filter) == 0) ? $(this).show() : $(this).hide();    
+                });
             } else {
                 _btn.addClass('disabled').attr('disabled', true);
             }
@@ -314,9 +319,15 @@
             event.preventDefault();
 
             let _input = $('#search_form input[type="text"]'),
+                _filter = _input.val().toLowerCase(),
                 _btn = $('#search_form .btn');
 
-            console.log("search button");
+                if (_input.val().length > 0) {
+                    $('#sites>li').each(function(){
+                        let _title = $(this).data('title').toLowerCase();                
+                        (_title.indexOf(_filter) == 0) ? $(this).show() : $(this).hide();    
+                    });
+                }
         });
 
         $('#btn_reload_progress').on('click', function(event) {

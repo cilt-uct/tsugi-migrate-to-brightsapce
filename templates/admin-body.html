@@ -56,7 +56,7 @@
                     <a class="btn btn-default btn-xs" href="{{ $reload_url }}" id="btn_reload_progress" role="button" style="font-size: 0.8rem;float: right;">Reload Progress</a>
                 </small>
             </h4>
-            <!-- <div class="row" id="search_form">
+            <div class="row" id="search_form">
                 <div class="col-xs-12">
                     <div class="input-group">
                         <i class="fas fa-search"></i>
@@ -66,7 +66,7 @@
                         </span>
                     </div>
                 </div>
-            </div>   -->
+            </div>  
         </div>
         <div class="col-md-8">
             <ul id="stats" class="nav nav-pills" role="tablist">
@@ -84,7 +84,7 @@
         <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 440px;">            
             <ul id="sites">
                 {% foreach ($sites as $site) { %}
-                <li data-state="{{ $site['state'] }}">
+                <li data-state="{{ $site['state'] }}" data-title="{{ $site['title'] }}">
                     <div style="float: right; z-index: 1000;">
                         <a class="btn btn-default btn-xs reload" href="#" 
                             role="button" style="display: block; font-size: 1rem" title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
