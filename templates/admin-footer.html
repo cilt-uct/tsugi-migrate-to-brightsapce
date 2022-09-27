@@ -41,14 +41,14 @@
         }
 
         function submit_sites(sites, a, text) {
-            const re = /\/site\/(.*)[\?|\/]?/i;
+            const re = /[{(]?[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?/i;
             
             if (sites.length > 0) {
                 $('#' + a).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
                 var jqxhr = $.post('{{ $submit }}', { 'type': 'add_sites', 
-                                                        'sites': sites.map(x => x.match(re)[1].split('/')[0].split('?')[0]), 
+                                                        'sites': sites.map(x => x.match(re)[0]),
                                                         'term': $('#year').val() }, function(result) {
                     hideHelp();
                     if (result.success === 1) {
@@ -175,11 +175,10 @@
         function doSearch() {
             let _input = $('#search_form input[type="text"]'),
                 _filter = _input.val(),
-                _btn = $('#search_form .btn');
+                _btn = $('#search_form #btn_search');
 
             if (_input.val().length > 0) {
-                _btn.removeClass('disabled').removeAttr('disabled');
-                _btn.text("Clear");
+                _btn.removeClass('disabled').removeAttr('disabled').removeClass('fas fa-search').text("X");
                 $('#sites>li').each(function(){
                     let _title = $(this).data('title').toLowerCase(),
                         _siteid = $(this).data('siteid');
@@ -187,8 +186,7 @@
                 });
             } else {
                 $('#sites>li').show();
-                _btn.addClass('disabled').attr('disabled', true);
-                _btn.text("Go!");
+                _btn.addClass('disabled').attr('disabled', true).addClass('fas fa-search').text("");
             }
         }
 
@@ -325,14 +323,14 @@
             doSearch();
         });
 
-        $('#search_form .btn').on('click', function(event) {
+        $('#search_form #btn_search').on('click', function(event) {
             event.preventDefault();
 
-            if($(this).text == "Go!") {
+            if($(this).hasClass('fa-search')) {
                 doSearch();
             } else {
                 $('#search_form input[type="text"]').val('');
-                $(this).text("Go!").addClass('disabled').attr('disabled', true);
+                $(this).addClass('disabled').attr('disabled', true).addClass('fas fa-search').text("");
                 $('#sites>li').show();
             }
         });
