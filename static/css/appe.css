@@ -359,7 +359,7 @@ form#metadata button {
   font-family: Arial, Helvetica, sans-serif;
   border-radius: 0px 0px 8px 8px;
   text-align: center;
-  padding: 12px;
+  padding: 12px 30px;
   height: 144px;
 }
 .row .migrate-progress .vula > div > .desc a,
@@ -369,18 +369,18 @@ form#metadata button {
   margin: auto;
   color: #1f2123;
   font-size: 1.1rem;
-  padding: 8px;
+  padding: 10px 10px 10px 65px;
   border-radius: 8px;
   border: 1px solid #cedbe3;
+  position: relative;
 }
 .row .migrate-progress .vula > div > .desc a .far,
 .row .migrate-progress .amathuba > div > .desc a .far {
-  float: left;
   font-size: 4rem;
   color: #20376b;
-  position: relative;
-  top: 10px;
-  margin: 0px 16px 38px 0px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-55px, -50%);
 }
 .row .migrate-progress .vula > div > .desc a:hover, .row .migrate-progress .vula > div > .desc a:active,
 .row .migrate-progress .amathuba > div > .desc a:hover,
@@ -390,6 +390,10 @@ form#metadata button {
 .row .migrate-progress .vula > div > .desc .glyphicon,
 .row .migrate-progress .amathuba > div > .desc .glyphicon {
   font-size: 6rem;
+}
+.row .migrate-progress .vula > div > .desc img,
+.row .migrate-progress .amathuba > div > .desc img {
+  width: 110px;
 }
 .row .migrate-progress .vula > div.disabled .title,
 .row .migrate-progress .amathuba > div.disabled .title {
@@ -404,6 +408,10 @@ form#metadata button {
 .row .migrate-progress .amathuba > div.disabled .desc {
   background: #cecece;
   color: #888;
+}
+.row .migrate-progress .vula > div.disabled .desc img,
+.row .migrate-progress .amathuba > div.disabled .desc img {
+  filter: grayscale(100%);
 }
 .row .migrate-progress .vula > div.disabled:before,
 .row .migrate-progress .amathuba > div.disabled:before {
@@ -547,12 +555,7 @@ form#metadata button {
 }
 .row .migrate-progress .amathuba > div:after {
   background-color: #73c9a6;
-}
-.row .migrate-progress .amathuba > div:last-child {
-  background-image: url("../img/graphic.png");
-  background-repeat: no-repeat;
-  background-position-x: 50%;
-  background-position-y: 135px;
+  top: calc(50% - 18px);
 }
 .row .migrate-progress .amathuba > div:last-child .title {
   background: transparent;
@@ -563,8 +566,14 @@ form#metadata button {
 .row .migrate-progress .amathuba > div:last-child .desc {
   background: transparent;
 }
+.row .migrate-progress .amathuba > div:last-child .desc img {
+  width: 135px;
+}
 .row .migrate-progress .amathuba > div:last-child:after {
   display: none;
+}
+.row .migrate-progress .amathuba > div.disabled:last-child .title {
+  color: #8b8b8b;
 }
 .row .migrate-progress .amathuba > div:only-child {
   background-image: none;
