@@ -229,4 +229,12 @@ class MigrateDAO {
         $arr = array();
         return $this->PDOX->allRowsDie($query, $arr);
     }
+
+    function getReport($site_id) {
+        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, `site`.imported_site_id
+                    FROM {$this->p}migration_site `site` WHERE `site`.site_id = :siteId order by `site`.modified_at desc";
+           
+        return $this->PDOX->allRowsDie($query, array(':siteId' => $site_id));
+    }
+
 }

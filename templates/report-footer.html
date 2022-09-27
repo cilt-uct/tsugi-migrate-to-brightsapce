@@ -1,0 +1,12 @@
+<script src="https://tsugidev.uct.ac.za/static/js/jquery-1.11.3.js"></script>
+<script src="https://tsugidev.uct.ac.za/static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script src="https://tsugidev.uct.ac.za/static/js/jquery-ui-1.11.4/jquery-ui.min.js"></script>
+<script src="https://tsugidev.uct.ac.za/static/js/jquery.timeago-1.6.3.js"></script>
+<script type="text/javascript">
+    jQuery.fn.exists = function(){ return this.length > 0; }
+
+    $(function() {
+        $(".date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); }); 
+    });
+</script>
+</body></html>
