@@ -580,12 +580,14 @@ form#metadata button {
 }
 .row .migrate-progress .amathuba > div:only-child .title {
   background-color: #73c9a6;
+  color: #eee;
 }
 .row .migrate-progress .amathuba > div:only-child .desc {
   background-color: #cfede1;
 }
 .row .migrate-progress .amathuba > div:only-child.disabled .title {
   background: #8b8b8b;
+  color: #eee;
 }
 .row .migrate-progress .amathuba > div:only-child.disabled .desc {
   background: #cecece;
