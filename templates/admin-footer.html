@@ -169,6 +169,26 @@
             }
         }
 
+        function doSearch() {
+            let _input = $('#search_form input[type="text"]'),
+                _filter = _input.val(),
+                _btn = $('#search_form .btn');
+
+            if (_input.val().length > 0) {
+                _btn.removeClass('disabled').removeAttr('disabled');
+                _btn.text("Clear");
+                $('#sites>li').each(function(){
+                    let _title = $(this).data('title').toLowerCase(),
+                        _siteid = $(this).data('siteid');
+                    (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
+                });
+            } else {
+                $('#sites>li').show();
+                _btn.addClass('disabled').attr('disabled', true);
+                _btn.text("Go!");
+            }
+        }
+
         if ($('#notifications').exists()) {
             $("#notifications").on('change', function(event) {
                 var i = $(this).val();
@@ -299,40 +319,19 @@
 
         $('#search_form input[type="text"]').keyup(function(event){
             event.preventDefault();
-
-            let _input = $('#search_form input[type="text"]'),
-                _filter = _input.val(),
-                _btn = $('#search_form .btn');
-
-            if (_input.val().length > 0) {
-                _btn.removeClass('disabled').removeAttr('disabled');
-                $('#sites>li').each(function(){
-                     let _title = $(this).data('title').toLowerCase(),
-                        _siteid = $(this).data('siteid');           
-                    (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
-                });
-            } else {
-                $('#sites>li').each(function(){
-                    $(this).show();
-                });
-                _btn.addClass('disabled').attr('disabled', true);
-            }
+            doSearch();
         });
 
         $('#search_form .btn').on('click', function(event) {
             event.preventDefault();
 
-            let _input = $('#search_form input[type="text"]'),
-                _filter = _input.val(),
-                _btn = $('#search_form .btn');
-
-                if (_input.val().length > 0) {
-                    $('#sites>li').each(function(){
-                        let _title = $(this).data('title').toLowerCase(),
-                            _siteid = $(this).data('siteid');           
-                        (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
-                    });
-                }
+            if($(this).text == "Go!") {
+                doSearch();
+            } else {
+                $('#search_form input[type="text"]').val('');
+                $(this).text("Go!").addClass('disabled').attr('disabled', true);
+                $('#sites>li').show();
+            }
         });
 
         $('#btn_reload_progress').on('click', function(event) {
