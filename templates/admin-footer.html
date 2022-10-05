@@ -78,14 +78,18 @@
                       _btn = $('#show-report'),
                       _btn_vula = $('#show-vula'),
                       _btn_amathuba = $('#show-amathuba'),
+                      _btn_import_log = $('#show-import-log'),
                       _iframe = $('#reportModal-iframe'),
                       _report_url = '{{ $fetch_report }}',
                       _amathuba_url = 'https://amathuba.uct.ac.za/d2l/home/',
-                      _vula_url = 'https://vula.uct.ac.za/portal/site/';
+                      _vula_url = 'https://vula.uct.ac.za/portal/site/',
+                      _import_log_url = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
 
                 if(result.amathuba_site) {
                     _btn_amathuba.show();
+                    _btn_import_log.show();
                     _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
+                    _btn_import_log.attr('href', _import_log_url + result.amathuba_site + '/history/display?ou=' + result.amathuba_site);
                 } else {
                     _btn_amathuba.hide();
                 }

@@ -749,6 +749,22 @@ form#metadata button {
   background-image: url(../img/amathuba_woodmark.svg);
 }
 
+#show-import-log {
+  margin-top: 0px;
+  padding-left: 26px;
+  background-color: lightgrey;
+  text-align: center !important;
+}
+#show-import-log.admin {
+  right: 123px;
+  border-radius: 0px 0px 4px 4px;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  width: 42px;
+  height: 42px;
+}
+
 .form-control.error {
   border-color: #4b0004;
   border-bottom-left-radius: 0px;
