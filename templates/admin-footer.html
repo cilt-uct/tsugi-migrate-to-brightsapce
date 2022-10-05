@@ -87,11 +87,16 @@
 
                 if(result.amathuba_site) {
                     _btn_amathuba.show();
-                    _btn_import_log.show();
                     _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
-                    _btn_import_log.attr('href', _import_log_url + result.amathuba_site + '/history/display?ou=' + result.amathuba_site);
                 } else {
                     _btn_amathuba.hide();
+                }
+
+                if(result.amathuba_site && result.report.length > 2) {
+                    _btn_import_log.show();
+                    _btn_import_log.attr('href', _import_log_url + result.amathuba_site + '/history/display?ou=' + result.amathuba_site);
+                } else {
+                    _btn_import_log.hide();
                 }
 
                 if (result.success === 1) {
