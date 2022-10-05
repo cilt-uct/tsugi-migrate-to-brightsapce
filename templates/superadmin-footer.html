@@ -6,10 +6,58 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
-
         $('.single').on('click', function(event){
             event.preventDefault();
-            $('.single_expand').toggle();
+            $(".single").removeClass('active-state');
+            $(this).addClass("active-state");
+            var filter = $(this).attr('id');
+            var page = 1;
+            getSingleSites(page, filter);
         })
+
+        $(document).on('click', '.pagination_link', function(){  
+           var page = $(this).attr("id");  
+           var filter = $(this).data("state");
+            getSingleSites(page, filter);
+        });  
+
+        $(document).on('click', '.show_report', function(event){
+            var site = event.target.id;
+            getworkflow(site);
+        });
+
+        function getSingleSites(page, filter) {
+            var jqxhr = $.post('{{ $fetch_single_sites }}', {'page' : page, 'state' : filter }, function(result) {
+                $("#singlesites_data").show();
+                $("#singlesites_data").html(result);
+            })
+            .fail(function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err.Message);
+            })
+            .always(function() {
+               console.log("finished");
+            });
+        }
+
+        function getworkflow(site) {
+            var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
+                const _btn = $('#show-report'),
+                      _iframe = $('#reportModal-iframe'),
+                      _report_url = '{{ $fetch_report }}';
+
+                    if (result.report.length > 2) {
+                        _iframe.attr('src', _report_url +'&site=' + site);
+                        console.log(_report_url +'&site=' + site);
+                    } else {
+                        _btn.hide();
+                    }
+                    
+                    setProgress(true);
+            })
+            .fail(function() {
+                $('#pre').html("Could not load workflow for site.");
+            });
+        }
     });
 </script>

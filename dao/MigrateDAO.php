@@ -261,4 +261,34 @@ class MigrateDAO {
         return $this->PDOX->rowDie($query, array(':linkId' => $lid, ':siteId' => $sid));
     }
 
+    function getSingleSites() {
+        $query = "SELECT `B`.*
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state <> 'admin'
+            where `A`.is_admin = 0 order by title, `A`.created_at asc;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
+    function getSingleSitesByState($link_id, $state, $start_from, $records_per_page) {
+        $query = "SELECT `B`.*
+        FROM {$this->p}migration `A`
+        inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state = '$state'
+        where `A`.is_admin = 0 order by title, `A`.created_at ASC LIMIT $start_from, $records_per_page;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
+    function getAllSingleSitesByState($link_id, $state) {
+        $query = "SELECT `B`.*
+        FROM {$this->p}migration `A`
+        inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state = '$state'
+        where `A`.is_admin = 0 order by title, `A`.created_at ASC;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
 }
