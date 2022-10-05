@@ -45,13 +45,23 @@ $output .= "<table class='table flex-wrap' id='singlesites_tbl'><tbody>";
 
 foreach($result as $row) {
     $output .= '<tr>  
-                    <td><span>'.$row["started_at"].'</span></td>  
-                    <td colspan="2"><span class="label alert-danger"><strong>State: </strong>'.$row["state"].'</span></td>
-                    <td colspan="2"><span>'.$row["title"].'</span></td>
-                    <td colspan="2"><a href="https://vula.uct.ac.za/portal/site/'.$row["site_id"].'" target="_blank" class="img">
-                        <img src="./static/img/vula.svg" class="img-fluid"/>
-                        </a>
-                    </td>';
+                <td><span>'.$row["started_at"].'</span></td> ';
+                
+    if($row['state'] == "completed") {
+        $output .= ' <td colspan="2"><span class="label alert-success"><strong>State: </strong>'.$row["state"].'</span></td>';
+    } else if($row['state'] == "init" || $row['state'] == "starting" || $row['state'] == "running" || $row['state'] == "importing" || $row['state'] == "exporting") {
+        $output .= ' <td colspan="2"><span class="label alert-info"><strong>State: </strong>'.$row["state"].'</span></td>';
+    } else if($row['state'] == "updating") {
+        $output .= ' <td colspan="2"><span class="label alert-warning"><strong>State: </strong>'.$row["state"].'</span></td>';
+    } else if($row['state'] == "error") {
+        $output .= ' <td colspan="2"><span class="label alert-danger"><strong>State: </strong>'.$row["state"].'</span></td>';
+    }
+    
+    $output .= '<td colspan="2"><span>'.$row["title"].'</span></td>
+    <td colspan="2"><a href="https://vula.uct.ac.za/portal/site/'.$row["site_id"].'" target="_blank" class="img">
+        <img src="./static/img/vula.svg" class="img-fluid"/>
+        </a>
+    </td>';
 
     if($row["imported_site_id"] > 0) {
         $output .= '<td colspan="2"><a href="https://amathuba.uct.ac.za/d2l/home/'.$row["imported_site_id"].'" target="_blank" class="img">
@@ -62,7 +72,7 @@ foreach($result as $row) {
         $output .= '<td colspan="2">&nbsp;</td>';
     }
 
-    if($row["report"] != '') {
+    if($row["report"] != '' || $row["report"] != NULL) {
         $output .= '<td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-toggle="modal" data-target="#reportModal" id='.$row["site_id"].'></i></td>';
     } else {
         $output .= '<td colspan="2">&nbsp;</td>';
