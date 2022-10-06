@@ -940,6 +940,23 @@ $admin-button-size: 42px;
     }
 }
 
+#show-import-log {
+    margin-top: 0px;
+    padding-left: 26px;
+    background-color: lightgrey;
+    text-align: center !important;
+
+    &.admin {
+        right: 123px;
+        border-radius: 0px 0px 4px 4px;
+        top: 2px;
+        margin: 0px;
+        padding: 4px;
+        width: $admin-button-size;
+        height: $admin-button-size;
+    }
+}
+
 .form-control.error {
     border-color: #4b0004;
     border-bottom-left-radius: 0px;
