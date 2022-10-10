@@ -119,7 +119,7 @@ class MigrateDAO {
         $user_name = $user_details['displayname'];
         $user_email = $user_details['email'];
 
-        $workflow = ["$now,000 - [INFO] - Migration for site $site_id started by $user_name ($user_email)","$now,001 - [INFO] - Scheduled Export..."];
+        $workflow = ["$now,000 INFO Migration for site $site_id started by $user_name ($user_email)","$now,001 INFO Scheduled Export..."];
 
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, 
