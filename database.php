@@ -68,6 +68,7 @@ array( "{$CFG->dbprefix}migration_site_property",
   PRIMARY KEY (`site_id`,`name`),
   CONSTRAINT `migration_property_link_fk` FOREIGN KEY (`site_id`) REFERENCES `migration_site` (`site_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3"
+)
 );
 
 // Database upgrade
