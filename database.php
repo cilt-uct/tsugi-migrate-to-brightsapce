@@ -58,7 +58,16 @@ array( "{$CFG->dbprefix}migration_site",
         REFERENCES `{$CFG->dbprefix}migration` (`link_id`) 
         ON DELETE CASCADE ON UPDATE NO ACTION
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;"
-)
+),
+array( "{$CFG->dbprefix}migration_site_property",
+"CREATE TABLE `{$CFG->dbprefix}migration_site_property` (
+  `site_id` varchar(99) NOT NULL,
+  `key` varchar(45) NOT NULL,
+  `found` tinyint(1) DEFAULT '0',
+  `detail` mediumtext,
+  PRIMARY KEY (`site_id`,`name`),
+  CONSTRAINT `migration_property_link_fk` FOREIGN KEY (`site_id`) REFERENCES `migration_site` (`site_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3"
 );
 
 // Database upgrade
