@@ -228,8 +228,11 @@ class MigrateDAO {
     }
 
     function getReport($site_id) {
-        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, `site`.imported_site_id
-                    FROM {$this->p}migration_site `site` WHERE `site`.site_id = :siteId order by `site`.modified_at desc";
+        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, `site`.imported_site_id, 
+                        IF(`site`.transfer_site_id = :siteId, 1, 0)  as `is_found`
+                    FROM {$this->p}migration_site `site` 
+                    WHERE (`site`.site_id = :siteId or `site`.transfer_site_id = :siteId)
+                    order by `site`.modified_at desc";
            
         return $this->PDOX->allRowsDie($query, array(':siteId' => $site_id));
     }

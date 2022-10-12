@@ -246,7 +246,7 @@
                         <div class="desc">
                             <a href="#" data-toggle="modal" data-target="#reportModal">
                                 <i class="far fa-file-alt"></i>
-                                <span>Review the conversion report for remediation steps</span>
+                                <span>Review the report for remediation steps</span>
                             </a>
                         </div>
                     </div>
@@ -276,11 +276,17 @@
                     </div>
                     <div data-step="4" style="grid-area: 1 / 3 / 2 / 4;" {% if ($state == 'updating') { %}class="disabled"{% } %}>
                         <div class="title">
-                            <strong>Ready</strong>
-                            for Teaching
+                            <strong>Ready</strong> for Teaching
                         </div>
                         <div class="desc">
-                            <img src="./static/img/graphic.png" title="Ready"/>
+                            {% if ($imported_site_id > 0) { %}
+                            <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id }}" title="Open in Amathuba" id="btn-amathuba">
+                                <img src="./static/img/graphic.png" title="Ready"/>
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                            {% } else { %}
+                                <img src="./static/img/graphic.png" title="Ready"/>
+                            {% } %}
                         </div>
                     </div>
                 </div>
@@ -328,7 +334,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reportModalLabel" style="display: inline-block;">Conversion Report</h5>
+                    <a id="btn_open_report" href="/mod/tsugi-migrate-to-brightspace/report.php?sid={{ $site_id }}" target="_blank" class="btn btn-secondary">
+                        Conversion Report&nbsp;&nbsp;
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>

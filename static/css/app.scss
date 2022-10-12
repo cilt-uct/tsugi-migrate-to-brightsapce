@@ -452,7 +452,7 @@ form#metadata {
                         padding: 10px 10px 10px 65px;
 
                         border-radius: $border-size;
-                        border: 1px solid #cedbe3;
+                        border: 1px solid #333;
 
                         position: relative;
 
@@ -469,6 +469,17 @@ form#metadata {
                         &:active {
                             border: 1px solid #20376b;
                         }
+
+                        &#btn-amathuba {
+                            display: flex;
+                            justify-content: space-around;
+                            align-items: center;
+                            padding: 10px;
+
+                            & > i {
+                                font-size: 38px;
+                            }
+                        }
                     }
 
                     .glyphicon {
@@ -476,7 +487,8 @@ form#metadata {
                     }
 
                     img {
-                        width: 110px;
+                        max-width: 110px;
+                        width: 100%;
                     }
                 }
 
@@ -694,7 +706,8 @@ form#metadata {
                         background: transparent;
 
                         img {
-                            width: 135px;
+                            max-width: 135px;
+                            width: 100%;
                         }
                     }
 

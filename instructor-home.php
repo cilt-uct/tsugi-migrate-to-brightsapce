@@ -60,6 +60,8 @@ $context = [
 
     'title'      => $title,
     'site_id'    => $site_id,
+    'imported_site_id' => $current_migration['imported_site_id'],
+
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
     'name'       => $current_migration['state'] == 'init' ? $USER->displayname : $current_migration['displayname'],

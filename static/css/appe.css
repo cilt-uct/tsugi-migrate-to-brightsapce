@@ -236,7 +236,7 @@ form#metadata button {
 .row .progress-container {
   display: block;
   height: 2px;
-  background-color: #eaeaea;
+  background-color: rgb(234, 234, 234);
   border-top-width: 0px;
   border-bottom-width: 0px;
 }
@@ -371,7 +371,7 @@ form#metadata button {
   font-size: 1.1rem;
   padding: 10px 10px 10px 65px;
   border-radius: 8px;
-  border: 1px solid #cedbe3;
+  border: 1px solid #333;
   position: relative;
 }
 .row .migrate-progress .vula > div > .desc a .far,
@@ -387,13 +387,25 @@ form#metadata button {
 .row .migrate-progress .amathuba > div > .desc a:active {
   border: 1px solid #20376b;
 }
+.row .migrate-progress .vula > div > .desc a#btn-amathuba,
+.row .migrate-progress .amathuba > div > .desc a#btn-amathuba {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+.row .migrate-progress .vula > div > .desc a#btn-amathuba > i,
+.row .migrate-progress .amathuba > div > .desc a#btn-amathuba > i {
+  font-size: 38px;
+}
 .row .migrate-progress .vula > div > .desc .glyphicon,
 .row .migrate-progress .amathuba > div > .desc .glyphicon {
   font-size: 6rem;
 }
 .row .migrate-progress .vula > div > .desc img,
 .row .migrate-progress .amathuba > div > .desc img {
-  width: 110px;
+  max-width: 110px;
+  width: 100%;
 }
 .row .migrate-progress .vula > div.disabled .title,
 .row .migrate-progress .amathuba > div.disabled .title {
@@ -567,7 +579,8 @@ form#metadata button {
   background: transparent;
 }
 .row .migrate-progress .amathuba > div:last-child .desc img {
-  width: 135px;
+  max-width: 135px;
+  width: 100%;
 }
 .row .migrate-progress .amathuba > div:last-child:after {
   display: none;

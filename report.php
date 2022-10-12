@@ -9,11 +9,12 @@ require_once "dao/MigrateDAO.php";
 use \Tsugi\Core\LTIX;
 use \Migration\DAO\MigrateDAO;
 
-if (isset($_GET["sid"])) {
+if (isset($_GET["sid"]) || isset($_GET["tid"])) {
     $PDOX = LTIX::getConnection();
 
+    $id = isset($_GET["sid"]) ? $_GET["sid"] : $_GET["tid"];
     $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-    $list = $migrationDAO->getReport($_GET["sid"]);
+    $list = $migrationDAO->getReport($id);
 
     $reports = array();
     foreach ($list as $i => $row) {
@@ -28,6 +29,7 @@ if (isset($_GET["sid"])) {
                               'started' => date_format($started,"D, j M"),
                               'modified' => date_format($modified,"D, j M"),
                               'state' => $row['state'],
+                              'active' => $row['is_found'],
                               'imported_site_id' => $row['imported_site_id'],
                               'body' => $html->find('body')[0] ]);
     }

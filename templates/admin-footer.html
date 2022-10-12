@@ -79,12 +79,14 @@
                       _btn_vula = $('#show-vula'),
                       _btn_amathuba = $('#show-amathuba'),
                       _btn_import_log = $('#show-import-log'),
+                      _btn_open_report = $('#btn_open_report'),
                       _iframe = $('#reportModal-iframe'),
                       _report_url = '{{ $fetch_report }}',
                       _amathuba_url = 'https://amathuba.uct.ac.za/d2l/home/',
                       _vula_url = 'https://vula.uct.ac.za/portal/site/',
                       _import_log_url = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
 
+                _btn_open_report.attr('href', '/mod/tsugi-migrate-to-brightspace/report.php?sid=' + site);
                 if(result.amathuba_site) {
                     _btn_amathuba.show();
                     _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
