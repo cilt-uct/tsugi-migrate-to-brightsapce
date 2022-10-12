@@ -211,6 +211,9 @@ form#metadata button {
 .row #pre-buttons > a {
   margin-right: 10px;
 }
+.row #pre-buttons > a i {
+  margin-top: 4px;
+}
 .row h4#progress-title {
   margin-top: 0px;
   margin-bottom: 18px;
