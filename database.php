@@ -65,7 +65,7 @@ array( "{$CFG->dbprefix}migration_site_property",
   `key` varchar(45) NOT NULL,
   `found` tinyint(1) DEFAULT '0',
   `detail` mediumtext,
-  PRIMARY KEY (`site_id`,`name`),
+  PRIMARY KEY (`site_id`,`key`),
   CONSTRAINT `migration_property_link_fk` FOREIGN KEY (`site_id`) REFERENCES `migration_site` (`site_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3"
 )
