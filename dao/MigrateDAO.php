@@ -110,7 +110,7 @@ class MigrateDAO {
                                 array(':linkId' => $link_id, ':siteId' => $site_id));
     }    
 
-    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider) {
+    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $site_type) {
         $now = date("Y-m-d H:i:s");
 
         $user_details = $this->PDOX->rowDie("SELECT user_id, displayname,email FROM {$this->p}lti_user WHERE user_id = :userid;",
@@ -132,7 +132,7 @@ class MigrateDAO {
 
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
-                        ':term' => $term, ':provider' => $provider, ':dept' => $dept,
+                        ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':site_type' => $site_type,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
         return $this->PDOX->queryDie($query, $arr);
     }
@@ -157,7 +157,7 @@ class MigrateDAO {
         return $this->PDOX->queryDie($query, $arr);
     }
 
-    function addSitesMigration($link_id, $user_id, $sites, $term) {
+    function addSitesMigration($link_id, $user_id, $sites, $term, $site_type) {
 
         $notifications = $this->PDOX->rowDie("SELECT notification FROM {$this->p}migration_site where state = 'admin' and link_id = :linkId limit 1;", 
                                             array(':linkId' => $link_id));
@@ -172,7 +172,7 @@ class MigrateDAO {
         foreach ($sites as $site) {
 
             if (strlen($site) > 3) {
-                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]') ? 1 : 0;
+                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $site_type) ? 1 : 0;
                 array_push($result, $output);
             }
         }
