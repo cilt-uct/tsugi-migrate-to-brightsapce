@@ -124,11 +124,11 @@ class MigrateDAO {
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, 
                     active, state, workflow, notification, term, provider, dept, report, files, 
-                    imported_site_id, transfer_site_id)
+                    imported_site_id, transfer_site_id, test_conversion)
                 VALUES
                 (:siteId, :linkId, NOW(), :userId, NOW(), :userId,
                 1, 'starting', :workflow, :notifications, :term, :provider, :dept, NULL, NULL,
-                0, NULL);";
+                0, NULL, :site_type);";
 
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
