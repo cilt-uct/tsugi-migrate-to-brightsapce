@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $term = isset($_POST['term']) ? $_POST['term'] : date("Y");
                 $provider = isset($_POST['provider']) ? $_POST['provider'] : '';
 
-                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, $_POST['notification'], $dept, $term, $provider) ? 1 : 0;
+                $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, $_POST['notification'], $dept, $term, $provider, $_POST['is_test']) ? 1 : 0;
                 break;
             case 'updating':    
             case 'starting':
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'add_sites':
                 $term = isset($_POST['term']) ? $_POST['term'] : date("Y");
 
-                $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites'], $term) ? 1 : 0;
+                $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id, $_POST['sites'], $term, $_POST['is_test']) ? 1 : 0;
                 break;
             case 'delete':
                 $result['success'] = $migrationDAO->removeSite($LINK->id, $USER->id, $_POST['site']) ? 1 : 0;

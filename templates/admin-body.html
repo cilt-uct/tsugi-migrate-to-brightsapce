@@ -15,10 +15,15 @@
                                     Add Sites
                                 </button>
                             </div>
-                            <div class="col-md-9 col-xs-12">
-                                <div id="message" style="margin-top: 16px;"></div>
+                            <div class="col-md-1 col-xs-1"></div>
+                            <div class="col-md-8 col-xs-12">
+                                <button type="button" id="test_conversion" class="btn btn-light" name="test_conversion" value="test conversion">
+                                    <i class="fa fa-vial"></i> Add sites as Test Conversions
+                                </button>
                             </div>
                         </div>
+                        <div id="message" style="margin-top: 16px;"></div>
+                        <br/>
                     </div>
                     <div class="col-xs-6 admin">
                         <label for="notifications" style="left: 0px;">
@@ -89,7 +94,8 @@
                 <li data-state="{{ $site['state'] }}" data-title="{{ $site['title'] }}" data-siteid="{{ $site['site_id'] }}">
                     <div style="float: right; z-index: 1000;">
                         <a class="btn btn-default btn-xs reload" href="#" 
-                            role="button" style="display: block; font-size: 1rem" title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
+                            role="button" style="display: block; font-size: 1rem" title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}"
+                            data-istest="{{ $site['test_conversion']}}">
                             <i class="glyphicon glyphicon-repeat"></i>
                         </a>
                         <a class="btn btn-default btn-xs delete" href="#" 

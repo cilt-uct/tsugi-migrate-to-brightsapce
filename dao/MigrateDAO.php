@@ -83,7 +83,7 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report, `site`.test_conversion
             FROM {$this->p}migration_site `site`
             where `site`.link_id = :linkId
             having `site`.state <> 'admin';";
@@ -110,7 +110,7 @@ class MigrateDAO {
                                 array(':linkId' => $link_id, ':siteId' => $site_id));
     }    
 
-    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider) {
+    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test) {
         $now = date("Y-m-d H:i:s");
 
         $user_details = $this->PDOX->rowDie("SELECT user_id, displayname,email FROM {$this->p}lti_user WHERE user_id = :userid;",
@@ -124,15 +124,15 @@ class MigrateDAO {
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, 
                     active, state, workflow, notification, term, provider, dept, report, files, 
-                    imported_site_id, transfer_site_id)
+                    imported_site_id, transfer_site_id, test_conversion)
                 VALUES
                 (:siteId, :linkId, NOW(), :userId, NOW(), :userId,
                 1, 'starting', :workflow, :notifications, :term, :provider, :dept, NULL, NULL,
-                0, NULL);";
+                0, NULL, :is_test);";
 
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
-                        ':term' => $term, ':provider' => $provider, ':dept' => $dept,
+                        ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':is_test' => $is_test,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
         return $this->PDOX->queryDie($query, $arr);
     }
@@ -157,7 +157,7 @@ class MigrateDAO {
         return $this->PDOX->queryDie($query, $arr);
     }
 
-    function addSitesMigration($link_id, $user_id, $sites, $term) {
+    function addSitesMigration($link_id, $user_id, $sites, $term, $is_test) {
 
         $notifications = $this->PDOX->rowDie("SELECT notification FROM {$this->p}migration_site where state = 'admin' and link_id = :linkId limit 1;", 
                                             array(':linkId' => $link_id));
@@ -172,7 +172,7 @@ class MigrateDAO {
         foreach ($sites as $site) {
 
             if (strlen($site) > 3) {
-                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]') ? 1 : 0;
+                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $is_test) ? 1 : 0;
                 array_push($result, $output);
             }
         }

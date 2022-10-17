@@ -49,7 +49,8 @@
 
                 var jqxhr = $.post('{{ $submit }}', { 'type': 'add_sites', 
                                                         'sites': sites.map(x => x.match(re)[0]),
-                                                        'term': $('#year').val() }, function(result) {
+                                                        'term': $('#year').val(),
+                                                        'is_test': a == 'test_conversion' ? 1 : 0 }, function(result) {
                     hideHelp();
                     if (result.success === 1) {
                         $('#' + a).html('<i class="fa fa-check"></i> Refreshing page ...');
@@ -285,6 +286,11 @@
             doPost('btnAccept', 'Adding sites ...');
         });
 
+        $('#test_conversion').click(function(event) {
+            event.preventDefault();
+            doPost('test_conversion', 'Adding test sites ...');
+        });
+
         $('#sites').on('click', 'a.site', function(event) {
             event.preventDefault();
             const _me = $(this),
@@ -302,8 +308,9 @@
         $('#sites').on('click', 'a.reload', function(event) {
             event.preventDefault();
             const _me = $(this);
+            var btn_type = _me.attr('data-istest') == 1 ? 'test_conversion' : 'btnAccept';
 
-            submit_sites([_me.attr('rel')], 'btnAccept', 'Adding sites ...');
+            submit_sites([_me.attr('rel')], btn_type , 'Adding sites ...');
         });
 
         $('#sites').on('click', 'a.delete', function(event) {

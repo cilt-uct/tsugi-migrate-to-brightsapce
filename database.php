@@ -48,6 +48,7 @@ array( "{$CFG->dbprefix}migration_site",
     `notification` mediumtext,
     `report` mediumtext,
     `files` mediumtext,
+    `test_conversion` tinyint(1) NOT NULL DEFAULT '0',
 
     PRIMARY KEY (`site_id`,`link_id`),
     KEY `idx_started_by` (`started_by`),
@@ -88,6 +89,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration_site', 'files', 'mediumtext'),
         array('migration_site', 'term', 'int'),
         array('migration_site', 'dept', 'VARCHAR(25)'),
+        array('migration_site', 'test_conversion', 'tinyint(1) NOT NULL DEFAULT 0'),
     );
 
     foreach ( $add_some_fields as $add_field ) {
