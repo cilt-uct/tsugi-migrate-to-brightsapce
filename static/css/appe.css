@@ -735,6 +735,10 @@ form#metadata button {
   transform: translate(-50%, -50%);
 }
 
+#test_conversion {
+  font-weight: normal;
+  font-size: 1rem;
+}
 #test_conversion:hover {
   background-color: rgba(51, 122, 183, 0.4) !important;
 }

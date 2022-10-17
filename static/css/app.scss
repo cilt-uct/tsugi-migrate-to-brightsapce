@@ -924,8 +924,13 @@ $admin-button-size: 42px;
     }
 }
 
-#test_conversion:hover {
-    background-color: rgb(51, 122, 183, 0.4) !important;
+#test_conversion {
+    font-weight: normal;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: rgb(51, 122, 183, 0.4) !important;
+    }
 }
 
 #show-vula,
