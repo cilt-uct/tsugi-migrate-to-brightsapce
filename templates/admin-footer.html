@@ -87,7 +87,7 @@
                       _vula_url = 'https://vula.uct.ac.za/portal/site/',
                       _import_log_url = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
 
-                _btn_open_report.attr('href', '/mod/tsugi-migrate-to-brightspace/report.php?sid=' + site);
+                
                 if(result.amathuba_site) {
                     _btn_amathuba.show();
                     _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
@@ -107,10 +107,11 @@
                     _btn_vula.show();
                     _btn_vula.attr('href', _vula_url + site);
 
-                    if (result.report.length > 2) {
+                    if (result.report == 1) {
                         _btn.show();
-                        _iframe.attr('src', _report_url +'&site=' + site);
-                        console.log(_report_url +'&site=' + site);
+
+                        _btn_open_report.attr('href', _report_url + '?sid=' + site);
+                        _iframe.attr('src', _report_url + '?sid=' + site);
                     } else {
                         _btn.hide();
                     }
@@ -200,6 +201,10 @@
                 $('#sites>li').show();
                 _btn.addClass('disabled').attr('disabled', true).addClass('fas fa-search').text("");
             }
+        }
+
+        function btn_reset() {
+            $('#pre-buttons').children().hide();
         }
 
         if ($('#notifications').exists()) {
@@ -376,6 +381,7 @@
                     _sites.children().hide();
                     _sites.children('[data-state="'+_me.attr('rel')+'"]').show();
                 }
+                btn_reset();
                 setProgress(false);
             }
         });

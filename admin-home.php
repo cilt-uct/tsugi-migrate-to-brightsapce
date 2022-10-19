@@ -72,7 +72,7 @@ $context = [
     'reload_url' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('index.php')) ),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
-    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_report.php')) ),
+    'fetch_report'   => str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')),
 
     'years'         => range(date("Y"), date("Y")+3),
     'current_term'  => $current_migration['term'] < 2000 ? date("Y") : $current_migration['term'],
