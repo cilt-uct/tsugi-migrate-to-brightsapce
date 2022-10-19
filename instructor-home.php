@@ -52,6 +52,9 @@ $title = $CONTEXT->title;
 
 $provider_details = get_provider_object($provider, $title);
 
+$report_url = str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')) . 
+                        (strlen($current_migration['transfer_site_id']) > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
+
 $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.min.css'), ],
@@ -61,6 +64,7 @@ $context = [
     'title'      => $title,
     'site_id'    => $site_id,
     'imported_site_id' => $current_migration['imported_site_id'],
+    'transfer_site_id' => $current_migration['transfer_site_id'],
 
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
@@ -73,7 +77,7 @@ $context = [
     'years'      => range(date("Y")+1, date("Y")+2),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
-    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_report.php')) ),
+    'fetch_report'   => $report_url,
     
     'has_report' => $current_migration['report'] == "1",
     'provider'   => $provider,
