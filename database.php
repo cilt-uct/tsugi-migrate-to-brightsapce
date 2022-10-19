@@ -36,6 +36,7 @@ array( "{$CFG->dbprefix}migration_site",
     `imported_site_id` int NOT NULL DEFAULT '0',
     `started_at` datetime DEFAULT NULL,
     `started_by` int NOT NULL DEFAULT '0',
+    `uploaded_at` datetime DEFAULT NULL,
     `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modified_by` int NOT NULL DEFAULT '0',        
     `provider` mediumtext,
@@ -90,6 +91,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration_site', 'term', 'int'),
         array('migration_site', 'dept', 'VARCHAR(25)'),
         array('migration_site', 'test_conversion', 'tinyint(1) NOT NULL DEFAULT 0'),
+        array('migration_site', 'uploaded_at', 'datetime DEFAULT NULL')
     );
 
     foreach ( $add_some_fields as $add_field ) {

@@ -126,11 +126,11 @@ class MigrateDAO {
         $workflow = ["$now,000 INFO Migration for site $site_id started by $user_name ($user_email)","$now,001 INFO Scheduled Export..."];
 
         $query = "REPLACE INTO {$this->p}migration_site
-                    (site_id, link_id, modified_at, modified_by, started_at, started_by, 
+                    (site_id, link_id, modified_at, modified_by, started_at, started_by, uploaded_at,
                     active, state, workflow, notification, term, provider, dept, report, files, 
                     imported_site_id, transfer_site_id, test_conversion)
                 VALUES
-                (:siteId, :linkId, NOW(), :userId, NOW(), :userId,
+                (:siteId, :linkId, NOW(), :userId, NOW(), :userId, NULL, 
                 1, 'starting', :workflow, :notifications, :term, :provider, :dept, NULL, NULL,
                 0, NULL, :is_test);";
 
