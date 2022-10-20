@@ -4,149 +4,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TSUGI-DEV</title>
-
-    <!-- Tiny bit of JS -->
-    <script src="https://tsugidev.uct.ac.za/static/js/tsugiscripts_head.js"></script>
-    <!-- Le styles -->
-    <link href="https://tsugidev.uct.ac.za/static/bootstrap-3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://tsugidev.uct.ac.za/static/js/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet">
-    <link href="https://tsugidev.uct.ac.za/static/fontawesome-free-5.8.2-web/css/all.css" rel="stylesheet">
-    <link href="https://tsugidev.uct.ac.za/static/fontawesome-free-5.8.2-web/css/v4-shims.css" rel="stylesheet">
-    <style>:root {--primary:#15597e;
-        --primary-menu:#15597e;
-        --primary-border:#145375;
-        --primary-darker:#135172;
-        --primary-darkest:#124a68;
-        --background-color:#FFFFFF;
-        --secondary:#EEEEEE;
-        --secondary-menu:#EEEEEE;
-        --text:#1f2123;
-        --text-light:#414649;
-        --font-family:'Open Sans', Helvetica, sans-serif;
-        --font-size:14px;
-        }
-        table {
-            margin: 0px 2em;
-            border-collapse: separate;
-            border-spacing: 1rem;
-        }
-
-        td {
-            padding: 1.6rem 1rem
-        }
-
-        tr.success td {
-            border-left: 3px solid rgb(5, 129, 61);
-        }
-
-        tr.failed td {
-            border-left: 3px solid rgb(158, 0, 8);
-        }
-
-        #tools {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-gap: 10px;
-        }
-
-        #tools > div {
-            padding: 8px;
-            text-align: center;
-        }
-
-        div.missing {
-            background-color: rgb(158, 0, 8, 0.4);
-        }
-
-        div.found {
-            background-color: rgb(5, 129, 61, 0.4);
-        }
-
-        nav {
-            margin-top: 10px;
-        }
-
-        nav li > a > span.badge {
-            margin-left: 10px;
-        }
-        nav li > a > small {
-            display: block;
-            font-size: 80%;
-        }
-        nav li > a > small::before {
-            content: "Started: ";
-        }
-
-        .nav-tabs > li {
-            float: none;
-            display: inline-block;
-            zoom: 1;
-        }
-
-        .nav-tabs {
-            text-align: center;
-        }
-
-        .tab-pane {
-            position: relative;
-        }
-
-        .tab-content #show-amathuba.admin {
-            position: absolute;
-            top: -1px;
-            width: 60px;
-            height: 60px;
-            right: 5%;
-        }
-    </style>
-    <link href="https://tsugidev.uct.ac.za/static/css/tsugi2.css" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://tsugidev.uct.ac.za/vendor/tsugi/lib/static/js/html5shiv/html5shiv.js"></script>
-        <script src="https://tsugidev.uct.ac.za/vendor/tsugi/lib/static/js/respond/respond.min.js"></script>
-    <![endif]-->
-
-    <script type="text/javascript">CSRF_TOKEN = "6332b87a9c9e3";</script>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link href="static/css/app.min.css?PHPSESSID=b8c635242211980857f23af91363fb95" rel="stylesheet" />
-    <script type="text/javascript">
-        function getObj(id, arr, key) { key = key || 'id'; var o = null; $.each(groups, function (i, el) { if (el[key] == id) { o=el; return; } }); return o; };
-        function cleanObj(o) { Object.keys(o).forEach(key => o[key] === undefined ? delete o[key] : {}); return o; }
 
-        Array.prototype.sum = function (prop) {
-            var total = 0
-            for ( var i = 0, _len = this.length; i < _len; i++ ) {
-                total += parseInt(this[i][prop]);
-            }
-            return total;
-        }
-        function formatNumber(num) {
-            if (isNaN(num)) {
-                return '';
-            }
-            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ')
-        }
-
-        if (!String.prototype.endsWith) {
-            String.prototype.endsWith = function(searchStr, Position) {
-                // This works much better than >= because
-                // it compensates for NaN:
-                if (!(Position < this.length))
-                    Position = this.length;
-                else
-                    Position |= 0; // round position
-                return this.substr(Position - searchStr.length,
-                                    searchStr.length) === searchStr;
-            };
-        }
-        if (!String.prototype.startsWith) {
-                String.prototype.startsWith = function(searchString, position){
-                return this.substr(position || 0, searchString.length) === searchString;
-            };
-        }
-    </script>
+    <!-- Le styles -->
+    <link href="/static/bootstrap-3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/js/jquery-ui-1.11.4/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/fontawesome-free-5.8.2-web/css/all.css" rel="stylesheet">
+    <link href="/static/fontawesome-free-5.8.2-web/css/v4-shims.css" rel="stylesheet">
+    <link href="/static/css/tsugi2.css" rel="stylesheet">
+    
+    <link href="static/css/report.min.css" rel="stylesheet" />
 </head>
 <body>
     {% if (count($links) > 1) { %}
@@ -169,15 +36,19 @@
     {% } %}
     <div class="tab-content">
     {% foreach ($links as $i => $link) { %}
-        <div id="report_{{$link['id']}}" role="tabpanel" class="tab-pane {% if ($i == 0) { %}active{% } %}"
-                data-link="{{ $link['imported_site_id'] }}" 
-                data-state="{{ $link['state'] }}" 
-                data-started="{{ $link['started_raw'] }}" 
-                data-modified="{{ $link['modified_raw'] }}">
-                {% if ($link['imported_site_id'] > 0) { %}
-                    <a id="show-amathuba" class="admin" href="https://amathuba.uct.ac.za/d2l/home/9626" target="_blank"></a>
-                {% } %}
-                {{ $link['body'] }}
-        </div>
+    <div id="report_{{$link['id']}}" role="tabpanel" class="tab-pane {% if ($i == 0) { %}active{% } %}"
+        data-link="{{ $link['imported_site_id'] }}" 
+        data-state="{{ $link['state'] }}" 
+        data-started="{{ $link['started_raw'] }}" 
+        data-modified="{{ $link['modified_raw'] }}">
+        <iframe src="{{ $link['url'] }}" class="report_iframe" 
+            frameborder="0" 
+            marginheight="0" 
+            marginwidth="0" 
+            width="100%" 
+            height="100%" 
+            scrolling="auto"></iframe>
+    </div>
     {% } %}
     </div>
+

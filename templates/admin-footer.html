@@ -188,18 +188,34 @@
         function doSearch() {
             let _input = $('#search_form input[type="text"]'),
                 _filter = _input.val(),
-                _btn = $('#search_form #btn_search');
+                _btn = $('#search_form #btn_search'),
+                _active_filter = $('#stats > li.active > a').attr('rel');
 
             if (_input.val().length > 0) {
                 _btn.removeClass('disabled').removeAttr('disabled').removeClass('fas fa-search').text("X");
-                $('#sites>li').each(function(){
-                    let _title = $(this).data('title').toLowerCase(),
-                        _siteid = $(this).data('siteid');
-                    (_title.indexOf(_filter.toLowerCase()) >= 0 || _siteid.indexOf(_filter) >= 0) ? $(this).show() : $(this).hide();    
+                $('#sites > li').each(function() {
+                    let in_title = $(this).data('title').toLowerCase().indexOf(_filter) >= 0,
+                        in_siteid = $(this).data('siteid').indexOf(_filter) >= 0,  
+                        in_state = _active_filter == 'all' ? true : $(this).data('state') == _active_filter;
+
+                    console.log($(this).data('title') +" "+ $(this).data('state'));
+                    console.log((in_title || in_siteid) +" " + in_state +" = "+ ((in_title || in_siteid)  && in_state));
+                    (in_title || in_siteid)  && in_state ? $(this).show() : $(this).hide();    
                 });
+
             } else {
                 $('#sites>li').show();
                 _btn.addClass('disabled').attr('disabled', true).addClass('fas fa-search').text("");
+
+                let _active_filter = $('#stats > li.active > a').attr('rel'),
+                    _sites = $('#sites');
+
+                if (_active_filter == 'all') {
+                    _sites.children().show();
+                } else {
+                    _sites.children().hide();
+                    _sites.children('[data-state="'+ _active_filter +'"]').show();
+                }
             }
         }
 
@@ -355,6 +371,16 @@
                 $('#search_form input[type="text"]').val('');
                 $(this).addClass('disabled').attr('disabled', true).addClass('fas fa-search').text("");
                 $('#sites>li').show();
+
+                let _active_filter = $('#stats > li.active > a').attr('rel'),
+                    _sites = $('#sites');
+
+                if (_active_filter == 'all') {
+                    _sites.children().show();
+                } else {
+                    _sites.children().hide();
+                    _sites.children('[data-state="'+ _active_filter +'"]').show();
+                }
             }
         });
 
@@ -382,10 +408,20 @@
                     _sites.children('[data-state="'+_me.attr('rel')+'"]').show();
                 }
                 btn_reset();
+                doSearch();
                 setProgress(false);
             }
         });
 
-        // $('#reportModal').modal('show');
+        window.onmessage = (e) => {
+            const _data = JSON.parse(e.data);
+            if (_data.hasOwnProperty("url")) {
+                const iframe = document.querySelector(`[src="${_data.url}"]`),
+                    adjust = $('nav').exists() ? $('nav').height() : -3;
+                if (iframe) {
+                    iframe.style.height = `${Math.min(_data.height, 420)}px`;
+                }
+            }
+        };
     });
 </script>

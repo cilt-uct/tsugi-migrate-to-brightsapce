@@ -138,8 +138,6 @@ form#metadata {
     }
 }
 
-
-
 @media (max-width: 767px) {
     #metadata .row>div.col-md-3:first-child label {
         margin-top: 0.5em;
@@ -268,7 +266,7 @@ form#metadata {
         right: 40px;
 
         & > a {
-            margin-right: 10px;
+            margin-right: 16px;
 
             i {
                 margin-top: 4px;
@@ -818,7 +816,7 @@ form#metadata {
 }
 
 
-$sites-height: 90px;
+$sites-height: 92px;
 #sites {
     margin-left: -24px;
 
@@ -827,10 +825,10 @@ $sites-height: 90px;
     }
 
     & > li {
-        height: $sites-height;
+        min-height: $sites-height;
         list-style: none;
-        margin-bottom: 6px;
-        border-radius: 6px;
+        margin-bottom: 10px;
+        border-radius: 6px 2px 2px 6px;
         border-left: 4px solid transparent;
 
         &.active {
@@ -847,22 +845,50 @@ $sites-height: 90px;
             }
         }
 
+                
         &[data-state="completed"] {
             border-left-color: green;
         }
         &[data-state="error"] {
             border-left-color: #4b0004;
         }
+        /* Button visibility */
+        /* Pause button visible in 'starting', 'exporting', 'running', 'importing' and 'updating'
+            Reload and Delete are hidden */
+        &[data-state="starting"], &[data-state="exporting"], &[data-state="running"], &[data-state="importing"], &[data-state="updating"] {
+            a.reload, a.delete {
+                display: none;
+            }
+            a.pause {
+                display: block;
+            }
+        }
+        /* Reload and Delete button visible in 'init', 'completed', 'error' and 'paused'
+            Pause is hidden */
+        &[data-state="init"], &[data-state="completed"], &[data-state="error"], &[data-state="paused"] {
+            a.reload, a.delete {
+                display: block;
+            }
+            a.pause {
+                display: none;
+            }            
+        }
 
-        div {
-            padding-right: 8px;
+
+        div:first-child {
+            // padding-right: 8px;
             float: right;
             z-index: 1000;
-            height: $sites-height;
+            min-height: $sites-height;
             display: flex;
             align-items: center;
-            justify-content: space-around;
+            justify-content: space-between;
             flex-direction: column;
+
+            a { 
+                font-size: 1rem;
+                padding: 4px 10px;
+            }
         }
 
         a.site {
@@ -876,15 +902,19 @@ $sites-height: 90px;
                 font-size: 80%;
                 display: block;
     
+                &.title {
+                    max-height: 52px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+
+                    i.far {
+                        padding-right: 8px;
+                        font-size: 1.2rem;
+                    }
+                }
                 &.state {
                     text-transform: capitalize;
                 }
-            }
-    
-            i.far {
-                position: absolute;
-                top: 10px;
-                right: 4px;
             }
         }
     }

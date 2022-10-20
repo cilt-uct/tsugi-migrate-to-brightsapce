@@ -209,7 +209,7 @@ form#metadata button {
   right: 40px;
 }
 .row #pre-buttons > a {
-  margin-right: 10px;
+  margin-right: 16px;
 }
 .row #pre-buttons > a i {
   margin-top: 4px;
@@ -656,11 +656,16 @@ form#metadata button {
   background-color: rgba(0, 0, 0, 0.02);
 }
 #sites > li {
-  height: 90px;
+  min-height: 92px;
   list-style: none;
-  margin-bottom: 6px;
-  border-radius: 6px;
+  margin-bottom: 10px;
+  border-radius: 6px 2px 2px 6px;
   border-left: 4px solid transparent;
+  /* Button visibility */
+  /* Pause button visible in 'starting', 'exporting', 'running', 'importing' and 'updating'
+      Reload and Delete are hidden */
+  /* Reload and Delete button visible in 'init', 'completed', 'error' and 'paused'
+      Pause is hidden */
 }
 #sites > li.active {
   background-color: rgba(0, 0, 255, 0.1);
@@ -677,15 +682,30 @@ form#metadata button {
 #sites > li[data-state=error] {
   border-left-color: #4b0004;
 }
-#sites > li div {
-  padding-right: 8px;
+#sites > li[data-state=starting] a.reload, #sites > li[data-state=starting] a.delete, #sites > li[data-state=exporting] a.reload, #sites > li[data-state=exporting] a.delete, #sites > li[data-state=running] a.reload, #sites > li[data-state=running] a.delete, #sites > li[data-state=importing] a.reload, #sites > li[data-state=importing] a.delete, #sites > li[data-state=updating] a.reload, #sites > li[data-state=updating] a.delete {
+  display: none;
+}
+#sites > li[data-state=starting] a.pause, #sites > li[data-state=exporting] a.pause, #sites > li[data-state=running] a.pause, #sites > li[data-state=importing] a.pause, #sites > li[data-state=updating] a.pause {
+  display: block;
+}
+#sites > li[data-state=init] a.reload, #sites > li[data-state=init] a.delete, #sites > li[data-state=completed] a.reload, #sites > li[data-state=completed] a.delete, #sites > li[data-state=error] a.reload, #sites > li[data-state=error] a.delete, #sites > li[data-state=paused] a.reload, #sites > li[data-state=paused] a.delete {
+  display: block;
+}
+#sites > li[data-state=init] a.pause, #sites > li[data-state=completed] a.pause, #sites > li[data-state=error] a.pause, #sites > li[data-state=paused] a.pause {
+  display: none;
+}
+#sites > li div:first-child {
   float: right;
   z-index: 1000;
-  height: 90px;
+  min-height: 92px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: column;
+}
+#sites > li div:first-child a {
+  font-size: 1rem;
+  padding: 4px 10px;
 }
 #sites > li a.site {
   display: block;
@@ -698,13 +718,17 @@ form#metadata button {
   font-size: 80%;
   display: block;
 }
+#sites > li a.site span.title {
+  max-height: 52px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#sites > li a.site span.title i.far {
+  padding-right: 8px;
+  font-size: 1.2rem;
+}
 #sites > li a.site span.state {
   text-transform: capitalize;
-}
-#sites > li a.site i.far {
-  position: absolute;
-  top: 10px;
-  right: 4px;
 }
 
 #show-report.btn-primary {

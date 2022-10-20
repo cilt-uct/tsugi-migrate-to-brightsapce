@@ -234,14 +234,31 @@ class MigrateDAO {
         return $this->PDOX->allRowsDie($query, $arr);
     }
 
-    function getReport($site_id) {
-        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, `site`.imported_site_id, 
-                        IF(`site`.transfer_site_id = :siteId, 1, 0)  as `is_found`
+    function getAllReports($id) {
+        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, 
+                        `site`.link_id, `site`.site_id, `site`.imported_site_id, `site`.transfer_site_id,
+                        IF(`site`.transfer_site_id = :id, 1, 0)  as `is_found`
                     FROM {$this->p}migration_site `site` 
-                    WHERE (`site`.site_id = :siteId or `site`.transfer_site_id = :siteId)
+                    WHERE (`site`.site_id = :id or `site`.transfer_site_id = :id)
                     order by `site`.modified_at desc";
            
-        return $this->PDOX->allRowsDie($query, array(':siteId' => $site_id));
+        return $this->PDOX->allRowsDie($query, array(':id' => $id));
+    }
+
+    function getReportTID($tid) {
+        $query = "SELECT `site`.report FROM {$this->p}migration_site `site` 
+                    WHERE (`site`.transfer_site_id = :tid) 
+                    limit 1";
+           
+        return $this->PDOX->rowDie($query, array(':tid' => $tid));
+    }
+
+    function getReportSID($lid, $sid) {
+        $query = "SELECT `site`.report FROM {$this->p}migration_site `site`  
+                    WHERE `site`.link_id = :linkId and `site`.site_id = :siteId
+                    limit 1";
+           
+        return $this->PDOX->rowDie($query, array(':linkId' => $lid, ':siteId' => $sid));
     }
 
 }

@@ -5,8 +5,29 @@
 <script type="text/javascript">
     jQuery.fn.exists = function(){ return this.length > 0; }
 
+    function resize_all_iframes(_w) {
+        const children = [...document.getElementsByTagName('iframe')];
+        children.forEach((child) => {
+            child.style.width = _w +'px';
+        });
+    }
+
     $(function() {
         $(".date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); }); 
+
+        $(window).resize(() => { resize_all_iframes($('body').width()); });
+        resize_all_iframes($('body').width());
     });
+
+    window.onmessage = (e) => {
+        const _data = JSON.parse(e.data);
+        if (_data.hasOwnProperty("url")) {
+            const iframe = document.querySelector(`[src="${_data.url}"]`),
+                  adjust = $('nav').exists() ? $('nav').height() : -3;
+            if (iframe) {
+                iframe.style.height = `${_data.height}px`;
+            }
+        }
+    };
 </script>
 </body></html>
