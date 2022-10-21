@@ -26,7 +26,38 @@
                         (<span class="date" datetime="{{ $link['modified_raw'] }}">{{ explode(" ", $link['modified_raw'])[1] }}</span>)
                     </span>
                     <span class="started date" datetime="{{ $link['started_raw'] }}">{{ $link['started'] }}</span>
-                    <span class="badge">{{ $link['state'] }}</span>
+                    {% 
+                        $cls = 'badge-light';
+                        switch ($link['state']) {
+                            case 'init':
+                                $cls = 'badge-light';
+                                break;
+                            case 'starting':
+                            case 'exporting':
+                            case 'running':
+                                $cls = 'badge-primary';
+                                break;
+                            case 'importing':
+                            case 'updating':
+                                    $cls = 'badge-info';
+                                    break;
+                            case 'error':
+                                $cls = 'badge-danger';
+                                break;
+                            case 'completed':
+                                $cls = 'badge-success';
+                                break;                                        
+                            case 'paused':
+                                $cls = 'badge-warning';
+                                break;                                        
+                            case 'paused':
+                                $cls = 'badge-dark';
+                                break;
+                            default:
+                                $cls = 'badge-light';
+                        }   
+                    %}
+                    <span class="badge {{ $cls }}">{{ $link['state'] }}</span>
                 </a>
             </li>
             {% } %}
