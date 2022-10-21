@@ -13,6 +13,33 @@ html, body {
 .nav-tabs li {
   padding: 0px;
 }
+.nav-tabs li a {
+  font-size: 0.75rem;
+  text-align: center;
+}
+.nav-tabs li a > span {
+  display: block;
+  text-align: left;
+}
+.nav-tabs li a > span.main:before, .nav-tabs li a > span.started:before {
+  content: "Updated:";
+  display: inline-block;
+  width: 60px;
+  text-align: right;
+  color: #999;
+  margin-right: 6px;
+}
+.nav-tabs li a > span.main:before {
+  content: "Updated:";
+}
+.nav-tabs li a > span.started:before {
+  content: "Started:";
+}
+.nav-tabs li a > span.badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  margin: auto;
+}
 
 .report_iframe {
   display: block;
@@ -23,31 +50,13 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Actual report */
-#tools_used #issues_found_list, #tools_used #tool_used_list, #issues_found #issues_found_list, #issues_found #tool_used_list {
-  list-style: decimal;
+.empty {
+  text-align: center;
 }
-
-#tools_not_used, #issues_not_found {
-  display: none;
+.empty .alert {
+  display: inline-block;
+  margin: 20px auto;
 }
-#tools_not_used #issues_not_found_list, #tools_not_used #tool_unused_list, #issues_not_found #issues_not_found_list, #issues_not_found #tool_unused_list {
-  list-style: none;
-}
-
-li {
-  padding: 0.5em;
-}
-li.success {
-  border-left: 3px solid rgb(5, 129, 61);
-  padding: 0.5em;
-}
-li.failed {
-  border-left: 3px solid rgb(158, 0, 8);
-}
-li.missing {
-  background-color: lightgray;
-}
-li.found {
-  background-color: rgba(5, 129, 61, 0.4);
+.empty .alert i {
+  margin-right: 8px;
 }

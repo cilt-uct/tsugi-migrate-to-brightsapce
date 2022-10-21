@@ -12,6 +12,42 @@ html, body {
 
     li {
         padding: 0px;
+
+        a {
+            font-size: 0.75rem;
+            text-align: center;
+
+            & > span {
+                display: block;
+                text-align: left;
+
+                &.main, &.started {
+                    &:before {
+                        content: "Updated:";
+                        display: inline-block;
+                        width: 60px;
+                        text-align: right;
+                        color: #999;
+                        margin-right: 6px;
+                    }
+                }
+                &.main {
+                    &:before {
+                        content: "Updated:";
+                    }
+                }
+                &.started {
+                    &:before {
+                        content: "Started:";
+                    }
+                }
+                &.badge {
+                    display: inline-block;
+                    font-size: 0.6rem;
+                    margin: auto;
+                }
+            }
+        }
     }
 
 }
@@ -25,38 +61,14 @@ html, body {
     overflow-x: hidden;
 }
 
-/* Actual report */
-#tools_used, #issues_found {
-    #issues_found_list, #tool_used_list {
-        list-style: decimal;
-    }
-}
+.empty {
+    text-align: center;
+    .alert {
+        display: inline-block;
+        margin: 20px auto;
 
-#tools_not_used, #issues_not_found {
-    display: none;
-
-    #issues_not_found_list, #tool_unused_list {
-        list-style: none;
-    }
-}
-
-li {
-    padding: 0.5em;
-
-    &.success {
-        border-left: 3px solid rgb(5, 129, 61);
-        padding: 0.5em;
-    }
-
-    &.failed {
-        border-left: 3px solid rgb(158, 0, 8);
-    }
-
-    &.missing {
-        background-color: lightgray;
-    }
-
-    &.found {
-        background-color: rgb(5, 129, 61, 0.4);
+        i {
+            margin-right: 8px;
+        }
     }
 }

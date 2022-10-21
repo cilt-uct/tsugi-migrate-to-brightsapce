@@ -22,12 +22,11 @@
             {% foreach ($links as $i => $link) { %}
             <li role="presentation" class="{% if ($i == 0) { %}active{% } %}">
                 <a href="#report_{{$link['id']}}" aria-controls="report_{{$link['id']}}" role="tab" data-toggle="tab">
-                    <span class="main">
-                        {{ $link['modified'] }}&nbsp;
+                    <span class="main">{{ $link['modified'] }}&nbsp;
                         (<span class="date" datetime="{{ $link['modified_raw'] }}">{{ explode(" ", $link['modified_raw'])[1] }}</span>)
                     </span>
+                    <span class="started date" datetime="{{ $link['started_raw'] }}">{{ $link['started'] }}</span>
                     <span class="badge">{{ $link['state'] }}</span>
-                    <small class="date" datetime="{{ $link['started_raw'] }}">{{ $link['started'] }}</small>
                 </a>
             </li>
             {% } %}

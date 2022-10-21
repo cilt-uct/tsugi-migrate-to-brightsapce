@@ -21,7 +21,7 @@ class MigrateDAO {
             `site`.notification as `notification`,
             `migration`.created_at, `site`.started_at, `site`.modified_at,
             ifnull(`user`.displayname,'') as displayname, ifnull(`user`.email,'') as email,
-            if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report,
+            ifnull(`site`.report_url,'') as report_url,
             `site`.state, `site`.`active`, `site`.workflow, `migration`.is_admin, 
             `site`.imported_site_id,
             `site`.transfer_site_id,
@@ -85,8 +85,8 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, 
-            if(`site`.report is not null and LENGTH(`site`.report) > 1, 1, 0) as report, 
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, `site`.modified_at,
+            ifnull(`site`.report_url,'') as report_url, 
             `site`.test_conversion
             FROM {$this->p}migration_site `site`
             where `site`.link_id = :linkId
@@ -127,7 +127,7 @@ class MigrateDAO {
 
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, uploaded_at,
-                    active, state, workflow, notification, term, provider, dept, report, files, 
+                    active, state, workflow, notification, term, provider, dept, report_url, files, 
                     imported_site_id, transfer_site_id, test_conversion)
                 VALUES
                 (:siteId, :linkId, NOW(), :userId, NOW(), :userId, NULL, 
@@ -136,7 +136,7 @@ class MigrateDAO {
 
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
-                        ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':is_test' => $is_test,
+                        ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':is_test' => $is_test ? 1 : 0,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
         return $this->PDOX->queryDie($query, $arr);
     }
@@ -193,7 +193,7 @@ class MigrateDAO {
     
     function getWorkflowAndReport($link_id, $site_id) {
         $query = "SELECT workflow, 
-                        if(report is not null and LENGTH(report) > 1, 1, 0) as report,
+                        ifnull(report_url,'') as report_url,
                         imported_site_id, transfer_site_id
                         FROM {$this->p}migration_site where link_id = :linkId and site_id = :siteId;";
         $rows = $this->PDOX->rowDie($query, array(':siteId' => $site_id, ':linkId' => $link_id));
@@ -235,7 +235,7 @@ class MigrateDAO {
     }
 
     function getAllReports($id) {
-        $query = "SELECT `site`.title, `site`.report, `site`.started_at, `site`.modified_at, `site`.state, 
+        $query = "SELECT `site`.title, ifnull(`site`.report_url,'') as report_url, `site`.started_at, `site`.modified_at, `site`.state, 
                         `site`.link_id, `site`.site_id, `site`.imported_site_id, `site`.transfer_site_id,
                         IF(`site`.transfer_site_id = :id, 1, 0)  as `is_found`
                     FROM {$this->p}migration_site `site` 
@@ -246,7 +246,7 @@ class MigrateDAO {
     }
 
     function getReportTID($tid) {
-        $query = "SELECT `site`.report FROM {$this->p}migration_site `site` 
+        $query = "SELECT `site`.report_url FROM {$this->p}migration_site `site` 
                     WHERE (`site`.transfer_site_id = :tid) 
                     limit 1";
            
@@ -254,7 +254,7 @@ class MigrateDAO {
     }
 
     function getReportSID($lid, $sid) {
-        $query = "SELECT `site`.report FROM {$this->p}migration_site `site`  
+        $query = "SELECT `site`.report_url FROM {$this->p}migration_site `site`  
                     WHERE `site`.link_id = :linkId and `site`.site_id = :siteId
                     limit 1";
            

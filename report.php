@@ -9,23 +9,33 @@ require_once "dao/MigrateDAO.php";
 use \Tsugi\Core\LTIX;
 use \Migration\DAO\MigrateDAO;
 
-if (isset($_GET["tid"])) {
-    header( 'Location: '. str_replace("\\","/", $CFG->getCurrentFileUrl('actions/get_report.php')) . "?tid=". $_GET["tid"]);
-} elseif (isset($_GET["sid"])) {
+if (isset($_GET["sid"]) || isset($_GET["tid"])) {
     $PDOX = LTIX::getConnection();
 
     $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
-    $list = $migrationDAO->getAllReports($_GET["sid"]);
+    $list = $migrationDAO->getAllReports(isset($_GET["tid"]) ? $_GET["tid"] : $_GET["sid"]);
+
+    if (count($list) == 0) {
+        echo Template::view('templates/no-report.html');
+        exit;
+    }
 
     if (count($list) == 1) {
-        header( 'Location: '. str_replace("\\","/", $CFG->getCurrentFileUrl('actions/get_report.php')) . "?sid=". $list[0]['site_id'] ."&lid=". $list[0]['link_id']);
-    } else {    
-        $reports = array();
-        foreach ($list as $i => $row) {
-            $html = str_get_html($row['report']);
-            $started = date_create($row['started_at']);
-            $modified = date_create($row['modified_at']);
+        if (strlen($list[0]['report_url']) > 0) {
+            header( 'Location: '. $list[0]['report_url']);
+            exit;
+        } else {
+            echo Template::view('templates/no-report.html');
+            exit;
+        }    
+    }
 
+    $reports = array();
+    foreach ($list as $i => $row) {
+        $started = date_create($row['started_at']);
+        $modified = date_create($row['modified_at']);
+
+        if (strlen($row['report_url']) > 0) {
             array_push($reports, ['id' => $i,
                                     'title' => $row['title'],
                                     'started_raw' => $row['started_at'],
@@ -36,14 +46,17 @@ if (isset($_GET["tid"])) {
                                     'active' => $row['is_found'],
                                     'imported_site_id' => $row['imported_site_id'],
                                     'transfer_site_id' => $row['transfer_site_id'],
-                                    'url' => str_replace("\\","/", $CFG->getCurrentFileUrl('actions/get_report.php')) .
-                                                (strlen($row['transfer_site_id']) > 0 ? "?tid=". $row['transfer_site_id'] : "?sid=". $row['site_id'] ."&lid=". $row['link_id'])
+                                    'url' => $row['report_url']
                                 ]);
         }
-
-        Template::view('templates/report-body.html', array('links' => $reports));
-        Template::view('templates/report-footer.html');
     }
+
+    if (count($reports) == 0) {
+        echo Template::view('templates/no-report.html');
+        exit;
+    }
+    Template::view('templates/report-body.html', array('links' => $reports));
+    Template::view('templates/report-footer.html');
 } else {
     header("HTTP/1.0 400 Bad Request");
 }

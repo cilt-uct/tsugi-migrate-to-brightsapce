@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-xs-2">
                     <a class="btn btn-default" href="{{ $reload_url }}" id="btn_reload_progress" role="button">
-                        <i class="glyphicon glyphicon-refresh"></i>
+                        <i class="fas fa-sync-alt"></i>
                     </a>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                 {% } %}
                 <!--li style="padding-top: 3px;">
                     <input type="checkbox" title="Autoreload" id="autoreload"/>
-                    <i class="glyphicon glyphicon-refresh" style="display: inline-block;padding-left: 2px;"></i>
+                    <i class="fas fa-sync-alt" style="display: inline-block;padding-left: 2px;"></i>
                 </li-->
             </ul>
         </div>
@@ -96,26 +96,59 @@
                         <a class="btn btn-default btn-xs reload" href="#" role="button" 
                             title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}"
                             data-istest="{{ $site['test_conversion']}}">
-                            <i class="glyphicon glyphicon-repeat"></i>
+                            <i class="fas fa-redo"></i>
                         </a>
                         <a class="btn btn-default btn-xs pause disabled" href="#" role="button" disabled="true"
                             title="Pause workflow" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
-                            <i class="glyphicon glyphicon-pause"></i>
+                            <i class="fas fa-pause"></i>
                         </a>
                         <a class="btn btn-default btn-xs delete" href="#" role="button" 
                             title="Remove site" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
-                            <i class="glyphicon glyphicon-trash"></i>
+                            <i class="far fa-trash-alt"></i>
                         </a>
                     </div>
 
                     <a href="#" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}" class="site">
                         <span class="title">
-                            {% if ($site['report'] == "1") { %}<i class="far fa-file-alt"></i>{% } %}
+                            {% if (strlen($site['report_url']) > 0) { %}<i class="far fa-file-alt"></i>{% } %}
                             {% if (! is_null($site['title'])) { %}{{ $site['title'] }}{% } else { %}&nbsp;{% } %}
                         </span>
                         <span class="site_id">{{ $site['site_id'] }}</span>
-                        <span class="state">{{ $site['state'] }}</span>
-                        
+                        <span class="state">
+                            {% 
+                                $cls = 'badge-light';
+                                switch ($site['state']) {
+                                    case 'init':
+                                        $cls = 'badge-light';
+                                        break;
+                                    case 'starting':
+                                    case 'exporting':
+                                    case 'running':
+                                        $cls = 'badge-primary';
+                                        break;
+                                    case 'importing':
+                                    case 'updating':
+                                            $cls = 'badge-info';
+                                            break;
+                                    case 'error':
+                                        $cls = 'badge-danger';
+                                        break;
+                                    case 'completed':
+                                        $cls = 'badge-success';
+                                        break;                                        
+                                    case 'paused':
+                                        $cls = 'badge-warning';
+                                        break;                                        
+                                    case 'paused':
+                                        $cls = 'badge-dark';
+                                        break;
+                                    default:
+                                        $cls = 'badge-light';
+                                }   
+                            %}
+                            <span class="badge {{ $cls }}">{{ $site['state'] }}</span>
+                            <small class="modified_at date" datetime="{{ $site['modified_at'] }}">{{ $site['started'] }}</small>                      
+                        </span>
                     </a>
                 </li>
                 {% } %}

@@ -22,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result['msg'] = $_POST;
     if (isset($_POST['type'])) {
 
+        if (!isset($_POST['is_test'])) {
+            $_POST['is_test'] = 0;
+        }
+
         switch($_POST['type']) {
             case 'init':
                 $dept = isset($_POST['dept']) ? $_POST['dept'] : '';
@@ -61,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $result = [
                         'success' => $result ? 1 : 0, 
                         'workflow' => $result ? json_decode($result['workflow']) : [],
-                        'report' => $result['report'] ? $result['report'] : '',
+                        'report_url' => $result['report_url'],
                         'transfer_site_id' => $result['transfer_site_id'] ? $result['transfer_site_id'] : '',
                         'amathuba_site' => $result['imported_site_id'] ? $result['imported_site_id'] : ''
                     ];

@@ -59,7 +59,6 @@ $context = [
     'instructor' => $USER->instructor, 
     'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), addSession('static/js/jquery.validate.min.js'),  ],
-    
 
     'title'      => $title,
     'site_id'    => $site_id,
@@ -79,7 +78,7 @@ $context = [
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $report_url,
     
-    'has_report' => $current_migration['report'] == "1",
+    'has_report' => strlen($current_migration['report_url']) > 0,
     'provider'   => $provider,
     'provider_details'=> $provider_details,
     

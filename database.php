@@ -11,6 +11,7 @@ if ( !isset($PDOX) ) {
 $DATABASE_UNINSTALL = array(
     "drop table if exists {$CFG->dbprefix}migration",
     "drop table if exists {$CFG->dbprefix}migration_site",
+    "drop table if exists {$CFG->dbprefix}migration_site_property"
 );
 
 // The SQL to create the tables if they don't exist
@@ -43,11 +44,12 @@ array( "{$CFG->dbprefix}migration_site",
     `term` int,
     `dept` VARCHAR(25),
     `active` tinyint(1) DEFAULT '0',
-    `state` enum('init','starting','exporting','running','importing','updating','completed','error','admin') DEFAULT NULL,
+    `is_paused` tinyint(1) DEFAULT '0',
+    `state` enum('init','starting','exporting','running','importing','updating','completed','error','paused','admin') DEFAULT NULL,
     `title` VARCHAR(99),
     `workflow` mediumtext,
     `notification` mediumtext,
-    `report` mediumtext,
+    `report_url` VARCHAR(255),
     `files` mediumtext,
     `test_conversion` tinyint(1) NOT NULL DEFAULT '0',
 
@@ -83,15 +85,19 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration', 'is_admin', 'TINYINT(1) NOT NULL DEFAULT 0'),
 
         array('migration_site', 'title', 'VARCHAR(99)'),
-        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','updating','completed','error','admin')"),
+        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','updating','completed','error','paused','admin')"),
         array('migration_site', 'transfer_site_id', 'varchar(255)'),
         array('migration_site', 'imported_site_id', 'int NOT NULL DEFAULT 0'),
-        array('migration_site', 'report', 'mediumtext'),
         array('migration_site', 'files', 'mediumtext'),
         array('migration_site', 'term', 'int'),
         array('migration_site', 'dept', 'VARCHAR(25)'),
         array('migration_site', 'test_conversion', 'tinyint(1) NOT NULL DEFAULT 0'),
-        array('migration_site', 'uploaded_at', 'datetime DEFAULT NULL')
+        array('migration_site', 'uploaded_at', 'datetime DEFAULT NULL'),
+        array('migration_site', 'report_url', 'varchar(255)'),
+        array('migration_site', 'is_paused', 'tinyint(1) DEFAULT 0'),
+
+        // drop report
+        array('migration_site', 'report', 'DROP')
     );
 
     foreach ( $add_some_fields as $add_field ) {
@@ -120,10 +126,11 @@ $DATABASE_UPGRADE = function($oldversion) {
         $q = $PDOX->queryReturnError($sql);
     }
 
-    return 202209008200;
+    return 202210211000;
 }; // Don't forget the semicolon on anonymous functions :)
 
 // Do the actual migration if we are not in admin/upgrade.php
 if ( isset($CURRENT_FILE) ) {
     include $CFG->dirroot."/admin/migrate-run.php";
 }
+

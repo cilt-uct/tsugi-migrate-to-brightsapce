@@ -5,28 +5,35 @@
 <script type="text/javascript">
     jQuery.fn.exists = function(){ return this.length > 0; }
 
-    function resize_all_iframes(_w) {
+    function resize_all_iframes(_h) {
         const children = [...document.getElementsByTagName('iframe')];
         children.forEach((child) => {
-            child.style.width = _w +'px';
+            child.style.height = _h +'px';
         });
+    }
+
+    function inIframe () {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
     }
 
     $(function() {
         $(".date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); }); 
-
-        $(window).resize(() => { resize_all_iframes($('body').width()); });
-        resize_all_iframes($('body').width());
+        
+        if (inIframe()) {
+            $('body').addClass('inside');
+            // console.log($('body').height());
+            $('iframe').style('height', ($('body').height() - 80) +'px');
+        }
     });
 
     window.onmessage = (e) => {
         const _data = JSON.parse(e.data);
         if (_data.hasOwnProperty("url")) {
-            const iframe = document.querySelector(`[src="${_data.url}"]`),
-                  adjust = $('nav').exists() ? $('nav').height() : -3;
-            if (iframe) {
-                iframe.style.height = `${_data.height}px`;
-            }
+            resize_all_iframes(_data.height);
         }
     };
 </script>

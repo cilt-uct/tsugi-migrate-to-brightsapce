@@ -158,9 +158,11 @@
                 </ul>
             </div>
             <div class="col-md-4">
+                {% if ($has_report) { %}
                 <button id="show-report" type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportModal">
                     <i class="far fa-file-alt"></i> View Conversion Report
                 </button>
+                {% } %}
             </div>
         </div>
         <div class="row">
@@ -244,10 +246,12 @@
                             Vula Course Site
                         </div>
                         <div class="desc">
+                            {% if ($has_report) { %}
                             <a href="#" data-toggle="modal" data-target="#reportModal">
                                 <i class="far fa-file-alt"></i>
                                 <span>Review the report for remediation steps</span>
                             </a>
+                            {% } %}
                         </div>
                     </div>
                 </div>
@@ -311,10 +315,13 @@
             <h4>
                 Progress <span>({{ $state }})</span>
                 
+                <!-- Reload visible in 'init', 'completed', 'error' and 'paused' -->
+                {% if (in_array($state, ['init', 'completed', 'error', 'paused'])) { %}
                 <a id="restart_wrokflow" class="btn btn-default btn-xs" href="#" 
-                    role="button" style="float: right; z-index: 1000;" title="Re-submit workflow ..." rel="{{ $site_id }}" data-title="{{ $title }}">
-                    <i class="glyphicon glyphicon-repeat"></i>
+                    role="button" style="float: right; z-index: 1000;font-size: 60%;" title="Re-submit workflow ..." rel="{{ $site_id }}" data-title="{{ $title }}">
+                    <i class="fas fa-redo" style="margin-right: 3px;"></i>Restart Migration
                 </a>
+                {% } %}
             </h4>
 
             <input type="hidden" name="organizer" id="organizer" value="{{ $name }} <{{ $email }}>"/>

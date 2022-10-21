@@ -6,6 +6,8 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
+        $("small.date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); }); 
+
         const progress_interval = 60000;
         let timeout = null,
             progress_timer = null,
@@ -95,7 +97,7 @@
                     _btn_amathuba.hide();
                 }
 
-                if(result.amathuba_site && result.report.length > 2) {
+                if(result.amathuba_site && result.report_url.length > 2) {
                     _btn_import_log.show();
                     _btn_import_log.attr('href', _import_log_url + result.amathuba_site + '/history/display?ou=' + result.amathuba_site);
                 } else {
@@ -107,7 +109,7 @@
                     _btn_vula.show();
                     _btn_vula.attr('href', _vula_url + site);
 
-                    if (result.report == 1) {
+                    if (result.report_url.length > 2) {
                         _btn.show();
 
                         _btn_open_report.attr('href', _report_url + '?sid=' + site);
