@@ -72,8 +72,8 @@ foreach($result as $row) {
         $output .= '<td colspan="2">&nbsp;</td>';
     }
 
-    if($row["report"] != '' || $row["report"] != NULL) {
-        $output .= '<td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-toggle="modal" data-target="#reportModal" id='.$row["site_id"].'></i></td>';
+    if($row["report_url"] != '' || $row["report_url"] != NULL) {
+        $output .= '<td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-toggle="modal" rel='.$row["report_url"].' data-target="#reportModal" id='.$row["site_id"].'></i></td>';
     } else {
         $output .= '<td colspan="2">&nbsp;</td>';
     }

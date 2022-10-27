@@ -22,8 +22,9 @@
         });  
 
         $(document).on('click', '.show_report', function(event){
-            var site = event.target.id;
-            getworkflow(site);
+            var url = $(this).attr('rel');
+            $('#reportModal-iframe').attr('src', url);
+            $('#btn_open_report').attr('href', url);
         });
 
         function getSingleSites(page, filter) {
@@ -37,26 +38,6 @@
             })
             .always(function() {
                console.log("finished");
-            });
-        }
-
-        function getworkflow(site) {
-            var jqxhr = $.getJSON('{{ $fetch_workflow }}', {'type' : 'workflow', 'site' : site }, function(result) {
-                const _btn = $('#show-report'),
-                      _iframe = $('#reportModal-iframe'),
-                      _report_url = '{{ $fetch_report }}';
-
-                    if (result.report.length > 2) {
-                        _iframe.attr('src', _report_url +'&site=' + site);
-                        console.log(_report_url +'&site=' + site);
-                    } else {
-                        _btn.hide();
-                    }
-                    
-                    setProgress(true);
-            })
-            .fail(function() {
-                $('#pre').html("Could not load workflow for site.");
             });
         }
     });

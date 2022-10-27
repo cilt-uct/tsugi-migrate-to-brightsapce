@@ -82,7 +82,7 @@ $context = [
     'single_sites' => array_merge($states, $single_site_stats),
     'reload_url' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('index.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
-    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_report.php')) ),
+    'fetch_report'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')) ),
     'fetch_single_sites'   => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/get_single_sites.php')) ),
 ];
 
