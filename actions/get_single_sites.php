@@ -52,7 +52,7 @@ foreach($result as $row) {
     } else if($row['state'] == "init" || $row['state'] == "starting" || $row['state'] == "running" || $row['state'] == "importing" || $row['state'] == "exporting") {
         $output .= ' <td colspan="2"><span class="label alert-info"><strong>State: </strong>'.$row["state"].'</span></td>';
     } else if($row['state'] == "updating") {
-        $output .= ' <td colspan="2"><span class="label alert-warning"><strong>State: </strong>'.$row["state"].'</span></td>';
+        $output .= ' <td colspan="2"><span class="label alert-info"><strong>State: </strong>'.$row["state"].'</span></td>';
     } else if($row['state'] == "error") {
         $output .= ' <td colspan="2"><span class="label alert-danger"><strong>State: </strong>'.$row["state"].'</span></td>';
     }

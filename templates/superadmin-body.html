@@ -34,7 +34,7 @@
                       </tr>
                     {% } %}
                     <tr>
-                        <td>Single</td>
+                        <td class="single" id="all">Single</td>
                         {% $t = 0; 
                             foreach ($states as $key => $val) { $totals[$key] += $single_sites[$key]; $t += $single_sites[$key]; %}
                             <td class="single" id="{{$key}}">{{ $single_sites[$key] }}</td>
