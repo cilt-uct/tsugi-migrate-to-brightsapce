@@ -15,13 +15,13 @@
             getSingleSites(page, filter);
         })
 
-        $(document).on('click', '.pagination_link', function(){  
+        $("#allstats tbody tr").on('click', '.pagination_link', function(){  
            var page = $(this).attr("id");  
            var filter = $(this).data("state");
             getSingleSites(page, filter);
         });  
 
-        $(document).on('click', '.show_report', function(event){
+        $("#allstats tbody tr").on('click', '.show_report', function(event){
             var url = $(this).attr('rel');
             $('#reportModal-iframe').attr('src', url);
             $('#btn_open_report').attr('href', url);

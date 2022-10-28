@@ -92,71 +92,33 @@ $second_last = $total_pages - 1;
 
 $output .='<div class="container text-center"><div class="btn-group flex-wrap" role="group">';
 
-if($page > 1) {
-    $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link'  data-state='$state' id='1'>
-    <i class='fa fa-angle-double-left'></i></button>";
+$output .= '<nav aria-label="Page navigation">
+                <ul class="pagination">';
 
-    $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link'  data-state='$state' id='$previous_page'>
-    <i class='fa fa-angle-left'></i></button>";
+if($page > 1){
+    $output .= '<li><button type="button" class="btn btn-pagination btn-xs pagination_link" data-state="'.$state.'" id=1>First Page</button></li>';
 }
-
-if ($total_pages <= 10){ 
-    for($i=1; $i<=$total_pages; $i++) {  
-        if ($i == $page) {  
-            $output .= "<button type='button' class='btn btn-primary btn-xs pagination_link' disabled  data-state='$state'><span>$i</span></button>";
-        } else {
-            $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='$i'>$i</button>";
-        }
-    }  
-} elseif ($total_pages > 6){
-    if($page <= 4) {			
-        for ($j = 1; $j < 8; $j++){		 
-            if ($j == $page) {	
-                $output .= "<button type='button' class='btn btn-primary btn-xs pagination_link'  data-state='$state' id='$j'><span>$j</span></button>";
-            }else{
-                $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link'  data-state='$state' id='$j'><span>$j<span></button>";
-            }
-        }
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' disabled>...</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id=".$second_last.">".$second_last."</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id=".$total_pages.">".$total_pages."</button>";
-
-    } elseif($page > 4 && $page < $total_pages - 4) {		 
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='1'>1</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='2'>2</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' disabled>...</button>";
-        for ($k = $page - $adjacents; $k <= $page + $adjacents; $k++) {		
-            if ($k == $page) {
-                $output .= "<button type='button' class='btn btn-primary btn-xs pagination_link' data-state='$state'>".$k."</button>";	
-            }else{
-                $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state'  id='$k'>".$k."</button>";
-            }                  
-        }
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' disabled>...</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id=".$second_last.">".$second_last."</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id=".$total_pages.">".$total_pages."</button>";
-    } else {
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='1'>1</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='2'>2</button>";
-        $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' disabled>...</button>";
-        for ($q = $total_pages - 6; $q <= $total_pages; $q++) {
-            if ($q == $page) {
-                $output .= "<button type='button' class='btn btn-primary btn-xs pagination_link' data-state='$state'>".$q."</button>";	
-            }else{
-                $output .= "<button type='button' class='btn  btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id='$q'>".$q."</button>";
-            }                   
-        }
+                    
+if($page <= 1){ 
+    $output .= '<li class="disabled">';
+    if($page > 1){
+        $output .= '<button type="button" class="btn btn-pagination pagination_link" data-state="'.$state.'" id="'.$previous_page.'">Previous</button>';
     }
+    $output .= '</li>';
+}
+                    
+if($page >= $total_pages){
+    $output .= '<li class="disabled">';
+    if($page < $total_pages) {
+        $output .= '<button type="button" class="btn btn-pagination pagination_link" data-state="'.$state.'" id="'.$next_page.'">Next</button>';
+    }
+    $output .= '</li>';
 }
 
-
-if($page < $total_pages) {
-    $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link' data-state='$state' id=".$next_page.">
-    <i class='fa fa-angle-right'></i></button>";
-
-    $output .= "<button type='button' class='btn btn-default btn-outline-primary btn-xs pagination_link text-info' data-state='$state' id=".$total_pages.">
-    <i class='fa fa-angle-double-right'></i></button>";
+if($page < $total_pages){
+    $output .= '<li><button type="button" class="btn btn-pagination btn-xs pagination_link"  data-state="'.$state.'" id="'.$total_pages.'">Last Page&rsaquo;&rsaquo;</button></li>';
 }
+$output .= '</ul></nav>';
 $output .= '</div></div><br/><br/>'; 
 echo $output;
 exit;
