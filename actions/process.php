@@ -1,7 +1,5 @@
 <?php
 require_once "../../config.php";
-include '../tool-config.php';
-
 require_once("../dao/MigrateDAO.php");
 
 use \Tsugi\Core\LTIX;

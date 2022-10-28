@@ -1,6 +1,6 @@
 <?php
 require_once('../config.php');
-include 'tool-config.php';
+include 'tool-config_dist.php';
 include 'src/simple_html_dom.php';
 include 'src/Template.php';
 

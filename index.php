@@ -1,6 +1,6 @@
 <?php
 require_once('../config.php');
-include 'tool-config.php';
+include 'tool-config_dist.php';
 
 require_once "dao/MigrateDAO.php";
 
@@ -12,7 +12,6 @@ $LAUNCH = LTIX::requireData();
 
 $is_admin = $LAUNCH->ltiRawParameter('custom_admin', false);
 $is_super_admin = $LAUNCH->ltiRawParameter('custom_superadmin', false);
-
 // custom_admin=true
 
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
@@ -32,7 +31,12 @@ if ($course_providers != $context_id) {
     }
 }
 
-$menu = false; // We are not using a menu
+# So the tool is not active yet - so display the coming soon page
+if ($tool['active'] == FALSE) {
+    header( 'Location: '.addSession('coming-soon.php') ) ;
+    exit;
+}
+
 if ( $USER->instructor ) {
 
     if ($is_super_admin) {
