@@ -80,7 +80,7 @@ function get_provider_object($provider, $title) {
 $provider_details = get_provider_object($provider, $title);
 
 $report_url = str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')) . 
-                        (strlen($current_migration['transfer_site_id']) > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
+                        (strlen($current_migration['transfer_site_id'] ?? '') > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
 
 $context = [
     'instructor' => $USER->instructor, 
@@ -105,7 +105,7 @@ $context = [
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $report_url,
     
-    'has_report' => strlen($current_migration['report_url']) > 0,
+    'has_report' => strlen($current_migration['report_url'] ?? '') > 0,
     'provider'   => $provider,
     'provider_details'=> $provider_details,
     

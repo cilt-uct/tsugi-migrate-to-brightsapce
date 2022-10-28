@@ -32,9 +32,11 @@ if ($course_providers != $context_id) {
 }
 
 # So the tool is not active yet - so display the coming soon page
-if ($tool['active'] == FALSE) {
-    header( 'Location: '.addSession('coming-soon.php') ) ;
-    exit;
+if ( !($is_admin || $is_super_admin) ) {
+    if ($tool['active'] == FALSE) {
+        header( 'Location: '.addSession('coming-soon.php') ) ;
+        exit;
+    }
 }
 
 if ( $USER->instructor ) {
