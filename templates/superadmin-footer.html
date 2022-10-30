@@ -29,8 +29,13 @@
 
         function getSingleSites(page, filter) {
             var jqxhr = $.post('{{ $fetch_single_sites }}', {'page' : page, 'state' : filter }, function(result) {
-                $("#singlesites_data").show();
-                $("#singlesites_data").html(result);
+                if(result){
+                    $("#singlesites_data").show();
+                    $("#singlesites_data").html(result);
+                } else {
+                    $("#singlesites_data").show();
+                    $("#singlesites_data").html("Error loading single sites");
+                }
             })
             .fail(function(xhr, status, error) {
                 var err = eval("(" + xhr.responseText + ")");

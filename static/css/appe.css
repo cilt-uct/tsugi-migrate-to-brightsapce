@@ -995,7 +995,7 @@ table#allstats tfoot tr > td:first-child {
 }
 
 .img-fluid {
-  width: 30px;
+  width: 25px;
 }
 
 .active-state {
@@ -1020,6 +1020,12 @@ button.btn.btn-pagination {
   font-size: 12px;
 }
 
-button.btn.btn-pagination:hover {
-  background-color: lightgray !important;
+table#singlesites_tbl tbody tr:hover td {
+  background-color: #F0F8FF !important;
+}
+
+#singlesites_tbl tbody tr td {
+  font-size: 12px !important;
+  vertical-align: middle;
+  background-color: white !important;
 }

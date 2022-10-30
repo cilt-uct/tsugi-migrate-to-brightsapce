@@ -272,6 +272,8 @@ class MigrateDAO {
     }
 
     function getSingleSitesByState($link_id, $state, $offset, $records_per_page) {
+        settype($offset, 'integer');
+        settype($records_per_page, 'integer');
         if($state == 'all') {
             $query = "SELECT ifnull(`B`.started_at, 'No start date') as started_at, `B`.site_id, `B`.imported_site_id, `B`.report_url, `B`.state, ifnull(`B`.title, 'No Title') as title
             FROM {$this->p}migration `A`
