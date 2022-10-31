@@ -2,4 +2,3 @@
 cache/*.php
 actions/cache/.._templates_no-report.php
 actions/cache/templates_no-report.php
-tool-config.php
