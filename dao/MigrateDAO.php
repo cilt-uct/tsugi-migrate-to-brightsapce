@@ -261,4 +261,52 @@ class MigrateDAO {
         return $this->PDOX->rowDie($query, array(':linkId' => $lid, ':siteId' => $sid));
     }
 
+    function getSingleSites() {
+        $query = "SELECT `B`.*
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state <> 'admin'
+            where `A`.is_admin = 0 order by title, `A`.created_at asc;";
+
+        $arr = array();
+        return $this->PDOX->allRowsDie($query, $arr);
+    }
+
+    function getSingleSitesByState($link_id, $state, $offset, $records_per_page) {
+        settype($offset, 'integer');
+        settype($records_per_page, 'integer');
+        if($state == 'all') {
+            $query = "SELECT ifnull(`B`.started_at, 'No start date') as started_at, `B`.site_id, `B`.imported_site_id, `B`.report_url, `B`.state, ifnull(`B`.title, 'No Title') as title
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id
+            where `A`.is_admin = 0 order by title, `A`.created_at ASC LIMIT $offset, $records_per_page;";
+
+            return $this->PDOX->allRowsDie($query);
+        } else {
+            $query = "SELECT ifnull(`B`.started_at, 'No start date') as started_at, `B`.site_id, `B`.imported_site_id, `B`.report_url, `B`.state, ifnull(`B`.title, 'No Title') as title
+                FROM {$this->p}migration `A`
+                inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state = :filter_state
+                where `A`.is_admin = 0 order by title, `A`.created_at ASC LIMIT $offset, $records_per_page;";
+
+            return $this->PDOX->allRowsDie($query, array(':filter_state' => $state));
+        }
+    }
+
+    function getAllSingleSitesByState($link_id, $state) {
+        if($state == 'all') {
+            $query = "SELECT ifnull(`B`.started_at, 'No start date') as started_at, `B`.site_id, `B`.imported_site_id, `B`.report_url, `B`.state, ifnull(`B`.title, 'No Title') as title
+            FROM {$this->p}migration `A`
+            inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id
+            where `A`.is_admin = 0 order by title, `A`.created_at ASC;";
+
+            return $this->PDOX->allRowsDie($query);
+        } else {
+            $query = "SELECT ifnull(`B`.started_at, 'No start date') as started_at, `B`.site_id, `B`.imported_site_id, `B`.report_url, `B`.state, ifnull(`B`.title, 'No Title') as title
+                FROM {$this->p}migration `A`
+                inner join {$this->p}migration_site `B` on `B`.link_id = `A`.link_id and `B`.state = :filter_state
+                where `A`.is_admin = 0 order by title, `A`.created_at ASC;";
+
+            return $this->PDOX->allRowsDie($query, array(':filter_state' => $state));
+        }
+    }
+
 }

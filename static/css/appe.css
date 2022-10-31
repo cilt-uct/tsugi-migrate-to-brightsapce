@@ -1030,3 +1030,39 @@ table#allstats tfoot tr > td:first-child {
   text-decoration: none;
   background-color: #1d2124;
 }
+
+.img-fluid {
+  width: 25px;
+}
+
+.active-state {
+  color: green;
+  font-weight: bolder;
+  background-color: lightgreen;
+}
+
+.single_expand:hover {
+  background-color: white;
+}
+
+table#singlesites_tbl tr:hover td {
+  background-color: white;
+}
+
+button.btn.btn-pagination {
+  color: #20376b;
+  background-color: white !important;
+  border: 2px solid #20376b !important;
+  font-weight: light;
+  font-size: 12px;
+}
+
+table#singlesites_tbl tbody tr:hover td {
+  background-color: #F0F8FF !important;
+}
+
+#singlesites_tbl tbody tr td {
+  font-size: 12px !important;
+  vertical-align: middle;
+  background-color: white !important;
+}

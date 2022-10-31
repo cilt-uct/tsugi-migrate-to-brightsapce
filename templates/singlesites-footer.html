@@ -1,0 +1,30 @@
+<div class="container text-center"><div class="btn-group flex-wrap" role="group">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+    
+            {% if($page > 1){ %}
+                <li><button type="button" class="btn btn-pagination btn-xs pagination_link" data-state="{% print($state); %}" id=1>&laquo; First Page</button></li>
+            {% } %} 
+                                
+            {% if($page <= 1){ %}
+                <li class="disabled">
+                {% if($page > 1){ %}
+                    <button type="button" class="btn btn-pagination pagination_link" data-state="{% print($state); %}" id="{% print($previous_page); %}">Previous</button>
+                {% } %}
+                </li>
+            {% } %}
+                                
+            {% if($page >= $total_pages){ %}
+                <li class="disabled">
+                {% if($page < $total_pages) { %}
+                    <button type="button" class="btn btn-pagination pagination_link" data-state="{% print($state); %}" id="{% print($next_page); %}">Next</button>
+                {% } %}
+                </li>
+            {% } %}
+            
+            {% if($page < $total_pages){ %}
+            <li><button type="button" class="btn btn-pagination btn-xs pagination_link"  data-state="{% print($state); %}" id="{% print($total_pages); %}">Last Page &raquo;</button></li>
+            {% } %}
+        </ul>
+    </nav>
+</div>

@@ -6,10 +6,44 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
-
         $('.single').on('click', function(event){
             event.preventDefault();
-            $('.single_expand').toggle();
+            $(".single").removeClass('active-state');
+            $(this).addClass("active-state");
+            var filter = $(this).attr('id');
+            var page = 1;
+            getSingleSites(page, filter);
         })
+
+        $("#allstats tbody tr").on('click', '.pagination_link', function(){  
+           var page = $(this).attr("id");  
+           var filter = $(this).data("state");
+            getSingleSites(page, filter);
+        });  
+
+        $("#allstats tbody tr").on('click', '.show_report', function(event){
+            var url = $(this).attr('rel');
+            $('#reportModal-iframe').attr('src', url);
+            $('#btn_open_report').attr('href', url);
+        });
+
+        function getSingleSites(page, filter) {
+            var jqxhr = $.post('{{ $fetch_single_sites }}', {'page' : page, 'state' : filter }, function(result) {
+                if(result){
+                    $("#singlesites_data").show();
+                    $("#singlesites_data").html(result);
+                } else {
+                    $("#singlesites_data").show();
+                    $("#singlesites_data").html("Error loading single sites");
+                }
+            })
+            .fail(function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                console.log(err.Message);
+            })
+            .always(function() {
+               console.log("finished");
+            });
+        }
     });
 </script>
