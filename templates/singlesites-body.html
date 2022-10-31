@@ -25,7 +25,7 @@
             {% } %}
 
             {% if($row["imported_site_id"] > 0 && ($row['report_url'] != '' || $row["report_url"] != NULL)) { %}
-                <td colspan="2"><a href="https://amathuba.uct.ac.za/d2l/le/conversion/import/{% print($row['site_id']); %}" target="_blank" class="img" title="View import log">
+                <td colspan="2"><a href="https://amathuba.uct.ac.za/d2l/le/conversion/import/{% print($row['imported_site_id']); %}/history/display?ou={% print($row['imported_site_id']); %}" target="_blank" class="img" title="View import log">
                     <i class="fa fa-history fa-2x" aria-hidden="true"></i>
                     </a>
                 </td>
