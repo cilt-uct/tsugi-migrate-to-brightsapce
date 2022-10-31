@@ -40,7 +40,7 @@
             {% } %}
 
             {% if($row["state"] == 'error') { %}
-                <td colspan="2"><a href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{% print($row['site_id']); %}%22"" target="_blank" class="img" title="View JIRA">
+                <td colspan="2"><a href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{% print($row['site_id']); %}%22" target="_blank" class="img" title="View JIRA">
                     <img src="./static/img/jira.svg" class="img-fluid"/>
                     </a>
                 </td>
