@@ -3,7 +3,10 @@
 # The configuration file - stores the paths to the scripts
 $tool = array();
 $tool['debug'] = FALSE;
+$tool['active'] = TRUE; # if false will show coming soon page
 $tool['brightspace_url'] = 'https://amathuba.uct.ac.za/d2l/home/';
+$tool['brightspace_log_url'] = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
+$tool['vula_url'] = 'https://vula.uct.ac.za/portal/site/';
 
 function get_provider_object($provider, $title) {
 

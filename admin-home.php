@@ -1,6 +1,6 @@
 <?php
 require_once "../config.php";
-include "tool-config_dist.php";
+include "tool-config.php";
 include 'src/Template.php';
 
 require_once "dao/MigrateDAO.php";
