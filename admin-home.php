@@ -1,6 +1,6 @@
 <?php
 require_once "../config.php";
-include "tool-config.php";
+include "tool-config_dist.php";
 include 'src/Template.php';
 
 require_once "dao/MigrateDAO.php";
@@ -78,7 +78,10 @@ $context = [
     'current_term'  => $current_migration['term'] < 2000 ? date("Y") : $current_migration['term'],
 
     'provider'   => $provider,
-    // 'current'    => $current_migration
+    
+    'brightspace_url' => $tool['brightspace_url'],
+    'brightspace_log_url' => $tool['brightspace_log_url'],
+    'vula_url' => $tool['vula_url']
 ];
 
 // Start of the output

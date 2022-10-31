@@ -49,7 +49,7 @@ class MigrateDAO {
 
         if (gettype($rows) == "boolean") {
             if ($this->createEmpty($link_id, $user_id, $site_id, $provider, $is_admin)) {
-                return $this->getMigration($link_id, $user_id, $site_id, $provider, $is_admin);
+                return $this->getMigration($link_id, $user_id, $site_id, $provider, $is_admin, $title);
             }
         }
         

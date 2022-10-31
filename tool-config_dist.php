@@ -1,36 +1,19 @@
 <?php
+// Configuration file - copy from tool-config_dist.php to tool-config.php
+// and then edit. 
+
+if ((basename(__FILE__, '.php') != 'tool-config') && (file_exists('tool-config.php'))) {
+    include 'tool-config.php';
+    return;
+}
 
 # The configuration file - stores the paths to the scripts
 $tool = array();
 $tool['debug'] = FALSE;
+$tool['active'] = TRUE; # if false will show coming soon page
 $tool['brightspace_url'] = 'https://amathuba.uct.ac.za/d2l/home/';
-
-function get_provider_object($provider, $title) {
-
-    if (preg_match("/Turnitin/i", $title)) {
-        return [];
-    }
-
-    $test = $provider;
-    if ($provider == 'none') {
-        # see if we can get it from the title ???
-        $test = [ strtoupper($title) ];
-    }
-
-    if (gettype($test) == "string") {
-        $test = [ $test ];
-    }
-
-    $list = array();
-    foreach($test as $t) {
-        preg_match('/([A-Za-z]{2,3})\s?(\d)(\d{2,3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
-        if (count($matches) >= 1) {
-            array_push($list, ['full' => $matches[0], 'dept' => $matches[1], 'year' => $matches[2], 'no' => $matches[3], 'period' => $matches[4], 'term' => $matches[5] ]);
-        }
-    }
-    
-    return $list;
-}
+$tool['brightspace_log_url'] = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
+$tool['vula_url'] = 'https://vula.uct.ac.za/portal/site/';
 
 $departments = [
     ['ACC','Faculty of Commerce','College of Accounting'],
@@ -114,3 +97,4 @@ $departments = [
     ['GSB','Graduate School of Business (GSB)','Graduate School of Business (GSB)'],
     ['GPP','Graduate School of Business (GSB)','The Nelson Mandela School of Public Gov'],
 ];
+

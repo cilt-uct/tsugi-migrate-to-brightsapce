@@ -284,7 +284,7 @@
                         </div>
                         <div class="desc">
                             {% if ($imported_site_id > 0) { %}
-                            <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id }}" title="Open in Amathuba" id="btn-amathuba">
+                            <a href="{{ $brightspace_url }}{{ $imported_site_id }}" title="Open in Amathuba" id="btn-amathuba">
                                 <img src="./static/img/graphic.png" title="Ready"/>
                                 <i class="fas fa-sign-out-alt"></i>
                             </a>

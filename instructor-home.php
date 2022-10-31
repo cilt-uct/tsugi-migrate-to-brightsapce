@@ -1,6 +1,6 @@
 <?php
 require_once "../config.php";
-include "tool-config.php";
+include 'tool-config_dist.php';
 include 'src/Template.php';
 
 require_once "dao/MigrateDAO.php";
@@ -50,10 +50,37 @@ $title = $CONTEXT->title;
 // $title = 'EDN4507F,2022 Test';
 // $provider = 'EDN4507F,2022';
 
+function get_provider_object($provider, $title) {
+
+    if (preg_match("/Turnitin/i", $title)) {
+        return [];
+    }
+
+    $test = $provider;
+    if ($provider == 'none') {
+        # see if we can get it from the title ???
+        $test = [ strtoupper($title) ];
+    }
+
+    if (gettype($test) == "string") {
+        $test = [ $test ];
+    }
+
+    $list = array();
+    foreach($test as $t) {
+        preg_match('/([A-Za-z]{2,3})\s?(\d)(\d{2,3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
+        if (count($matches) >= 1) {
+            array_push($list, ['full' => $matches[0], 'dept' => $matches[1], 'year' => $matches[2], 'no' => $matches[3], 'period' => $matches[4], 'term' => $matches[5] ]);
+        }
+    }
+    
+    return $list;
+}
+
 $provider_details = get_provider_object($provider, $title);
 
 $report_url = str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')) . 
-                        (strlen($current_migration['transfer_site_id']) > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
+                        (strlen($current_migration['transfer_site_id'] ?? '') > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
 
 $context = [
     'instructor' => $USER->instructor, 
@@ -78,7 +105,7 @@ $context = [
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $report_url,
     
-    'has_report' => strlen($current_migration['report_url']) > 0,
+    'has_report' => strlen($current_migration['report_url'] ?? '') > 0,
     'provider'   => $provider,
     'provider_details'=> $provider_details,
     
@@ -86,8 +113,8 @@ $context = [
     'current_dept'     => $current_migration['dept'],
     'current_term'     => $current_migration['term'],
 
-    'departments' => $departments
-    // 'current'    => $current_migration
+    'departments' => $departments,
+    'brightspace_url' => $tool['brightspace_url']
 ];
 
 if (!$USER->instructor) {

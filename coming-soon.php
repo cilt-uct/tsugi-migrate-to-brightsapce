@@ -21,14 +21,12 @@ Template::view('templates/header.html', $context);
 $OUTPUT->bodyStart();
 
 $OUTPUT->topNav($menu);
-
-// style=" background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);"
 ?>
 <div class="bgnew"></div>
 <?php
 $OUTPUT->splashPage(
-    "Hi !",
-    __("This tool is not available to students.")
+    "<img src='static/img/vula.svg' alt='Vula'/><i class='fas fa-arrow-right'></i><img src='static/img/amathuba_woodmark.svg' alt='Amathuba'/>",
+    __("<h2>Migrate to Amathuba - Coming Soon!<h2>")
 );
 
 $OUTPUT->footerStart();

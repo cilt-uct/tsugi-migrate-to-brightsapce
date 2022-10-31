@@ -85,9 +85,9 @@
                       _btn_open_report = $('#btn_open_report'),
                       _iframe = $('#reportModal-iframe'),
                       _report_url = '{{ $fetch_report }}',
-                      _amathuba_url = 'https://amathuba.uct.ac.za/d2l/home/',
-                      _vula_url = 'https://vula.uct.ac.za/portal/site/',
-                      _import_log_url = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
+                      _amathuba_url = '{{ $brightspace_url }}',
+                      _vula_url = '{{ $vula_url }}',
+                      _import_log_url = '{{ $brightspace_log_url }}';
 
                 
                 if(result.amathuba_site) {
