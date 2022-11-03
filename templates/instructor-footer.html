@@ -64,24 +64,27 @@
         }
 
         function migrateSite(a, type, alt) {
-            const organizer = $('#organizer').val().trim().replace(/\r?\n/g, ', '),
-                  notification = $('#'+ alt).val().trim().replace(/\r?\n/g, ', '),
+            const organizer = $('#organizer').exists() ? $('#organizer').val().trim().replace(/\r?\n/g, ', ') : '',
+                  notification = $('#'+ alt).exists() ?  $('#'+ alt).val().trim().replace(/\r?\n/g, ', ') : '',
                   _provider = $('#provider').exists() ? $('#provider') : undefined, 
                   _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
             
             let provider = _provider ? _provider.val() : '',
                 dept = _provider ? 
                             (_provider.prop('nodeName') == 'SELECT' ? _provider.find('option:selected').data('dept') : _provider.data('dept'))
-                            : (_provider_select ? _provider_select.val() : ''),
-                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear();
-        
+                            : (_provider_select ? _provider_select.val() : $('#dept').exists() ? $('#dept').val() : ''),
+                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear(),
+                create_course_offering = $('#if_course').exists() ? ($('#if_course').is(':checked')?1:0) : $('#create_course_offering').val()
+                
             var data = { 
                 "type": type,
+                "title": "{{ $title }}",
                 "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
                 "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
-                "provider": provider,
+                "provider": provider == '' ? `${dept}00${term.slice(-2)}` : provider,
                 "dept": dept,
                 "term": term,
+                "create_course": create_course_offering
             }
 
             // console.log(data);
@@ -103,10 +106,38 @@
             });
         }
 
+        function can_submit() {
+            const _dept = $('#provider_select'),
+                  _provider = $('#provider'),
+                  _term = $('#year'),
+                  _check = $('#if_course'),
+                  _btn = $('#btn_option1'),
+                  valid = !_check.is(':checked') ||
+                            ((_dept.exists() ? _dept.val() != 0 : true) &&
+                            (_provider.exists() ? _provider.val() != 0 : true) &&
+                            (_term.exists() ? _term.val() != 0 : true));
+
+            if (valid) {
+                _btn.removeClass('disabled').removeAttr('disabled');
+            } else {
+                _btn.addClass('disabled').attr('disabled', 'true');
+            }
+        }
+
         $('#year, #provider, #provider_select').on("change", function(event) {
             if ($(this).val != '') {
                 $(this).find('option[data-type=default]').remove();
             }
+            can_submit();
+        });
+
+        $('#if_course').on("change", function(event) {
+            if ($(this).is(':checked')) {
+                $('#do_course').show();
+            } else {
+                $('#do_course').hide();
+            }
+            can_submit();
         });
 
         $("#metadata").validate({
@@ -128,7 +159,8 @@
                     var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
                     var data = { 
                         "type": "updating",
-                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification)
+                        "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
+                        "term": $('#year').val()
                     }
 
                     $.ajax({
@@ -164,13 +196,14 @@
             _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full') + '<i class="fas fa-question-circle" title="Subject to Faculty approval."></i>');
         })
 
-        $('#restart_wrokflow').on('click', function(event) {
+        $('#restart_workflow').on('click', function(event) {
             event.preventDefault();
             const _me = $(this);
 
             migrateSite(_me.attr('id'), 'init', 'notifications_hidden');
         });
 
+        
         $('#btn_option1, #btn_option2').click( function(event) {
             event.preventDefault();
             const _me = $(this);

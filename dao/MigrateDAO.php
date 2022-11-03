@@ -27,7 +27,8 @@ class MigrateDAO {
             `site`.transfer_site_id,
             ifnull(`site`.`provider`, '') as `provider`, 
             ifnull(`site`.`term`, 0) as `term`, 
-            ifnull(`site`.`dept`, '') as `dept`
+            ifnull(`site`.`dept`, '') as `dept`,
+            target_title, target_course, target_term, target_dept, create_course_offering
             FROM {$this->p}migration `migration`
             left join {$this->p}migration_site `site` on `site`.link_id = `migration`.link_id
             left join {$this->p}lti_user `user` on `user`.user_id = `site`.started_by
@@ -114,7 +115,8 @@ class MigrateDAO {
                                 array(':linkId' => $link_id, ':siteId' => $site_id));
     }    
 
-    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test) {
+    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test, 
+                                $target_title, $target_course, $target_term, $target_dept, $create_course_offering) {
         $now = date("Y-m-d H:i:s");
 
         $user_details = $this->PDOX->rowDie("SELECT user_id, displayname,email FROM {$this->p}lti_user WHERE user_id = :userid;",
@@ -128,15 +130,18 @@ class MigrateDAO {
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, uploaded_at,
                     active, state, workflow, notification, term, provider, dept, report_url, files, 
-                    imported_site_id, transfer_site_id, test_conversion)
+                    imported_site_id, transfer_site_id, test_conversion,
+                    target_title, target_course, target_term, target_dept, create_course_offering)
                 VALUES
                 (:siteId, :linkId, NOW(), :userId, NOW(), :userId, NULL, 
                 1, 'starting', :workflow, :notifications, :term, :provider, :dept, NULL, NULL,
-                0, NULL, :is_test);";
+                0, NULL, :is_test,
+                :target_title, :target_course, :target_term, :target_dept, :create_course_offering);";
 
-
-        $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, 
+        $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id,
                         ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':is_test' => $is_test ? 1 : 0,
+                        ':target_title' => $target_title, ':target_course' => $target_course, 
+                        ':target_term' => $target_term, ':target_dept' => $target_dept, ':create_course_offering' => $create_course_offering,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
         return $this->PDOX->queryDie($query, $arr);
     }
@@ -176,7 +181,7 @@ class MigrateDAO {
         foreach ($sites as $site) {
 
             if (strlen($site) > 3) {
-                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $is_test) ? 1 : 0;
+                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $is_test, '', '', $term, '', 0) ? 1 : 0;
                 array_push($result, $output);
             }
         }

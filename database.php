@@ -52,6 +52,11 @@ array( "{$CFG->dbprefix}migration_site",
     `report_url` VARCHAR(255),
     `files` mediumtext,
     `test_conversion` tinyint(1) NOT NULL DEFAULT '0',
+    `target_title` VARCHAR(255),
+    `target_course` VARCHAR(255),
+    `target_term` int,
+    `target_dept` VARCHAR(25),
+    `create_course_offering` tinyint(1) DEFAULT '0',
 
     PRIMARY KEY (`site_id`,`link_id`),
     KEY `idx_started_by` (`started_by`),
@@ -95,6 +100,11 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration_site', 'uploaded_at', 'datetime DEFAULT NULL'),
         array('migration_site', 'report_url', 'varchar(255)'),
         array('migration_site', 'is_paused', 'tinyint(1) DEFAULT 0'),
+        array('migration_site', 'target_title', 'VARCHAR(255)'),
+        array('migration_site', 'target_course', 'VARCHAR(255)'),
+        array('migration_site', 'target_term', 'int'),
+        array('migration_site', 'target_dept', 'VARCHAR(25)'),
+        array('migration_site', 'create_course_offering', 'tinyint(1) DEFAULT 0'),
 
         // drop report
         array('migration_site', 'report', 'DROP')

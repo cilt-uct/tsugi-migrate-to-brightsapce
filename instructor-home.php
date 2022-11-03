@@ -113,6 +113,12 @@ $context = [
     'current_dept'     => $current_migration['dept'],
     'current_term'     => $current_migration['term'],
 
+    'target_title' => $current_migration['target_title'],
+    'target_course' => $current_migration['target_course'],
+    'target_term' => $current_migration['target_term'],
+    'target_dept' => $current_migration['target_dept'],
+    'create_course_offering' => $current_migration['create_course_offering'],
+
     'departments' => $departments,
     'brightspace_url' => $tool['brightspace_url']
 ];
