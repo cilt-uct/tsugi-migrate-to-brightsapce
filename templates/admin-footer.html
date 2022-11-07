@@ -196,7 +196,7 @@
             if (_input.val().length > 0) {
                 _btn.removeClass('disabled').removeAttr('disabled').removeClass('fas fa-search').text("X");
                 $('#sites > li').each(function() {
-                    let in_title = $(this).data('title').toLowerCase().toString().indexOf(_filter.toLowerCase()) >= 0
+                    let in_title = $(this).data('title').toLowerCase().toString().indexOf(_filter.toLowerCase()) >= 0,
                         in_siteid = $(this).data('siteid').toString().indexOf(_filter) >= 0,
                         in_state = _active_filter == 'all' ? true : $(this).data('state') == _active_filter;
 
