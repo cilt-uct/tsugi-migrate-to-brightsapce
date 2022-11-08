@@ -26,7 +26,7 @@ $OUTPUT->topNav($menu);
 <?php
 $OUTPUT->splashPage(
     "<img src='static/img/vula.svg' alt='Vula'/><i class='fas fa-arrow-right'></i><img src='static/img/amathuba_woodmark.svg' alt='Amathuba'/>",
-    __("<h2>Migrate to Amathuba - Coming Soon!<h2>")
+    __("<h2>Convert your site to Amathuba - Coming Soon!<h2>")
 );
 
 $OUTPUT->footerStart();

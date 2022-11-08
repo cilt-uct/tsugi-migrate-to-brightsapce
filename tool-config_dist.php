@@ -11,9 +11,13 @@ if ((basename(__FILE__, '.php') != 'tool-config') && (file_exists('tool-config.p
 $tool = array();
 $tool['debug'] = FALSE;
 $tool['active'] = TRUE; # if false will show coming soon page
+
 $tool['brightspace_url'] = 'https://amathuba.uct.ac.za/d2l/home/';
 $tool['brightspace_log_url'] = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
 $tool['vula_url'] = 'https://vula.uct.ac.za/portal/site/';
+
+# these sites are used for development - so ignore coming soon page
+$tool['dev'] = [];
 
 $departments = [
     ['ACC','Faculty of Commerce','College of Accounting'],
