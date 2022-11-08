@@ -79,12 +79,9 @@ function get_provider_object($provider, $title) {
 
 $provider_details = get_provider_object($provider, $title);
 
-$report_url = str_replace("\\","/",$CFG->getCurrentFileUrl('report.php')) . 
-                        (strlen($current_migration['transfer_site_id'] ?? '') > 0 ? "?tid=". $current_migration['transfer_site_id'] : "?sid=". $site_id);
-
 $context = [
     'instructor' => $USER->instructor, 
-    'styles'     => [ addSession('static/css/app.min.css'), ],
+    'styles'     => [ addSession('static/css/app.min.css') ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), addSession('static/js/jquery.validate.min.js'),  ],
 
     'title'      => $title,
@@ -103,7 +100,8 @@ $context = [
     'years'      => range(date("Y")+1, date("Y")+2),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
-    'fetch_report'   => $report_url,
+    'fetch_report'   => $current_migration['report_url'],
+    'report_url' =>  $current_migration['report_url'],
     
     'has_report' => strlen($current_migration['report_url'] ?? '') > 0,
     'provider'   => $provider,

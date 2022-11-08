@@ -1,102 +1,55 @@
 <section>
-    <h1>Vula <span>to</span> Amathuba</h1>
-
     <!-- <pre>|{{ json_encode($provider_details) }}|</pre> -->
-
+    
     {% if ($state == "init") { %}
-    <form class="form-inline text-left needs-validation" method="post" target="_self" id="metadata"> 
-        <input type="hidden" name="state"  id="state" value="{{ $state }}"/>           
+        <h2 class="tool-header">Conversion Setup</h2>
+        <blockquote>Choose how you would like this site converted to Amathuba</blockquote>
         <div class="row">
-            <div class="col-xs-12">
-                <h3>You're about to convert your course to Amathuba!</h3>              
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-9">
-                <h4>What will transfer from Vula to Amathuba in the conversion process?</h4>
-                <ul style="margin-left: 60px;">                
-                    <li>Announcements</li>
-                    <li>Assignments</li>
-                    <li>Discussions</li>
-                    <li>Gradebook</li>
-                    <li>Lessons</li>
-                    <li>Resources</li>
-                    <li>Quizzes</li>
-                    <li>Rubrics</li>
-                </ul>
-                <small style="margin-left: 72px;"><u>Note:</u> Lecture videos - Requires a CILT Helpdesk request.</small>
-            </div>
-        </div>
-        
-        <div class="row" style="margin-top: 1em;">
-            <div class="col-md-9 col-xs-offset-1">
-                <label for="provider">My Site</label>
-                <input type="text" name="site-title" id="site-title" disabled="true" class="form-control disabled" value="{{ $title }}"/>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 1em;">
-            <div class="col-md-2 col-xs-offset-1">
-                <label class="custom-control overflow-checkbox">
-                    <input type="checkbox" class="overflow-control-input" disabled="" checked="">
-                    <span class="overflow-control-indicator"></span>
-                    <span class="overflow-control-description">Reference Site</span>
-                </label>
-            </div>
-            <div class="col-md-5" style="padding-left: 0px; color:#aaa;">
-                The reference site will contain the content of your Vula site, which you can then transfer to any other Amathuba site at will.
-            </div>
-        </div>
-        <div class="row" style="margin-top: 1em;">
-            <div class="col-md-2 col-xs-offset-1">
-                <label class="custom-control overflow-checkbox">
-                    <input id="if_course" type="checkbox" class="overflow-control-input" checked="">
-                    <span class="overflow-control-indicator"></span>
-                    <span class="overflow-control-description">Create an accompanying<br/>Course Site</span>
-                </label>
-            </div>
-            <div id="do_course" class="col-md-7">
-                {%  $full = 'is the year for this course in Amathuba.';
-                    $empty = 'that you will be teaching this course on Amathuba.';
-
-                    if (count($provider_details) == 0) { %}
-                    <div class="row">
-                        <div class="col-xs-12" style="padding-left: 0px">
-                            <select class="form-control" name="provider_select" id="provider_select" style="width: 420px" required>
-                                {% if ($current_dept == '') { %}
-                                <option selected data-type="default" value="0">Please select a department</option>
-                                {% } 
-                                    foreach ($departments as $el) {
-                                        $str = $el[1] ." - ". $el[2];
-                                        $selected = ($current_dept == $el[0] ? 'selected' : '');
-                                        print "<option value=\"". $el[0] ."\" ". $selected .">". $str ."</option>";
-                                    }
-                                %}
-                            </select>
-                            <!-- <span>Additional course codes can be added later</span> -->
+            <div class="col-md-8">
+                <form class="needs-validation form-horizontal"  id="metadata">
+                    <input type="hidden" name="state"  id="state" value="{{ $state }}" />
+                    <input type="hidden" name="site-title" id="site-title" value="{{ $title }}" />
+                    <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}" />
+            
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <!--label class="custom-control overflow-checkbox">
+                                <input id="if_course" type="checkbox" class="overflow-control-input" checked="">
+                                <span class="overflow-control-indicator"></span>
+                                <span class="overflow-control-description">Create a new Amathuba site for teaching</span>
+                            </label-->
+                            <label>Create a new Amathuba site for teaching</label>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12" style="padding-left: 0px">
-                {% } else { %}
-                    <div class="row">
-                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
-                            <div class="col-xs-2" style="padding: 0px;">
-                                <input type="text" name="provider" id="provider"
+                        <div class="col-md-7">
+                            <input id="if_course" type="checkbox" class="overflow-control-input" checked="" />
+                        {% if (count($provider_details) == 0) { %}
+                            <select class="form-control" name="provider_select" id="provider_select" style="width: 420px" required>
+                            {% if ($current_dept == '') { %}
+                                <option selected data-type="default" value="">Please select a department</option>
+                            {% }
+                                foreach ($departments as $el) {
+                                    $str = $el[1] ." - ". $el[2];
+                                    $selected = ($current_dept == $el[0] ? 'selected' : '');
+                                    print "<option value=\"". $el[0] ."\" ". $selected .">". $str ."</option>";
+                                }
+                            %}
+                            </select>
+                        {% } else { %}
+                            {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
+                                <input type="hidden" name="provider" id="provider"
                                     data-full="{{ $el['full'] }}"
                                     data-dept="{{ $el['dept'] }}"
                                     data-year="{{ $el['year'] }}"
                                     data-period="{{ $el['period'] }}"
                                     data-term="{{ $el['term'] }}"
                                     value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" class="form-control disabled" disabled
-                                    style="width: 100%; text-align: center;"/>
-                            </div>
-                            <div class="col-xs-10">
-                        {% } else { %}
-                            <div class="col-xs-12" style="padding-left: 0px">
-                                <select class="form-control" name="provider" id="provider" style="width: 180px" required>
+                                    style="width: 100%;"/>
+                                <span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span>
+                            {% } else { %}
+                                <select class="form-control" name="provider" id="provider" style="width: 320px" required>
                                     {% if ($current_provider == '') { %}
-                                    <option selected data-type="default" value="0">Please select the primary course code...</option>
-                                    {% } 
+                                    <!--<option selected data-type="default" value="">Please select the primary course code...</option>-->
+                                    {% }
                                         foreach ($provider_details as $el) {
                                             $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
                                             $selected = ($current_provider == $str ? 'selected' : '');
@@ -104,79 +57,63 @@
                                         }
                                     %}
                                 </select>
-                                <span style="padding-left: 6px; color:#aaa;">
-                                    Choose the reference course code.
-                                    <i style="color:#444" class="fas fa-question-circle" title="This will be the initial code for your course which can be changed later on."></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12" style="padding-left: 0px">
+                            {% } %}
                         {% } %}
-                {% } %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <label>
+                                Year in which this course will be taught on Amathuba 
+                                <i class="fas fa-question-circle" title="Subject to Faculty approval."></i>
+                            </label>
+                        </div>
+                        <div class="col-md-7">
                             <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;" required>
-                                {% if ($current_term  <= 2000) { %}
-                                <option selected value="0" data-type="default" >Please select a year </option>
-                                {% }
-                                foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
+                                {%  foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
                                     <option value="{{$val}}" {{$selected}}>{{$val}}</option>
                                 {% } %}
                             </select>
-                            <span id="year_selected" style="padding-left: 6px;" data-full="{{ $full }}" data-empty="{{ $empty }}">
-                                {{ $empty }} <i class="fas fa-question-circle" title="Subject to Faculty approval."></i>
-                            </span>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <label for="notifications">Email Notifications <br/><small>(Will also receive progress and final report)</small></label>
+                        </div>
+                        <div class="col-md-7">
+                            <span class="multi-item" value="{{ $current_email }}"> {{ $current_email }}</span>
+                            <textarea class="form-control" name="notifications" id="notifications" 
+                                placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
+                            <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <button id="btn_option1" class="btn btn-success" type="button" data-path="a" >
+                                Start Conversion
+                            </button>
+                            <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    
-        <div class="row" style="margin-top: 1em;">
-            <div class="col-md-4 col-xs-offset-1">
-                <label for="organizer">My Email</label>
-                <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
-                {% 
-                    $value = $email != '' ? $name .' <'. $email .'>' : ''; 
-                %}
-                <input type="text" name="organizer" id="organizer" disabled="true" class="form-control disabled" 
-                        value="{{ $value }}" data-email="{{ $email }}"/>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 1em;">
-            <div class="col-md-9 col-xs-offset-1">
-                <label for="notifications">Email Notifications <small>(Will also receive progress and final report)</small></label>
-                <textarea class="form-control" name="notifications" 
-                            id="notifications" 
-                            placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
-                <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
-            </div>
-        </div>
-        <div class="row">            
-            <div class="col-md-9 col-xs-offset-1">
-                <!-- <h4>Choose an option:</h4> -->
-                <!-- <div class="col-xs-offset-1" id="option-a"> -->
-                    <button id="btn_option1" class="btn btn-success disabled" type="button" data-path="a" disabled="true">
-                        <i class="fa fa-check"></i>
-                        Yes, <small>I want to run the conversion process ...</small>
-                    </button>
-                <!-- </div> -->
-                <!-- <div class="col-xs-offset-1" id="option-b">
-                    <button id="btn_option2" class="btn btn-default" type="button" data-path="b" style="margin-bottom: 0px;">
-                        No thanks, <small>I want to start from scratch in Amathuba</small>
-                    </button>
-                    <br/>
-                    <i>I don't need any of my Vula content converted, and only want a course site.</i>
-                </div> -->
-                <!-- <div class="col-xs-offset-1"> -->
-                    <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
-                <!-- </div> -->
-            </div>
-        </div>
-    </form>
-    {% } elseif (in_array($state, ['starting','exporting','running','importing','error'])) { %} 
+    {% } elseif (in_array($state, ['starting','exporting','running','uploading','importing','error','updating','completed'])) { %} 
         <input type="hidden" name="provider" id="provider" data-dept="{{$current_dept}}" value="{{$current_provider}}"/>
         <input type="hidden" name="year" id="year" value="{{$current_term}}"/>
 
+        <ul class="steps">
+            <li class="step" data-step="1" id="step1">Starting</li>
+            <li class="step" data-step="2" id="step2">Exporting</li>
+            <li class="step" data-step="3" id="step3">Running</li>
+            <li class="step" data-step="4" id="step4">Uploading</li>
+            <li class="step" data-step="5" id="step5">Importing</li>
+            <li class="step" data-step="6" id="step6">Updating</li>
+            <li class="step" data-step="7" id="step7">Completed</li>
+        </ul>
+    
         <div class="row">
+	        <h3><strong>State: </strong> {{ $state }}</h3>
             <div class="col-md-8">
                 <ul>                
                     <li>You have successfully initiated the migration process </li>
@@ -186,210 +123,19 @@
             </div>
             <div class="col-md-4">
                 {% if ($has_report) { %}
-                <button id="show-report" type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportModal">
-                    <i class="far fa-file-alt"></i> View Conversion Report
-                </button>
-                {% } %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-lg-11">
-                <div class="migrate-progress workflow {{ $state }}">
-                    <div class="vula" >
-                        <div>
-                            <div class="title">
-                                <strong>Starting</strong>
-                                Schedule Migration
-                            </div>
-                            <div class="desc">
-                                {% if (in_array($state,['starting'])) { %}
-                                    The site is scheduled to be exported, you will be <i>notified</i> when it starts.
-                                {% } else { %}
-                                    <img src="./static/img/starting.svg" title="starting"/>
-                                {% } %}
-                            </div>
-                        </div>
-                        <div {% if ($state == 'starting') { %}class="disabled"{% } %}>
-                            <div class="title">
-                                <strong>Exporting</strong>
-                                Vula Course Site
-                            </div>
-                            <div class="desc">
-                                {% if (in_array($state,['starting','exporting'])) { %}
-                                    Course content is exported into a package that will be processed and imported.
-                                {% } else { %}
-                                    <img src="./static/img/exporting.svg" title="exporting"/>
-                                {% } %}
-                            </div>
-                        </div>
-                        <div {% if ($state == 'error') { %}class="error"{% } %}
-                            {% if (in_array($state,['starting','exporting'])) { %}class="disabled"{% } %}>
-                            <div class="title">
-                                {% if ($state == 'error') { %}
-                                    <i class="fas fa-exclamation"></i>
-                                    <strong>Error</strong>    
-                                {% } else { %}
-                                <strong>Running</strong>
-                                Conversion Workflow
-                                {% } %}
-                            </div>
-                            <div class="desc">
-                                {% if ($state == 'error') { %}
-                                    There was an error in converting this site, the <strong>Administrator</strong> has been notified.
-                                {% } elseif (in_array($state,['starting','exporting','running'])) { %}
-                                    Running some conversion steps to make sure we import the content from the course site correctly.
-                                {% } else { %}
-                                    <img src="./static/img/running.svg" title="running"/>
-                                {% } %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="amathuba">
-                        <div {% if (in_array($state,['starting','exporting','running','error'])) { %}class="disabled"{% } %}>
-                            <div class="title">
-                                <strong>Importing</strong>
-                                To Auto-converted Site
-                            </div>
-                            <div class="desc">
-                                {% if (in_array($state,['starting','exporting','running','importing','error'])) { %}
-                                    Importing content into the auto-converted site.
-                                {% } else { %}
-                                    <img src="./static/img/Vula-Amathuba.svg" title="imported"/>
-                                {% } %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% } elseif (in_array($state, ['updating','completed'])) { %} 
-    <div class="row">
-        <div class="col-xs-12 col-lg-11">
-            <div class="migrate-progress {{ $state }}">
-                <div class="vula">
-                    <div data-step="1">
-                        <div class="title">
-                            <strong>Converted</strong>
-                            Vula Course Site
-                        </div>
-                        <div class="desc">
-                            {% if ($has_report) { %}
-                            <a href="#" data-toggle="modal" data-target="#reportModal">
-                                <i class="far fa-file-alt"></i>
-                                <span>Review the report for remediation steps</span>
-                            </a>
-                            {% } %}
-                        </div>
-                    </div>
-                </div>
-                <div class="amathuba">
-                    <div data-step="2" style="grid-area: 1 / 1 / 2 / 2;">
-                        <div class="title">
-                            <strong>Updating</strong>
-                            Auto - converted site
-                        </div>
-                        <div class="desc">
-                            {% if (in_array($state,['starting','exporting','running','importing','error'])) { %}
-                                    Updating auto-converted site.
-                            {% } else { %}
-                                <img src="./static/img/updating.svg" title="updating"/>
-                            {% } %}
-                        </div>
-                    </div>
-                    <div data-step="3" style="grid-area: 1 / 2 / 2 / 3;" {% if ($state == 'updating') { %}class="disabled"{% } %}>
-                        <div class="title">
-                            <strong>Completed</strong>
-                            update
-                        </div>
-                        <div class="desc">
-                            Ready for Staff to review & update content.
-                        </div>
-                    </div>
-                    <div data-step="4" style="grid-area: 1 / 3 / 2 / 4;" {% if ($state == 'updating') { %}class="disabled"{% } %}>
-                        <div class="title">
-                            <strong>Ready</strong> for Teaching
-                        </div>
-                        <div class="desc">
-                            {% if ($imported_site_id > 0) { %}
-                            <a href="{{ $brightspace_url }}{{ $imported_site_id }}" title="Open in Amathuba" id="btn-amathuba">
-                                <img src="./static/img/graphic.png" title="Ready"/>
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
-                            {% } else { %}
-                                <img src="./static/img/graphic.png" title="Ready"/>
-                            {% } %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>            
-    {% } %}
-    <div class="row">
-        <br/>
-        <div class="col-xs-12 col-lg-11 footer">
-            If you need help, consult the 
-            <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a> 
-            or contact 
-            <a href="mailto:help@vula.uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">help@vula.uct.ac.za</a>.
-        </div>
-    </div>
-
-    {% if (in_array($state, ['starting','exporting','running','importing','error','updating','completed'])) { %}
-    <br/>
-    <br/>
-    <div class="row">
-        <div class="col-xs-12 col-lg-11 workflow">
-            <h4>
-                Progress <span>({{ $state }})</span>
-                
-                <!-- Reload visible in 'init', 'completed', 'error' and 'paused' -->
-                {% if (in_array($state, ['init', 'completed', 'error', 'paused'])) { %}
-                <input type="hidden" name="provider" id="provider" value="{{ $target_course }}"/>
-                <input type="hidden" name="year" id="year" value="{{ $target_term }}"/>
-                <input type="hidden" name="dept" id="dept" value="{{ $target_dept }}"/>
-                <input type="hidden" name="title" id="title" value="{{ $target_title }}"/>
-                <input type="hidden" name="create_course_offering" id="create_course_offering" value="{{ $create_course_offering }}"/>
-
-                <a id="restart_workflow" class="btn btn-default btn-xs" href="#" 
-                    role="button" style="float: right; z-index: 1000;font-size: 60%;" title="Re-submit workflow ..." rel="{{ $site_id }}" data-title="{{ $title }}">
-                    <i class="fas fa-redo" style="margin-right: 3px;"></i>Restart Migration
-                </a>
-                {% } %}
-            </h4>
-
-            <input type="hidden" name="organizer" id="organizer" value="{{ $name }} <{{ $email }}>"/>
-            <input type="hidden" name="notifications_hidden" id="notifications_hidden" value="{{ $notifications }}"/>
-
-            {% $output = '';
-            if (gettype($workflow) === 'array') { 
-                $ouput = join("<br/>",$workflow);
-            } %}
-            <div id="pre">{{ $ouput }}</div>
-        </div>
-    </div>
-    {% } %}
-
-    <!-- Modal -->
-    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a id="btn_open_report" href="{{$fetch_report}}" target="_blank" class="btn btn-secondary">
-                        Conversion Report&nbsp;&nbsp;
-                        <i class="fas fa-sign-out-alt"></i>
+		            <a id="show-report" type="button" class="btn btn-primary" href="{{ $report_url }}" target="_blank">
+                        <i class="far fa-file-alt"></i> View Conversion Report
                     </a>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" style="padding:0px;">
-                    <iframe id="reportModal-iframe" src="{{$fetch_report}}" style="width:100%; height: 420px;border:0px;"></iframe>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                {% } %}
             </div>
+        </div>       
+    {% } %}
+    <div class="row">
+        <div class="col-md-8">
+            Need more help or advice? Consult the
+            <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a>
+            or contact
+            <a href="mailto:help@vula.uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">help@vula.uct.ac.za</a>.
         </div>
     </div>
 </section>

@@ -6,6 +6,8 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
+        var state = '{{ $state }}';
+        setStateClass(state);
         var timeout = null;
 
         function setError(st) {
@@ -112,8 +114,8 @@
                   _term = $('#year'),
                   _check = $('#if_course'),
                   _btn = $('#btn_option1'),
-                  valid = !_check.is(':checked') ||
-                            ((_dept.exists() ? _dept.val() != 0 : true) &&
+			        valid = !_check.is(':checked') ||
+			            ((_dept.exists() ? _dept.val() != 0 : true) &&
                             (_provider.exists() ? _provider.val() != 0 : true) &&
                             (_term.exists() ? _term.val() != 0 : true));
 
@@ -121,6 +123,42 @@
                 _btn.removeClass('disabled').removeAttr('disabled');
             } else {
                 _btn.addClass('disabled').attr('disabled', 'true');
+            }
+        }
+
+	function setStateClass(state) {
+		// switch statement ?
+        if (state == 'starting') {
+            $('#step1').addClass("is-active");
+            $("#step2 ,#step3 ,#step4 ,#step5 ,#step6 ,#step7").addClass("is-pending");
+        } else if(state == 'exporting') {
+            $('#step2').addClass("is-active");
+            $('#step1').removeClass("is-active");
+            $("#step3 ,#step4 ,#step5 ,#step6 ,#step7").addClass("is-pending");
+        } else if(state == 'running') {
+                $("#step1 ,#step2").removeClass("is-active");
+                $("#step3").addClass("is-active");
+                $("#step1 , #step2").addClass("is-complete");
+                $("#step4 ,#step5 ,#step6 ,#step7").addClass("is-pending");
+            } else if(state == 'uploading') {
+                $("#step1 ,#step2 , #step3").removeClass("is-active");
+                $("#step4").addClass("im-active");
+                $("#step1 , #step2 ,#step3").addClass("is-complete");
+                $("#step5 ,#step6 ,#step7").addClass("is-pending");
+            } else if(state == 'importing') {
+                $("#step1 ,#step2 , #step3 ,#step4").removeClass("is-active");
+                $("#step5").addClass("is-active");
+                $("#step1 , #step2 ,#step3 ,#step4").addClass("is-complete");
+                $("#step6 ,#step7").addClass("is-pending");
+            } else if(state == 'updating') {
+                $("#step1 ,#step2 , #step3 ,#step4 ,#step5").removeClass("is-active");
+                $("#step6").addClass("is-active");
+                $("#step1 , #step2 ,#step3 ,#step4 ,#step5").addClass("is-complete");
+                $("#step7").addClass("is-pending");
+            } else if(state == 'completed') {
+                $("#step1 ,#step2 , #step3 ,#step4 ,#step5 ,#step6").removeClass("is-active");
+                $("#step7").addClass("is-active");
+                $("#step1 , #step2 ,#step3 ,#step4 ,#step5 ,#step6").addClass("is-complete");
             }
         }
 
@@ -148,6 +186,7 @@
             }
         });
 
+        console.log('exists:' + $('#notifications').exists());
         if ($('#notifications').exists()) {
             $("#notifications").on('change', function(event) {
                 var i = $(this).val();
