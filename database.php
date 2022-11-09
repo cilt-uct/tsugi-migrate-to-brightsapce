@@ -56,6 +56,8 @@ array( "{$CFG->dbprefix}migration_site",
     `target_course` VARCHAR(255),
     `target_term` int,
     `target_dept` VARCHAR(25),
+    `target_site_id` int NOT NULL DEFAULT '0',
+    `target_site_created` tinyint(1) DEFAULT '0',
     `create_course_offering` tinyint(1) DEFAULT '0',
 
     PRIMARY KEY (`site_id`,`link_id`),
@@ -105,6 +107,8 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration_site', 'target_term', 'int'),
         array('migration_site', 'target_dept', 'VARCHAR(25)'),
         array('migration_site', 'create_course_offering', 'tinyint(1) DEFAULT 0'),
+        array('migration_site', 'target_site_id', 'int NOT NULL DEFAULT 0'),
+        array('migration_site', 'target_site_created', 'tinyint(1) DEFAULT 0'),
 
         // drop report
         array('migration_site', 'report', 'DROP')
@@ -143,4 +147,5 @@ $DATABASE_UPGRADE = function($oldversion) {
 if ( isset($CURRENT_FILE) ) {
     include $CFG->dirroot."/admin/migrate-run.php";
 }
+
 

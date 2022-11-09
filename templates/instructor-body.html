@@ -13,11 +13,6 @@
             
                     <div class="form-group">
                         <div class="col-md-5">
-                            <!--label class="custom-control overflow-checkbox">
-                                <input id="if_course" type="checkbox" class="overflow-control-input" checked="">
-                                <span class="overflow-control-indicator"></span>
-                                <span class="overflow-control-description">Create a new Amathuba site for teaching</span>
-                            </label-->
                             <label>Create a new Amathuba site for teaching</label>
                         </div>
                         <div class="col-md-7">
@@ -47,9 +42,7 @@
                                 <span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span>
                             {% } else { %}
                                 <select class="form-control" name="provider" id="provider" style="width: 320px" required>
-                                    {% if ($current_provider == '') { %}
-                                    <!--<option selected data-type="default" value="">Please select the primary course code...</option>-->
-                                    {% }
+				   {%
                                         foreach ($provider_details as $el) {
                                             $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
                                             $selected = ($current_provider == $str ? 'selected' : '');
@@ -61,7 +54,7 @@
                         {% } %}
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="course_year">
                         <div class="col-md-5">
                             <label>
                                 Year in which this course will be taught on Amathuba 
@@ -78,7 +71,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-5">
-                            <label for="notifications">Email Notifications <br/><small>(Will also receive progress and final report)</small></label>
+				<label for="notifications">Email Notifications for conversion updates</label>
                         </div>
                         <div class="col-md-7">
                             <span class="multi-item" value="{{ $current_email }}"> {{ $current_email }}</span>
@@ -87,55 +80,124 @@
                             <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-5">
-                            <button id="btn_option1" class="btn btn-success" type="button" data-path="a" >
-                                Start Conversion
-                            </button>
-                            <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
-                        </div>
-                    </div>
-                </form>
-            </div>
+	      </div>
+	</div>
+        <button id="btn_option1" class="btn btn-success" type="button" data-path="a" >Start Conversion </button>
+        <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+        </form>
+            
         </div>
-    {% } elseif (in_array($state, ['starting','exporting','running','uploading','importing','error','updating','completed'])) { %} 
+    {% } elseif (in_array($state, ['starting','exporting','running', 'queued', 'uploading','importing','updating','completed'])) { %} 
         <input type="hidden" name="provider" id="provider" data-dept="{{$current_dept}}" value="{{$current_provider}}"/>
         <input type="hidden" name="year" id="year" value="{{$current_term}}"/>
+        {% if($state != 'completed') { %}    
 
-        <ul class="steps">
-            <li class="step" data-step="1" id="step1">Starting</li>
-            <li class="step" data-step="2" id="step2">Exporting</li>
-            <li class="step" data-step="3" id="step3">Running</li>
-            <li class="step" data-step="4" id="step4">Uploading</li>
-            <li class="step" data-step="5" id="step5">Importing</li>
-            <li class="step" data-step="6" id="step6">Updating</li>
-            <li class="step" data-step="7" id="step7">Completed</li>
-        </ul>
-    
         <div class="row">
-	        <h3><strong>State: </strong> {{ $state }}</h3>
-            <div class="col-md-8">
-                <ul>                
-                    <li>You have successfully initiated the migration process </li>
-                    <li>The duration of the process depends on the size of your Resources folder in Vula.</li>
-                    <li>You will receive a confirmation email once the conversion is complete.</li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                {% if ($has_report) { %}
-		            <a id="show-report" type="button" class="btn btn-primary" href="{{ $report_url }}" target="_blank">
-                        <i class="far fa-file-alt"></i> View Conversion Report
-                    </a>
-                {% } %}
-            </div>
-        </div>       
-    {% } %}
-    <div class="row">
-        <div class="col-md-8">
-            Need more help or advice? Consult the
-            <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a>
-            or contact
-            <a href="mailto:help@vula.uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">help@vula.uct.ac.za</a>.
+            <h2 class="tool-header">Conversion in progress</h2>
+
+            <ul class="steps">
+                <li class="step" data-step="1" id="step1">Starting</li>
+                <li class="step" data-step="2" id="step2">Exporting</li>
+                <li class="step" data-step="3" id="step3">Running</li>
+	        <li class="step" data-step="4" id="step4">Uploading</li>
+                <li class="step" data-step="5" id="step5">Importing</li>
+                <li class="step" data-step="6" id="step6">Updating</li>
+            </ul>
+   
+	    {% if($state == 'queued') { %}
+	    
+	    <blockquote><span id="state-span">uploading </span>started {{ $last_modified  }}</blockquote>
+
+	    {% }  else { %}
+	    <blockquote><span id="state-span">{{ $state }} </span>started {{ $last_modified  }}</blockquote>
+            {% } %}
         </div>
+
+	<div class="row">
+            <p><br/>This Vula site is being converted to Amathuba, which could take between 10 minutes and 12 hours depending on site content. When it's done, we'll send you an email confirmation, or you can check back here for progress.</p>
+        </div>
+
+	{% }} %}
+
+        {% if( $state == 'completed') { %}
+        <div class="row">
+	    <h2 class="tool-header">Conversion complete</h2>
+	    <br/>
+            <div class="col-md-9">
+            <div class="row display-flex">
+                <div class="col-md-3 col-xs-12 text-center" >
+		    <div id="step-image">
+		    {% if ($has_report) { %}
+		        <a href="{{ $report_url }}" target="_blank">
+                            <img src="./static/img/Read_report.svg" alt="Conversion report" width="50px"/>
+            		</a>
+		    </div>
+                    <div id="step-description">
+                        <a href="{{ $report_url }}" class="step_title" target="_blank">Conversion Report </a>
+                        <p>Issues which may need your attention.</p>
+            	    </div>
+	    	    {% } %}
+        	</div>
+        	<div class="col-md-1 col-xs-12 text-center hidden-xs hidden-sm">
+		    {% if($imported_site_id > 0) { %}
+		        <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
+                    {% } %}
+		</div>
+                <div class="col-md-3 col-xs-12 text-center" id="step_details">
+		    {% if($imported_site_id > 0) { %}
+		    <div id="step-image"> 
+		        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank">
+                            <img src="./static/img/View_new_site.svg" alt="Converted Amathuba site" width="75px" />
+                        </a>
+		    </div>
+                    <div id="step-description">
+		        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" class="step_title" target="_blank" >Converted reference site </a>
+                        <p>A copy of this site on Amathuba.</p>
+                    </div>
+	      	   {% } %}
+            	</div>
+            	<div class="col-md-1 col-xs-12 text-center hidden-xs hidden-sm">
+                    {% if($target_site_id >  0) { %}
+		        <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
+                    {% } %}
+		</div>
+            	<div class="col-md-3 col-xs-12 text-center" id="step_details">
+		     {% if($target_site_id > 0 )  { %}
+		     <div id="step-image">
+		         <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank" >
+                             <img src="./static/img/Step 3.svg" alt="New Amathuba site" width="75px" />
+                   	 </a>
+		    </div>
+                    <div id="step-description">
+                        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" class="step_title" target="_blank" >New Amathuba site </a>
+                        <p>Import and update content and activities in this new site.</p>
+                    </div>
+              	    {% } %}
+            	</div>
+    	    </div>
+	</div>
+	<div class="col-md-3 col-xs-12">&nbsp;</div>
     </div>
+    <p>This site has been converted to Amathuba! Here's what to do next:</p>
+    <ol>
+        <li>Read the <a href="{{ $report_url }}" target="_blank">conversion report</a> which provides details on any issues that may need attention.</li>
+        <li>Visit the <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank" >converted reference  site</a> on Amathuba to review how the Vula content has converted to Amathuba tools.</li>
+        <li>Build your <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank">new Amathuba site</a> by importing content from the converted reference site as needed.</li>
+        <li>Edit content or update settings in the new site as needed to address any issues flagged in the conversion report.</li>
+    </ol>
+ </div>
+{% } %}
+
+{% if( $state == 'error') { %}
+<div class="row">
+    <h2 class="tool-header">Conversion failed</h2>
+    <p>The conversion of this site to Amathuba ran into an unexpected error. We're looking into it, and will let you know as soon as there's an update</p>
+</div>
+{% }  %}
+<p>Need more help or advice? Consult the
+    <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a>
+    or contact
+    <a href="mailto:cilt-helpdesk@uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">cilt-helpdesk@uct.ac.za</a>.</p>
+</div>
+</div>
 </section>

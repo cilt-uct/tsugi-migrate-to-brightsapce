@@ -1252,7 +1252,7 @@ table#singlesites_tbl tbody tr:hover td {
   background: #ebebeb;
   width: 100%;
   height: 0.125rem;
-  top: 1rem;
+  top: 0.5rem;
   left: 50%;
 }
 

@@ -50,6 +50,107 @@ $title = $CONTEXT->title;
 // $title = 'EDN4507F,2022 Test';
 // $provider = 'EDN4507F,2022';
 
+
+function time_Ago($time) {
+
+    // Calculate difference between current
+    // time and given timestamp in seconds
+    $diff     = time() - $time;
+
+    // Time difference in seconds
+    $sec     = $diff;
+
+    // Convert time difference in minutes
+    $min     = round($diff / 60 );
+
+    // Convert time difference in hours
+    $hrs     = round($diff / 3600);
+
+    // Convert time difference in days
+    $days     = round($diff / 86400 );
+
+    // Convert time difference in weeks
+    $weeks     = round($diff / 604800);
+
+    // Convert time difference in months
+    $mnths     = round($diff / 2600640 );
+
+    // Convert time difference in years
+    $yrs     = round($diff / 31207680 );
+
+    // Check for seconds
+    if($sec <= 60) {
+        return "$sec seconds ago";
+    }
+
+    // Check for minutes
+    else if($min <= 60) {
+        if($min==1) {
+            return "one minute ago";
+        }
+        else {
+            return "$min minutes ago";
+        }
+    }
+
+    // Check for hours
+    else if($hrs <= 24) {
+        if($hrs == 1) {
+            return "an hour ago";
+        }
+        else {
+            return "$hrs hours ago";
+        }
+    }
+
+    // Check for days
+    else if($days <= 7) {
+        if($days == 1) {
+            return "since yesterday";
+        }
+        else {
+            return "since $days days ago";
+        }
+    }
+
+    // Check for weeks
+    else if($weeks <= 4.3) {
+        if($weeks == 1) {
+            return "since a week ago";
+        }
+        else {
+            return "since $weeks weeks ago";
+        }
+    }
+
+    // Check for months
+    else if($mnths <= 12) {
+        if($mnths == 1) {
+            return "since a month ago";
+        }
+        else {
+            return "since $mnths months ago";
+        }
+    }
+
+    // Check for years
+    else {
+        if($yrs == 1) {
+            return "since one year ago";
+        }
+        else {
+            return "since $yrs years ago";
+        }
+    }
+}
+
+$modified_time = strtotime($current_migration['modified_at']);
+$time_modified = time_Ago($modified_time);
+/*$started_time = $current_migration['modified_at'];
+
+$time_ago = strtotime($started_time);*/
+
+
 function get_provider_object($provider, $title) {
 
     if (preg_match("/Turnitin/i", $title)) {
@@ -88,6 +189,7 @@ $context = [
     'site_id'    => $site_id,
     'imported_site_id' => $current_migration['imported_site_id'],
     'transfer_site_id' => $current_migration['transfer_site_id'],
+    'target_site_id' => $current_migration['target_site_id'],
 
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
@@ -103,10 +205,14 @@ $context = [
     'fetch_report'   => $current_migration['report_url'],
     'report_url' =>  $current_migration['report_url'],
     
+
     'has_report' => strlen($current_migration['report_url'] ?? '') > 0,
     'provider'   => $provider,
     'provider_details'=> $provider_details,
-    
+    'started' => $current_migration['started_at'],
+    'modified_at' => $current_migration['modified_at'],
+    'last_modified' => $time_modified,
+
     'current_provider' => $current_migration['provider'],
     'current_dept'     => $current_migration['dept'],
     'current_term'     => $current_migration['term'],

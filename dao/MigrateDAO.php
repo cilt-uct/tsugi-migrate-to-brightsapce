@@ -24,7 +24,8 @@ class MigrateDAO {
             ifnull(`site`.report_url,'') as report_url,
             `site`.state, `site`.`active`, `site`.workflow, `migration`.is_admin, 
             `site`.imported_site_id,
-            `site`.transfer_site_id,
+	    `site`.transfer_site_id,
+	    `site`.target_site_id,
             ifnull(`site`.`provider`, '') as `provider`, 
             ifnull(`site`.`term`, 0) as `term`, 
             ifnull(`site`.`dept`, '') as `dept`,
@@ -86,7 +87,7 @@ class MigrateDAO {
 
     function getMigrationsPerLink($link_id) {
 
-        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, `site`.modified_at,
+        $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, `site`.modified_at, target_site_id,
             ifnull(`site`.report_url,'') as report_url, 
             `site`.test_conversion
             FROM {$this->p}migration_site `site`
