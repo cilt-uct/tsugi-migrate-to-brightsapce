@@ -147,8 +147,9 @@
             $(".steps > .step").addClass("is-pending").removeClass('is-active is-complete');
             // set the current step
             $(`#step${_current_step}`).addClass("is-active").removeClass('is-pending');
+	    $(`#step${_current_step}`).find("span").removeClass('hidden-xs');
             // set completed
-            $(".steps > .step").filter(function() { return $(this).data("step") < _current_step; }).addClass("is-complete").removeClass('is-pending');
+            $(".steps > .step").filter(function() { return $(this).data("step") < _current_step; }).addClass("is-complete hidden-xs").removeClass('is-pending');
         }
 
         $('#year, #provider, #provider_select').on("change", function(event) {

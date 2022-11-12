@@ -96,36 +96,40 @@
             <h2 class="tool-header">Conversion in progress</h2>
 
             <ul class="steps">
-                <li class="step" data-step="1" id="step1">Starting</li>
-                <li class="step" data-step="2" id="step2">Exporting</li>
-                <li class="step" data-step="3" id="step3">Running</li>
-	        <li class="step" data-step="4" id="step4">Uploading</li>
-                <li class="step" data-step="5" id="step5">Importing</li>
-                <li class="step" data-step="6" id="step6">Updating</li>
+		<li class="step" data-step="1" id="step1"><span class="hidden-xs">Starting</span></li>
+		<li class="step" data-step="2" id="step2"><span class="hidden-xs">Exporting</span></li>
+		<li class="step" data-step="3" id="step3"><span class="hidden-xs">Running</span></li>
+		<li class="step" data-step="4" id="step4"><span class="hidden-xs">Uploading</span></li>
+		<li class="step" data-step="5" id="step5"><span class="hidden-xs">Importing</span></li>
+		<li class="step" data-step="6" id="step6"><span class="hidden-xs">Updating</span></li>
             </ul>
    
 	    {% if($state == 'queued') { %}
 	    
-	    <blockquote><span id="state-span">uploading </span>started {{ $last_modified  }}</blockquote>
+	    <blockquote><img id="running_icon" class="hidden-xs hidden-sm" />
+		    <p><span id="state-span">uploading </span>started {{ $last_modified  }}</p>
+	    </blockquote>
 
 	    {% }  else { %}
-	    <blockquote><span id="state-span">{{ $state }} </span>started {{ $last_modified  }}</blockquote>
+	    <blockquote><img id="running_icon" class="hidden-xs hidden-sm" />
+		    <p><span id="state-span">{{ $state }} </span>started {{ $last_modified  }}</p>
+	    </blockquote>
             {% } %}
         </div>
 
 	<div class="row">
-            <p><br/>This Vula site is being converted to Amathuba, which could take between 10 minutes and 12 hours depending on site content. When it's done, we'll send you an email confirmation, or you can check back here for progress.</p>
+            <p><br/>This Vula site is being converted to Amathuba, which could take between 10 minutes and 12 hours depending on site content and the number of conversions in progress. When it's done, we'll send you an email confirmation, or you can check back here for updates.</p>
         </div>
 
 	{% }} %}
 
         {% if( $state == 'completed') { %}
         <div class="row">
-	    <h2 class="tool-header">Conversion complete</h2>
+	    <h2 class="tool-header">Conversion complete <img id="conversion_completed_icon" /></h2>
 	    <br/>
             <div class="col-md-9">
             <div class="row display-flex">
-                <div class="col-md-3 col-xs-12 text-center" >
+                <div class="col-md-3 col-xs-4 col-sm-3 text-center" >
 		    <div id="step-image">
 		    {% if ($has_report) { %}
 		        <a href="{{ $report_url }}" target="_blank">
@@ -138,12 +142,12 @@
             	    </div>
 	    	    {% } %}
         	</div>
-        	<div class="col-md-1 col-xs-12 text-center hidden-xs hidden-sm">
+        	<div class="col-md-1 col-xs-12 text-center hidden-sm hidden-xs">
 		    {% if($imported_site_id > 0) { %}
 		        <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
                     {% } %}
 		</div>
-                <div class="col-md-3 col-xs-12 text-center" id="step_details">
+                <div class="col-md-3 col-xs-4 col-sm-3 text-center" id="step_details">
 		    {% if($imported_site_id > 0) { %}
 		    <div id="step-image"> 
 		        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank">
@@ -161,7 +165,7 @@
 		        <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
                     {% } %}
 		</div>
-            	<div class="col-md-3 col-xs-12 text-center" id="step_details">
+            	<div class="col-md-3 col-xs-4 col-sm-4 text-center" id="step_details">
 		     {% if($target_site_id > 0 )  { %}
 		     <div id="step-image">
 		         <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank" >
@@ -194,14 +198,24 @@
 
 {% if( $state == 'error') { %}
 <div class="row">
-    <h2 class="tool-header">Conversion failed</h2>
+	<h2 class="tool-header">Conversion failed <img id="conversion_failed_icon"/></h2>
     <p>The conversion of this site to Amathuba ran into an unexpected error. We're looking into it, and will let you know as soon as there's an update</p>
 </div>
 {% }  %}
-<p>Need more help or advice? Consult the
-    <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a>
-    or contact
-    <a href="mailto:cilt-helpdesk@uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">cilt-helpdesk@uct.ac.za</a>.</p>
+
+<div class="contact-box">
+   <div class="icon icon_1"></div>
+   <div class="icon icon_2 hidden-xs hidden-sm"></div>
+</div>
+<div class="row" id="support-footer">
+    <div class="col-md-1 hidden-xs hidden-sm">&nbsp;</div>
+    <div class="col-md-11" id="support-section">
+    <p id="support_text">Need more help or advice? Consult the
+            <a href="http://www.cilt.uct.ac.za/cilt/amathuba" title="Amathuba : Support" target="_blank"/>help documentation</a>
+             or contact
+            <a href="mailto:cilt-helpdesk@uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">cilt-helpdesk@uct.ac.za</a>.</p>
+    </div>
+</div>
 </div>
 </div>
 </section>

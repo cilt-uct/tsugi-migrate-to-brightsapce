@@ -1590,6 +1590,7 @@ blockquote {
 }
 blockquote p {
   display: inline-block;
+  vertical-align: middle;
 }
 blockquote span {
     font-weight: bold;
@@ -1623,4 +1624,64 @@ blockquote span {
 }
 .row.display-flex > [class*='col-'] {
     margin-bottom: 30px;
+}
+.icon {
+
+    float:left;
+    height: 50px;
+    width: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+    position:relative;
+}
+.icon_1 { 
+      background-image: url("../img/Headphones.svg");
+      float:left !important;
+      margin-left: 10px;
+}
+.icon_2 {
+      background-image: url("../img/Blue_pill.svg");
+      margin:0 10px;
+      float:right !important;
+}
+  
+.contact-box { 
+    position:relative;
+    width: 100%;
+    float:left;
+}
+.contact-box:before {
+    content:"";
+    position:absolute;
+    height:7px;
+    background:#1fa485;
+    top:50%;
+    width:100%;
+    left:0;
+    z-index:-1;
+}
+#support-footer {
+    padding: 0px !important;
+    margin-top: -15px !important;
+}
+#support-section {
+    padding-left:0px !important;
+}
+#support_text {
+    margin-left: 0px;
+}
+#conversion_failed_icon {
+    content: url('../img/Red_cross.svg');
+    height: 20px;
+    width: 20px;
+}
+#conversion_completed_icon {
+    content: url('../img/Green_check.svg');
+    height: 20px;
+    width: 20px;
+}
+#running_icon {
+    content: url('../img/is_running.png');
+    vertical-align: middle;
+    width: 50px;
 }
