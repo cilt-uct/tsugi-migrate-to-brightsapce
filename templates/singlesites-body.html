@@ -34,7 +34,7 @@
             {% } %}
         
             {% if($row["report_url"] != '' || $row["report_url"] != NULL) { %}
-                <td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-toggle="modal" rel="{% print($row['report_url']); %}" title="View conversion report" data-target="#reportModal" id="{% print($row['site_id']); %}"></i></td>
+                <td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-="modal" rel="{% print($row['report_url']); %}" title="View conversion report" data-target="#reportModal" id="{% print($row['site_id']); %}"></i></td>
             {% } else { %}
                 <td colspan="2">&nbsp;</td>
             {% } %}

@@ -1,6 +1,8 @@
 <?php
 namespace Migration\DAO;
 
+define("OTHER", 9999);
+
 class MigrateDAO {
 
     private $PDOX;
@@ -127,6 +129,11 @@ class MigrateDAO {
         $user_email = $user_details['email'];
 
         $workflow = ["$now,000 INFO Migration for site $site_id started by $user_name ($user_email)","$now,001 INFO Scheduled Export..."];
+        
+        if ($term == 'other') {
+            $term = OTHER;
+            $target_term = OTHER;
+        }
 
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, uploaded_at,

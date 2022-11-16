@@ -169,9 +169,15 @@ function get_provider_object($provider, $title) {
 
     $list = array();
     foreach($test as $t) {
-        preg_match('/([A-Za-z]{2,3})\s?(\d)(\d{2,3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
+        preg_match('/([A-Za-z]{3})\s?(\d)(\d{3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
         if (count($matches) >= 1) {
-            array_push($list, ['full' => $matches[0], 'dept' => $matches[1], 'year' => $matches[2], 'no' => $matches[3], 'period' => $matches[4], 'term' => $matches[5] ]);
+            array_push($list, [ 'full' => $matches[0] ?? '',
+                                'dept' => $matches[1] ?? '', 
+                                'year' => $matches[2] ?? '', 
+                                'no' => $matches[3] ?? '', 
+                                'period' => $matches[4] ?? '', 
+                                'term' => $matches[5] ?? '' 
+                            ]);
         }
     }
     
@@ -179,6 +185,12 @@ function get_provider_object($provider, $title) {
 }
 
 $provider_details = get_provider_object($provider, $title);
+
+## For multiple providers we are not doing that for now
+if (count($provider_details) != 1) { 
+    header( 'Location: '.addSession('coming-soon.php') ) ;
+    exit;
+}
 
 $context = [
     'instructor' => $USER->instructor, 
@@ -219,7 +231,7 @@ $context = [
 
     'target_title' => $current_migration['target_title'],
     'target_course' => $current_migration['target_course'],
-    'target_term' => $current_migration['target_term'],
+    'target_term' => $current_migration['target_term'] == OTHER ? 'other' : $current_migration['target_term'],
     'target_dept' => $current_migration['target_dept'],
     'create_course_offering' => $current_migration['create_course_offering'],
 
@@ -230,6 +242,8 @@ $context = [
 if (!$USER->instructor) {
     header('Location: ' . addSession('student-home.php'));
 }
+
+
 
 // Start of the output
 $OUTPUT->header();

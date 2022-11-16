@@ -6,86 +6,117 @@
         <blockquote>Choose how you would like this site converted to Amathuba</blockquote>
         <div class="row">
             <div class="col-md-8">
-                <form class="needs-validation form-horizontal"  id="metadata">
+                <form class="needs-validation" id="metadata">
                     <input type="hidden" name="state"  id="state" value="{{ $state }}" />
                     <input type="hidden" name="site-title" id="site-title" value="{{ $title }}" />
                     <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}" />
             
-                    <div class="form-group">
-                        <div class="col-md-5">
-                            <label>Create a new Amathuba site for teaching</label>
+                    <div class="row">
+                        <div class="col-md-12">
+				            <label>In Amathuba</label>
                         </div>
-                        <div class="col-md-7">
-                            <input id="if_course" type="checkbox" class="overflow-control-input" checked="" />
-                        {% if (count($provider_details) == 0) { %}
-                            <select class="form-control" name="provider_select" id="provider_select" style="width: 420px" required>
-                            {% if ($current_dept == '') { %}
-                                <option selected data-type="default" value="">Please select a department</option>
-                            {% }
-                                foreach ($departments as $el) {
-                                    $str = $el[1] ." - ". $el[2];
-                                    $selected = ($current_dept == $el[0] ? 'selected' : '');
-                                    print "<option value=\"". $el[0] ."\" ". $selected .">". $str ."</option>";
-                                }
-                            %}
-                            </select>
-                        {% } else { %}
-                            {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
-                                <input type="hidden" name="provider" id="provider"
-                                    data-full="{{ $el['full'] }}"
-                                    data-dept="{{ $el['dept'] }}"
-                                    data-year="{{ $el['year'] }}"
-                                    data-period="{{ $el['period'] }}"
-                                    data-term="{{ $el['term'] }}"
-                                    value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" class="form-control disabled" disabled
-                                    style="width: 100%;"/>
-                                <span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span>
-                            {% } else { %}
-                                <select class="form-control" name="provider" id="provider" style="width: 320px" required>
-				   {%
-                                        foreach ($provider_details as $el) {
-                                            $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
-                                            $selected = ($current_provider == $str ? 'selected' : '');
-                                            print "<option data-dept=\"". $el['dept'] ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
-                                        }
-                                    %}
-                                </select>
-                            {% } %}
-                        {% } %}
+                        <div class="col-md-12 secondary" id="course_provider">
+                            <div class="radio">
+                                <label for="create_course">
+                                    <input type="radio" name="select_type" id="create_course" checked="checked" />
+                                    Convert this site and create a new
+                                    {% if (count($provider_details) == 0) { %}
+                                        site in
+                                    {% } else { %}
+                                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
+                                            course site for
+                                        {% } else { %}
+                                            Select primary course
+                                        {% } %}
+                                    {% } %}
+                                </label>
+                                <div id="do_course">
+                                    {% if (count($provider_details) == 0) { %}
+                                        <select class="form-control" name="provider_select" id="provider_select" required>
+                                            <option data-type="default" value="">Choose type of site ...</option>
+                                        {% foreach ($departments as $el) {
+                                                $selected = ($current_dept == $el[0] ? 'selected' : '');
+                                                print "<option value=\"". $el[0] ."\" ". $selected .">". $el[1] ."</option>";
+                                            }
+                                        %}
+                                        </select>
+                                    {% } else { %}
+                                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
+                                            <input type="hidden" name="provider" id="provider"
+                                                data-full="{{ $el['full'] }}"
+                                                data-dept="{{ $el['dept'] }}"
+                                                data-year="{{ $el['year'] }}"
+                                                data-period="{{ $el['period'] }}"
+                                                data-term="{{ $el['term'] }}"
+                                                value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" class="form-control disabled" disabled
+                                                style="width: 100%;"/>
+                                            <!--span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span-->
+                                        {% } else { %}
+                                            <select class="form-control" name="provider" id="provider" required>
+                                                {%
+                                                    foreach ($provider_details as $el) {
+                                                        $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
+                                                        $selected = ($current_provider == $str ? 'selected' : '');
+                                                        print "<option data-dept=\"". $el['dept'] ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
+                                                    }
+                                                %}
+                                            </select>
+                                        {% } %}
+                                    {% } %}
+
+                                    {% if (count($provider_details) == 0) { %}
+                                    {% } else { %}
+                                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}    
+                                        {% } else { %}
+                                        <span class="desc">for teaching in</span>
+                                        {% } %}
+                                    {% } %}
+
+                                    {% if (count($provider_details) == 0) { %}
+                                        <input type="hidden" name="year" id="year" value="other" />
+                                    {% } else { %}
+                                        <select id="year" name="year" class="form-control" required>
+                                            {%  foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
+                                                <option value="{{$val}}" {{$selected}}>{{$val}}</option>
+                                            {% } %}
+                                        </select>
+                                        <i class="fas fa-question-circle" title="Subject to Faculty approval." style="margin-left: 8px;"></i>
+                                    {% } %}
+                                </div>
+                            </div>
+                            <div class="radio">
+                                <label for="just_convert">
+                                    <input type="radio" name="select_type" id="just_convert" />
+                                    Convert this site, but do not create 
+                                    {% if (count($provider_details) == 0) { %}
+                                        a new site
+                                    {% } else { %}
+                                        a new course site
+                                    {% } %}
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group" id="course_year">
-                        <div class="col-md-5">
-                            <label>
-                                Year in which this course will be taught on Amathuba 
-                                <i class="fas fa-question-circle" title="Subject to Faculty approval."></i>
-                            </label>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+				            <label for="notifications">Email Notifications for conversion updates</label>
                         </div>
-                        <div class="col-md-7">
-                            <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;" required>
-                                {%  foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
-                                    <option value="{{$val}}" {{$selected}}>{{$val}}</option>
-                                {% } %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-5">
-				<label for="notifications">Email Notifications for conversion updates</label>
-                        </div>
-                        <div class="col-md-7">
+                        <div class="col-md-12 secondary" >
                             <span class="multi-item" value="{{ $current_email }}"> {{ $current_email }}</span>
                             <textarea class="form-control" name="notifications" id="notifications" 
                                 placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
                             <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
                         </div>
                     </div>
-	      </div>
-	</div>
-        <button id="btn_option1" class="btn btn-success" type="button" data-path="a" >Start Conversion </button>
-        <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
-        </form>
-            
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
+                            <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     {% } elseif (in_array($state, ['starting','exporting','running', 'queued', 'uploading','importing','updating','completed'])) { %} 
         <input type="hidden" name="provider" id="provider" data-dept="{{$current_dept}}" value="{{$current_provider}}"/>
@@ -117,7 +148,7 @@
             {% } %}
         </div>
 
-	<div class="row">
+	    <div class="row">
             <p><br/>This Vula site is being converted to Amathuba, which could take between 10 minutes and 12 hours depending on site content and the number of conversions in progress. When it's done, we'll send you an email confirmation, or you can check back here for updates.</p>
         </div>
 
@@ -148,23 +179,23 @@
                     {% } %}
 		</div>
                 <div class="col-md-3 col-xs-4 col-sm-3 text-center" id="step_details">
-		    {% if($imported_site_id > 0) { %}
-		    <div id="step-image"> 
-		        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank">
-                            <img src="./static/img/View_new_site.svg" alt="Converted Amathuba site" width="75px" />
-                        </a>
-		    </div>
-                    <div id="step-description">
-		        <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" class="step_title" target="_blank" >Converted reference site </a>
-                        <p>A copy of this site on Amathuba.</p>
-                    </div>
-	      	   {% } %}
+		        {% if($imported_site_id > 0) { %}
+                <div id="step-image"> 
+                    <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank">
+                                <img src="./static/img/View_new_site.svg" alt="Converted Amathuba site" width="75px" />
+                            </a>
+                </div>
+                <div id="step-description">
+                    <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" class="step_title" target="_blank" >Converted reference site </a>
+                    <p>A copy of this site on Amathuba.</p>
+                </div>
+	      	    {% } %}
             	</div>
             	<div class="col-md-1 col-xs-12 text-center hidden-xs hidden-sm">
                     {% if($target_site_id >  0) { %}
-		        <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
+		                <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
                     {% } %}
-		</div>
+		        </div>
             	<div class="col-md-3 col-xs-4 col-sm-4 text-center" id="step_details">
 		     {% if($target_site_id > 0 )  { %}
 		     <div id="step-image">
@@ -181,16 +212,16 @@
     	    </div>
 	</div>
 	<div class="col-md-3 col-xs-12">&nbsp;</div>
-    </div>
-    <p>This site has been converted to Amathuba! Here's what to do next:</p>
-    <ol>
-        <li>Read the <a href="{{ $report_url }}" target="_blank">conversion report</a> which provides details on any issues that may need attention.</li>
-        <li>Visit the <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank" >converted reference  site</a> on Amathuba to review how the Vula content has converted to Amathuba tools.</li>
-	{% if($target_site_id > 0) { %}
-	<li>Build your <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank">new Amathuba site</a> by importing content from the converted reference site as needed.</li>
-        {% } else {%}
-            <li>Create a new Amathuba site, and import content from the converted reference site as needed.</li>
-	{% } %}
+        </div>
+        <p>This site has been converted to Amathuba! Here's what to do next:</p>
+        <ol>
+            <li>Read the <a href="{{ $report_url }}" target="_blank">conversion report</a> which provides details on any issues that may need attention.</li>
+            <li>Visit the <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank" >converted reference  site</a> on Amathuba to review how the Vula content has converted to Amathuba tools.</li>
+        {% if($target_site_id > 0) { %}
+        <li>Build your <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank">new Amathuba site</a> by importing content from the converted reference site as needed.</li>
+            {% } else {%}
+                <li>Create a new Amathuba site, and import content from the converted reference site as needed.</li>
+        {% } %}
         <li>Edit content or update settings in the new site as needed to address any issues flagged in the conversion report.</li>
     </ol>
  </div>
@@ -202,7 +233,7 @@
     <p>The conversion of this site to Amathuba ran into an unexpected error. We're looking into it, and will let you know as soon as there's an update</p>
 </div>
 {% }  %}
-
+<br/>
 <div class="contact-box">
    <div class="icon icon_1"></div>
    <div class="icon icon_2 hidden-xs hidden-sm"></div>

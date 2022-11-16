@@ -6,19 +6,15 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
-	var state = '{{ $state }}';
-	var timeout = null;
-
-	if(state == 'queued') { 
-            state = 'uploading';
-	}
-
-	if(state != 'completed' || state != 'error') {
-	    setTimeout("window.open(self.location, '_self');", 30000);
-	}
-
-	const state_array = ['starting', 'exporting', 'running', 'uploading', 'importing', 'updating', 'completed'];
+        const state_array = ['starting', 'exporting', 'running', 'uploading', 'importing', 'updating', 'completed'];
+        const static_state_array = ['init', 'completed', 'error'];
+        var state = '{{ $state }}' == 'queued' ? 'uploading' : '{{ $state }}';
+        var timeout = null;
         setStateClass(state);
+
+        if (!static_state_array.includes(state)) {
+            setTimeout("window.open(self.location, '_self');", 30000);
+        }
 
         function setError(st) {
             $(st).removeClass('text-success text-info').addClass('text-danger').children('i').removeClass('fa-ellipsis-h fa-check').addClass('fa-times');
@@ -85,18 +81,17 @@
                 dept = _provider ? 
                             (_provider.prop('nodeName') == 'SELECT' ? _provider.find('option:selected').data('dept') : _provider.data('dept'))
                             : (_provider_select ? _provider_select.val() : $('#dept').exists() ? $('#dept').val() : ''),
-                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear(),
-                create_course_offering = $('#if_course').exists() ? ($('#if_course').is(':checked')?1:0) : $('#create_course_offering').val()
+                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear();
                 
             var data = { 
                 "type": type,
                 "title": "{{ $title }}",
                 "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
                 "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
-                "provider": provider == '' ? `${dept}00${term.slice(-2)}` : provider,
+                "provider": provider == '' ? (dept == 'other' ? dept : `${dept}00${term.slice(-2)}`) : provider,
                 "dept": dept,
                 "term": term,
-                "create_course": create_course_offering
+                "create_course": $('#create_course').is(':checked') ? 1 : 0
             }
 
             // console.log(data);
@@ -119,35 +114,35 @@
         }
 
         function can_submit() {
-            const _dept = $('#provider_select'),
-                  _provider = $('#provider'),
-                  _term = $('#year'),
-                  _check = $('#if_course'),
-                  _btn = $('#btn_option1'),
-			        valid = !_check.is(':checked') ||
-			            ((_dept.exists() ? _dept.val() != 0 : true) &&
-                            (_provider.exists() ? _provider.val() != 0 : true) &&
-                            (_term.exists() ? _term.val() != 0 : true));
+            const  _btn = $('#btn_start'),
+                  _create_course = $('#create_course').is(':checked'),
+                  _just_convert  = $('#just_convert').is(':checked'),
+                  _provider = $('#provider_select').exists() ? $('#provider_select').val() != '' : true,
+                  _year = $('#year').exists() ? $('#year').val() != '' : true,
+                  valid = (_create_course && _provider && _year) || _just_convert;
 
+            // console.log(`can_submit: ${valid}`);
             if (valid) {
                 _btn.removeClass('disabled').removeAttr('disabled');
+                return true;
             } else {
                 _btn.addClass('disabled').attr('disabled', 'true');
+                return false;
             }
         }
     
         function setStateClass(state) {
             let _current_step = state_array.indexOf(state) + 1;
-	    if(state == 'queued') {
-                   state = 'uploading';
-		   $(`#step${_current_step}`).addClass("is-active").removeClass('is-pending');
-	    }
+            if(state == 'queued') {
+                state = 'uploading';
+                $(`#step${_current_step}`).addClass("is-active").removeClass('is-pending');
+            }
 
             // all is pending
             $(".steps > .step").addClass("is-pending").removeClass('is-active is-complete');
             // set the current step
             $(`#step${_current_step}`).addClass("is-active").removeClass('is-pending');
-	    $(`#step${_current_step}`).find("span").removeClass('hidden-xs');
+	        $(`#step${_current_step}`).find("span").removeClass('hidden-xs');
             // set completed
             $(".steps > .step").filter(function() { return $(this).data("step") < _current_step; }).addClass("is-complete hidden-xs").removeClass('is-pending');
         }
@@ -159,23 +154,8 @@
             can_submit();
         });
 
-        $('#if_course').on("change", function(event) {
-            if ($(this).is(':checked')) {
-                $('#do_course').show();
-	        $('#course_year ,#course_year_text').show();
-            } else {
-		$('#course_year ,#course_year_text').hide();
-                $('#do_course').hide();
-            }
+        $('#create_course, #just_convert').on("change", function(event) {
             can_submit();
-        });
-
-        $("#metadata").validate({
-            rules: {
-                provider_select : { required: true },
-                provider : { required: true },
-                year : { required: true }
-            }
         });
 
         if ($('#notifications').exists()) {
@@ -221,38 +201,25 @@
             check_if_im_in_notification(false);
         }
         
-        $('#year').on('change', function(event){
-            const _y = $('#year_selected');
-            _y.html( $('#year').val() == 0 ? _y.data('empty') : _y.data('full') + '<i class="fas fa-question-circle" title="Subject to Faculty approval."></i>');
-        })
-
         $('#restart_workflow').on('click', function(event) {
             event.preventDefault();
             const _me = $(this);
 
             migrateSite(_me.attr('id'), 'init', 'notifications_hidden');
         });
-
         
-        $('#btn_option1, #btn_option2').click( function(event) {
+        $('#btn_start').click( function(event) {
             event.preventDefault();
             const _me = $(this);
     
-            if ($("#metadata").valid()) {
+            if (can_submit()) {
                 _me.html('<i class="fa fa-cog fa-spin"></i>Starting process...').addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
-                switch(_me.data('path')){
-                    case 'a':
-                        $('#option-b').hide();
-                        migrateSite(_me.attr('id'), 'init', 'notifications');
-                        break;
-                    case 'b':
-                        $('#option-a').hide();
-                        migrateSite(_me.attr('id'), 'site', 'notifications');
-                        break;    
-                }
+                migrateSite(_me.attr('id'), 'init', 'notifications');
             }
         });
+        // check after loading
+        can_submit();
     });
 </script>
