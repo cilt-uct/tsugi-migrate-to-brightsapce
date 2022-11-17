@@ -187,7 +187,10 @@ function get_provider_object($provider, $title) {
 $provider_details = get_provider_object($provider, $title);
 
 ## For multiple providers we are not doing that for now
-if (count($provider_details) != 1) { 
+# single site == 1 (Working)
+# no provider / project site <= 0 (Working)
+# more than one provider > 1 (Coming soon)
+if (count($provider_details) > 1) { 
     header( 'Location: '.addSession('coming-soon.php') ) ;
     exit;
 }
