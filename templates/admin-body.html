@@ -107,7 +107,7 @@
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </div>
-                    <div class="jira-div" style="float: right; z-index: 1000;">
+                    <div {% if ($site['state'] == "error") {echo 'class="show"';} else {echo 'class="hide"';} %} id="jira-div">
                         <a class="btn btn-default btn-xs jira-btn" role="button" target="_blank"
                             href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{{ $site['site_id'] }}%22"
                             title="Go to jira ...">
