@@ -56,7 +56,7 @@ $menu = false; // We are not using a menu
 
 $context = [
     'instructor' => $USER->instructor, 
-    'styles'     => [ addSession('static/css/app.min.css'), ],
+    'styles'     => [ addSession('static/css/app.min.css'), addSession('static/css/custom.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
     'debug'      => $debug,
     'custom_debug' => $LAUNCH->ltiRawParameter('custom_debug', false),
