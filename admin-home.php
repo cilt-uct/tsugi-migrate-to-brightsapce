@@ -56,7 +56,7 @@ $menu = false; // We are not using a menu
 
 $context = [
     'instructor' => $USER->instructor, 
-    'styles'     => [ addSession('static/css/app.min.css'), addSession('static/css/custom.css'), ],
+    'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
     'debug'      => $debug,
     'custom_debug' => $LAUNCH->ltiRawParameter('custom_debug', false),
@@ -81,7 +81,8 @@ $context = [
     
     'brightspace_url' => $tool['brightspace_url'],
     'brightspace_log_url' => $tool['brightspace_log_url'],
-    'vula_url' => $tool['vula_url']
+    'vula_url' => $tool['vula_url'],
+    'jira_url' => $tool['jira_url']
 ];
 
 // Start of the output
