@@ -15,6 +15,7 @@ $tool['active'] = TRUE; # if false will show coming soon page
 $tool['brightspace_url'] = 'https://amathuba.uct.ac.za/d2l/home/';
 $tool['brightspace_log_url'] = 'https://amathuba.uct.ac.za/d2l/le/conversion/import/';
 $tool['vula_url'] = 'https://vula.uct.ac.za/portal/site/';
+$tool['jira_url'] = 'https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22';
 
 # these sites are used for development - so ignore coming soon page
 $tool['dev'] = [];
