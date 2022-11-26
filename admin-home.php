@@ -81,7 +81,8 @@ $context = [
     
     'brightspace_url' => $tool['brightspace_url'],
     'brightspace_log_url' => $tool['brightspace_log_url'],
-    'vula_url' => $tool['vula_url']
+    'vula_url' => $tool['vula_url'],
+    'jira_url' => $tool['jira_url']
 ];
 
 // Start of the output

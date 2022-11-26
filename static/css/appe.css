@@ -819,14 +819,12 @@ input.multi-input[type=text] {
   background-color: rgba(51, 122, 183, 0.4) !important;
 }
 
-#show-vula,
-#show-amathuba {
+#show-vula {
   margin-top: 32px;
   padding-left: 26px;
   background-color: lightgrey;
 }
-#show-vula.admin,
-#show-amathuba.admin {
+#show-vula.admin {
   border-radius: 0px 0px 4px 4px;
   top: 2px;
   margin: 0px;
@@ -847,6 +845,30 @@ input.multi-input[type=text] {
 #show-amathuba.admin {
   right: 123px;
   background-image: url(../img/amathuba_woodmark.svg);
+  border-radius: 0px 0px 4px 4px;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: 50% 50%;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  width: 42px;
+  height: 42px;
+}
+
+#show-jira {
+  margin-top: 0px;
+  text-align: center !important;
+  background-color: lightgrey;
+}
+#show-jira.admin {
+  right: 123px;
+  border-radius: 0px 0px 4px 4px;
+  top: 2px;
+  margin: 0px;
+  padding: 4px;
+  width: 42px;
+  height: 42px;
 }
 
 #show-import-log {

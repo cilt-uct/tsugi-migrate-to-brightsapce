@@ -81,15 +81,35 @@
                       _btn = $('#show-report'),
                       _btn_vula = $('#show-vula'),
                       _btn_amathuba = $('#show-amathuba'),
+                      _btn_jira = $('#show-jira'),
                       _btn_import_log = $('#show-import-log'),
                       _btn_open_report = $('#btn_open_report'),
                       _iframe = $('#reportModal-iframe'),
                       _report_url = '{{ $fetch_report }}',
                       _amathuba_url = '{{ $brightspace_url }}',
                       _vula_url = '{{ $vula_url }}',
-                      _import_log_url = '{{ $brightspace_log_url }}';
+                      _import_log_url = '{{ $brightspace_log_url }}',
+                      _jira_url = '{{ $jira_url }}';
 
-                
+                _btn_vula.show();
+                _btn_vula.attr('href', _vula_url + site);
+
+                if (result.report_url.length > 2) {
+                    _btn.show();
+                    _btn_open_report.show();
+                    _btn_open_report.attr('href', _report_url + '?sid=' + site);
+                    _iframe.attr('src', _report_url + '?sid=' + site);
+                } else {
+                    _btn.hide();
+                }
+
+                if(result.state === "error") {
+                    _btn_jira.show();
+                    _btn_jira.attr('href', _jira_url + site + '"');
+                } else {
+                    _btn_jira.hide();
+                }
+
                 if(result.amathuba_site) {
                     _btn_amathuba.show();
                     _btn_amathuba.attr('href', _amathuba_url + result.amathuba_site);
@@ -106,18 +126,6 @@
 
                 if (result.success === 1) {
                     _pre.html(result.workflow.join("<br/>"));
-                    _btn_vula.show();
-                    _btn_vula.attr('href', _vula_url + site);
-
-                    if (result.report_url.length > 2) {
-                        _btn.show();
-
-                        _btn_open_report.attr('href', _report_url + '?sid=' + site);
-                        _iframe.attr('src', _report_url + '?sid=' + site);
-                    } else {
-                        _btn.hide();
-                    }
-                    
                     setProgress(true);
                 } else {
                     _pre.html("Could not load workflow for site.");

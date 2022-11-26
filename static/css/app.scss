@@ -1033,19 +1033,16 @@ $admin-button-size: 42px;
     }
 }
 
-#show-vula,
-#show-amathuba {
+#show-vula {
     margin-top: 32px;
     padding-left: 26px;
     background-color: lightgrey;
 
     &.admin {
-        // right: 78px;
         border-radius: 0px 0px 4px 4px;
         top: 2px;
         margin: 0px;
         padding: 4px;
-        // position: absolute;
         width: $admin-button-size;
         height: $admin-button-size;
         background-image: url(../img/vula.svg);
@@ -1063,9 +1060,32 @@ $admin-button-size: 42px;
     &.admin {
         right: 123px;
         background-image: url(../img/amathuba_woodmark.svg);
+        border-radius: 0px 0px 4px 4px;
+        background-repeat: no-repeat;
+        background-size: 80%;
+        background-position: 50% 50%;
+        top: 2px;
+        margin: 0px;
+        padding: 4px;
+        width: 42px;
+        height: 42px;
     }
 }
+#show-jira {
+    margin-top: 0px;
+    text-align: center !important;
+    background-color: lightgrey;
 
+    &.admin {
+        right: 123px;
+        border-radius: 0px 0px 4px 4px;
+        top: 2px;
+        margin: 0px;
+        padding: 4px;
+        width: 42px;
+        height: 42px;
+    }
+}
 #show-import-log {
     margin-top: 0px;
     padding-left: 26px;
@@ -1078,8 +1098,8 @@ $admin-button-size: 42px;
         top: 2px;
         margin: 0px;
         padding: 4px;
-        width: $admin-button-size;
-        height: $admin-button-size;
+        width: 42px;
+        height: 42px;
     }
 }
 
