@@ -92,7 +92,7 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration', 'is_admin', 'TINYINT(1) NOT NULL DEFAULT 0'),
 
         array('migration_site', 'title', 'VARCHAR(99)'),
-        array('migration_site', 'state', "enum('init','starting','exporting','running','importing','updating','completed','error','paused','admin')"),
+        array('migration_site', 'state', "enum('init','starting','exporting','running','uploading','importing','updating','completed','error','paused','admin')"),
         array('migration_site', 'transfer_site_id', 'varchar(255)'),
         array('migration_site', 'imported_site_id', 'int NOT NULL DEFAULT 0'),
         array('migration_site', 'files', 'mediumtext'),

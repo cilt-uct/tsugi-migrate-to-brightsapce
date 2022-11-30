@@ -50,7 +50,7 @@ $site_stats_raw = $migrationDAO->getMigrationsPerLinkStats($LINK->id);
 foreach ($site_stats_raw as $v) {
     $site_stats[$v['state']] = $v['n'];
 }
-$stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'importing' => 0,'updating' => 0,'completed' => 0,'error' => 0);
+$stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' => 0,'running' => 0,'uploading'=>0,'importing' => 0,'updating' => 0,'completed' => 0,'error' => 0);
 
 $menu = false; // We are not using a menu
 
@@ -82,7 +82,8 @@ $context = [
     'brightspace_url' => $tool['brightspace_url'],
     'brightspace_log_url' => $tool['brightspace_log_url'],
     'vula_url' => $tool['vula_url'],
-    'jira_url' => $tool['jira_url']
+    'jira_url' => $tool['jira_url'],
+    'conversion_test' => $LAUNCH->ltiRawParameter('conversion_test', false)
 ];
 
 // Start of the output
