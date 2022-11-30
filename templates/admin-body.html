@@ -1,184 +1,197 @@
 <section>
-    <div class="row">
-        <div class="col-xs-12">
-            <h2>Admin <small>(Migrate list of sites)</small></h2>
-
-            <form class="form-inline text-left" method="post" target="_self" id="metadata">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <textarea id="add_sites" names="add_sites" placeholder="Add Site ID per line ..."></textarea>
-
-                        <div class="row">
-                            <div class="col-md-3 col-xs-12">
-                                <button id="btnAccept" class="btn btn-success" type="button">
-                                    <i class="fa fa-check"></i>
-                                    Add Sites
-                                </button>
-                            </div>
-                            <div class="col-md-1 col-xs-1"></div>
-                            <div class="col-md-8 col-xs-12">
-                                <button type="button" id="test_conversion" class="btn btn-light" name="test_conversion" value="test conversion">
-                                    <i class="fa fa-vial"></i> Add sites as Test Conversions
-                                </button>
-                            </div>
-                        </div>
-                        <div id="message" style="margin-top: 16px;"></div>
-                        <br/>
-                    </div>
-                    <div class="col-xs-6 admin">
-                        <label for="notifications" style="left: 0px;">
-                            Email Notifications 
-                            <i class="fas fa-question-circle" title="Will also receive progress and final report - for ALL sites."></i>
-                        </label>
-                        <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
-                        <textarea class="form-control" name="notifications" id="notifications" 
-                                    style="width: 100%"
-                                    placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
-                        <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
-
-                        <br/>
-                        
-                        <div style="padding-top: 15px;">
-                            <label for="year" style="left: 0px; display: inline-block;">
-                                Term (Default)
-                            </label>
-                            <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;" required>
-                                {% if ($current_term  <= 2000) { %}
-                                <option selected value="0" data-type="default" >Please select a year </option>
-                                {% }
-                                foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
-                                    <option value="{{$val}}" {{$selected}}>{{$val}}</option>
-                                {% } %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    {% if ($state != "init") { %}
-    <div class="row">
-        <div class="col-md-4 col-xs-12" style="padding-right: 0px;">
-            <div class="row" id="search_form">
-                <div class="col-xs-10">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="All Sites ({{ count($sites) }}) or search ...">
-                        <span class="input-group-btn">
-                            <button id="btn_search" class="btn btn-default disabled fas fa-search" disabled="true" type="button"></button>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-2">
-                    <a class="btn btn-default" href="{{ $reload_url }}" id="btn_reload_progress" role="button">
-                        <i class="fas fa-sync-alt"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8 col-xs-12">
-            <ul id="stats" class="nav nav-pills" role="tablist">
-                {% foreach ($site_stats as $x => $val) { %}
-                <li role="presentation" {% if ($x =='all') { %}class="active"{% } %}><a href="#" rel="{{ $x }}">{{ $x }} <span class="badge">{{ $val }}</span></a></li>
-                {% } %}
-                <!--li style="padding-top: 3px;">
-                    <input type="checkbox" title="Autoreload" id="autoreload"/>
-                    <i class="fas fa-sync-alt" style="display: inline-block;padding-left: 2px;"></i>
-                </li-->
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 440px;">            
-            <ul id="sites">
-                {% foreach ($sites as $site) { %}
-                <li data-state="{{ $site['state'] }}" data-title="{{ $site['title'] }}" data-siteid="{{ $site['site_id'] }}">
-                    <div style="float: right; z-index: 1000;">
-                        <a class="btn btn-default btn-xs reload" href="#" role="button" 
-                            title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}"
-                            data-istest="{{ $site['test_conversion']}}">
-                            <i class="fas fa-redo"></i>
-                        </a>
-                        <a class="btn btn-default btn-xs pause disabled" href="#" role="button" disabled="true"
-                            title="Pause workflow" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
-                            <i class="fas fa-pause"></i>
-                        </a>
-                        <a class="btn btn-default btn-xs delete" href="#" role="button" 
-                            title="Remove site" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
-                            <i class="far fa-trash-alt"></i>
-                        </a>
-                    </div>
-                    <div {% if ($site['state'] == "error") {echo 'class="show"';} else {echo 'class="hide"';} %} id="jira-div">
-                        <a class="btn btn-default btn-xs jira-btn" role="button" target="_blank"
-                            href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{{ $site['site_id'] }}%22"
-                            title="Go to jira ...">
-                            <i class="fab fa-jira"></i>
-                        </a>
-                    </div>
-
-                    <a href="#" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}" class="site add-margin">
-                        <span class="title">
-                            {% if (strlen($site['report_url']) > 0) { %}<i class="far fa-file-alt"></i>{% } %}
-                            {% if (! is_null($site['title'])) { %}{{ $site['title'] }}{% } else { %}&nbsp;{% } %}
-                        </span>
-                        <span class="site_id">{{ $site['site_id'] }}</span>
-                        <span class="state">
-                            {% 
-                                $cls = 'badge-light';
-                                switch ($site['state']) {
-                                    case 'init':
-                                        $cls = 'badge-light';
-                                        break;
-                                    case 'starting':
-                                    case 'exporting':
-                                    case 'running':
-                                        $cls = 'badge-primary';
-                                        break;
-                                    case 'importing':
-                                    case 'updating':
-                                            $cls = 'badge-info';
-                                            break;
-                                    case 'error':
-                                        $cls = 'badge-danger';
-                                        break;
-                                    case 'completed':
-                                        $cls = 'badge-success';
-                                        break;                                        
-                                    case 'paused':
-                                        $cls = 'badge-warning';
-                                        break;                                        
-                                    case 'paused':
-                                        $cls = 'badge-dark';
-                                        break;
-                                    default:
-                                        $cls = 'badge-light';
-                                }   
-                            %}
-                            <span class="badge {{ $cls }}">{{ $site['state'] }}</span>
-                            <small class="modified_at date" datetime="{{ $site['modified_at'] }}">{{ $site['modified_at'] }}</small>                      
-                        </span>
-                    </a>
+    <div class="tabbable-panel">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs ">
+                <li class="active">
+                    <a href="#tab_default_1" data-toggle="tab">Jobs</a>
                 </li>
-                {% } %}
+                <li>
+                    <a href="#tab_default_2" data-toggle="tab">Add Sites</a>
+                </li>
             </ul>
-        </div>
-        <div class="col-md-8 col-xs-12">
-            <div class="progress-container">
-                <span class="progress" style="width:0%"></span>
+            <br/>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_default_1">
+                    {% if ($state != "init") { %}
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12" style="padding-right: 0px;">
+                            <div class="row" id="search_form">
+                                <div class="col-xs-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="All Sites ({{ count($sites) }}) or search ...">
+                                        <span class="input-group-btn">
+                                            <button id="btn_search" class="btn btn-default disabled fas fa-search" disabled="true" type="button"></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <a class="btn btn-default" href="{{ $reload_url }}" id="btn_reload_progress" role="button">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <ul id="stats" class="nav nav-pills" role="tablist">
+                                {% foreach ($site_stats as $x => $val) { %}
+                                <li role="presentation" {% if ($x =='all') { %}class="active"{% } %}><a href="#" rel="{{ $x }}">{{ $x }} <span class="badge">{{ $val }}</span></a></li>
+                                {% } %}
+                                <!--li style="padding-top: 3px;">
+                                    <input type="checkbox" title="Autoreload" id="autoreload"/>
+                                    <i class="fas fa-sync-alt" style="display: inline-block;padding-left: 2px;"></i>
+                                </li-->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12" style="overflow-x: hidden; overflow-y: scroll; height: 440px;">
+                            <ul id="sites">
+                                {% foreach ($sites as $site) { %}
+                                <li data-state="{{ $site['state'] }}" data-title="{{ $site['title'] }}" data-siteid="{{ $site['site_id'] }}">
+                                    <div style="float: right; z-index: 1000;">
+                                        <a class="btn btn-default btn-xs reload" href="#" role="button"
+                                            title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}"
+                                            data-istest="{{ $site['test_conversion']}}">
+                                            <i class="fas fa-redo"></i>
+                                        </a>
+                                        <a class="btn btn-default btn-xs pause disabled" href="#" role="button" disabled="true"
+                                            title="Pause workflow" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
+                                            <i class="fas fa-pause"></i>
+                                        </a>
+                                        <a class="btn btn-default btn-xs delete" href="#" role="button"
+                                            title="Remove site" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}">
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                    <div {% if ($site['state'] == "error") {echo 'class="show"';} else {echo 'class="hide"';} %} id="jira-div">
+                                        <a class="btn btn-default btn-xs jira-btn" role="button" target="_blank"
+                                            href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{{ $site['site_id'] }}%22"
+                                            title="Go to jira ...">
+                                            <i class="fab fa-jira"></i>
+                                        </a>
+                                    </div>
+
+                                    <a href="#" rel="{{ $site['site_id'] }}" data-title="{{ $site['title'] }}" class="site add-margin">
+                                        <span class="title">
+                                            {% if (strlen($site['report_url']) > 0) { %}<i class="far fa-file-alt"></i>{% } %}
+                                            {% if (! is_null($site['title'])) { %}{{ $site['title'] }}{% } else { %}&nbsp;{% } %}
+                                        </span>
+                                        <span class="site_id">{{ $site['site_id'] }}</span>
+                                        <span class="state">
+                                            {%
+                                                $cls = 'badge-light';
+                                                switch ($site['state']) {
+                                                    case 'init':
+                                                        $cls = 'badge-light';
+                                                        break;
+                                                    case 'starting':
+                                                    case 'exporting':
+                                                    case 'running':
+                                                        $cls = 'badge-primary';
+                                                        break;
+                                                    case 'importing':
+                                                    case 'updating':
+                                                            $cls = 'badge-info';
+                                                            break;
+                                                    case 'error':
+                                                        $cls = 'badge-danger';
+                                                        break;
+                                                    case 'completed':
+                                                        $cls = 'badge-success';
+                                                        break;
+                                                    case 'paused':
+                                                        $cls = 'badge-warning';
+                                                        break;
+                                                    case 'paused':
+                                                        $cls = 'badge-dark';
+                                                        break;
+                                                    default:
+                                                        $cls = 'badge-light';
+                                                }
+                                            %}
+                                            <span class="badge {{ $cls }}">{{ $site['state'] }}</span>
+                                            <small class="modified_at date" datetime="{{ $site['modified_at'] }}">{{ $site['modified_at'] }}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                {% } %}
+                            </ul>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="progress-container">
+                                <span class="progress" style="width:0%"></span>
+                            </div>
+                            <div id="pre-buttons">
+                                <button id="show-report" title="Show conversion report"  type="button" class="btn btn-primary admin" data-toggle="modal" data-target="#reportModal" style="display: none;">
+                                    <i class="far fa-file-alt"></i>
+                                </button>
+                                <a id="show-vula" title="Open site in Vula" class="admin" href="" target="_blank" style="display: none;"></a>
+                                <a id="show-amathuba" title="Open site in Amathuba" class="admin" href="" target="_blank" style="display: none;"></a>
+                                <a id="show-import-log" title="Show import log in Amathuba" class="admin" href="" target="_blank" style="display: none;"><i class="fa fa-history fa-2x" aria-hidden="true"></i></a>
+                                <a id="show-jira" title="Go to jira..." class="admin" href="" target="_blank" style="display: none;"><i class="fab fa-jira fa-2x"></i></a>
+                            </div>
+                            <div id="pre" style="height: 438px; max-height: 438px;"></div>
+                        </div>
+                    </div>
+                    {% } %}
+                    <!-- Button trigger modal -->
+                </div>
+                <div class="tab-pane" id="tab_default_2">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h2>Admin <small>(Migrate list of sites)</small></h2>
+
+                            <form class="form-inline text-left" method="post" target="_self" id="metadata">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <textarea id="add_sites" names="add_sites" placeholder="Add Site ID per line ..."></textarea>
+
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-12">
+                                                <button id="btnAccept" class="btn btn-success" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                    Start Conversion
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div id="message" style="margin-top: 16px;"></div>
+                                        <br/>
+                                    </div>
+                                    <div class="col-xs-6 admin">
+                                        <label for="notifications" style="left: 0px;">
+                                            Email Notifications
+                                            <i class="fas fa-question-circle" title="Will also receive progress and final report - for ALL sites."></i>
+                                        </label>
+                                        <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}"/>
+                                        <textarea class="form-control" name="notifications" id="notifications"
+                                                    style="width: 100%"
+                                                    placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
+                                        <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
+
+                                        <br/>
+
+                                        <div style="padding-top: 15px;">
+                                            <label for="year" style="left: 0px; display: inline-block;">
+                                                Term (Default)
+                                            </label>
+                                            <select id="year" name="year" class="form-control" style="width: 180px; text-align: center;" required>
+                                                {% if ($current_term  <= 2000) { %}
+                                                <option selected value="0" data-type="default" >Please select a year </option>
+                                                {% }
+                                                foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
+                                                    <option value="{{$val}}" {{$selected}}>{{$val}}</option>
+                                                {% } %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="pre-buttons">
-                <button id="show-report" title="Show conversion report"  type="button" class="btn btn-primary admin" data-toggle="modal" data-target="#reportModal" style="display: none;">
-                    <i class="far fa-file-alt"></i>
-                </button>
-                <a id="show-vula" title="Open site in Vula" class="admin" href="" target="_blank" style="display: none;"></a>
-                <a id="show-amathuba" title="Open site in Amathuba" class="admin" href="" target="_blank" style="display: none;"></a>
-                <a id="show-import-log" title="Show import log in Amathuba" class="admin" href="" target="_blank" style="display: none;"><i class="fa fa-history fa-2x" aria-hidden="true"></i></a>
-                <a id="show-jira" title="Go to jira..." class="admin" href="" target="_blank" style="display: none;"><i class="fab fa-jira fa-2x"></i></a>
-            </div>
-            <div id="pre" style="height: 438px; max-height: 438px;"></div>
         </div>
     </div>
-    {% } %}
-    <!-- Button trigger modal -->
   
     <!-- Modal -->
     <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
