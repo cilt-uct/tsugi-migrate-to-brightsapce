@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         'success' => $result ? 1 : 0, 
                         'workflow' => $result ? json_decode($result['workflow']) : [],
                         'report_url' => $result['report_url'],
+                        'state' => $result['state'],
                         'transfer_site_id' => $result['transfer_site_id'] ? $result['transfer_site_id'] : '',
                         'amathuba_site' => $result['imported_site_id'] ? $result['imported_site_id'] : ''
                     ];

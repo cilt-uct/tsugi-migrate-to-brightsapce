@@ -206,7 +206,7 @@ class MigrateDAO {
     
     function getWorkflowAndReport($link_id, $site_id) {
         $query = "SELECT workflow, 
-                        ifnull(report_url,'') as report_url,
+                        ifnull(report_url,'') as report_url,`state`,
                         imported_site_id, transfer_site_id
                         FROM {$this->p}migration_site where link_id = :linkId and site_id = :siteId;";
         $rows = $this->PDOX->rowDie($query, array(':siteId' => $site_id, ':linkId' => $link_id));
