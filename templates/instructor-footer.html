@@ -88,7 +88,7 @@
                 "title": "{{ $title }}",
                 "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
                 "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
-                "provider": provider == '' ? (dept == 'other' ? dept : `${dept}00${term.slice(-2)}`) : provider,
+                "provider": provider == '' ? (dept == 'other' ? dept : '[]') : provider,
                 "dept": dept,
                 "term": term,
                 "create_course": $('#create_course').is(':checked') ? 1 : 0

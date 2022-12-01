@@ -30,10 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $term = isset($_POST['term']) ? $_POST['term'] : date("Y");
                 $provider = isset($_POST['provider']) ? $_POST['provider'] : '';
                 $title = isset($_POST['title']) ? $_POST['title'] : $CONTEXT->title;
+                $target_coures = $provider == '[]' ? $dept : $provider;
 
                 $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, 
                                             $_POST['notification'], $dept, $term, $provider, $_POST['is_test'],
-                                            $title, $provider, $term, $dept, $_POST['create_course'] == '1'? 1 : 0) ? 1 : 0;
+                                            $title, $target_coures, $term, $dept, $_POST['create_course'] == '1'? 1 : 0) ? 1 : 0;
                 break;
             case 'updating':    
             case 'starting':

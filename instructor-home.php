@@ -246,8 +246,6 @@ if (!$USER->instructor) {
     header('Location: ' . addSession('student-home.php'));
 }
 
-
-
 // Start of the output
 $OUTPUT->header();
 
