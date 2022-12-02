@@ -190,10 +190,10 @@ $provider_details = get_provider_object($provider, $title);
 # single site == 1 (Working)
 # no provider / project site <= 0 (Working)
 # more than one provider > 1 (Coming soon)
-if (count($provider_details) > 1) { 
+/*if (count($provider_details) > 1) { 
     header( 'Location: '.addSession('coming-soon.php') ) ;
     exit;
-}
+}*/
 
 $context = [
     'instructor' => $USER->instructor, 

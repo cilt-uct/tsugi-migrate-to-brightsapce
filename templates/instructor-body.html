@@ -3,7 +3,7 @@
     
     {% if ($state == "init") { %}
         <h2 class="tool-header">Conversion Setup</h2>
-        <blockquote>Choose how you would like this site converted to Amathuba</blockquote>
+        <blockquote>Choose how you would like this site to be converted to Amathuba</blockquote>
         <div class="row">
             <div class="col-md-8">
                 <form class="needs-validation" id="metadata">
@@ -13,20 +13,20 @@
             
                     <div class="row">
                         <div class="col-md-12">
-				            <label>In Amathuba</label>
+		            <label>In Amathuba</label>
                         </div>
                         <div class="col-md-12 secondary" id="course_provider">
                             <div class="radio">
                                 <label for="create_course">
                                     <input type="radio" name="select_type" id="create_course" checked="checked" />
-                                    Convert this site and create a new
+                                    Convert this site
                                     {% if (count($provider_details) == 0) { %}
-                                        site in
+                                         and create a new site in
                                     {% } else { %}
                                         {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
-                                            course site for
+                                          and create a new course site for
                                         {% } else { %}
-                                            Select primary course
+					    <br/> Select a primary course
                                         {% } %}
                                     {% } %}
                                 </label>
@@ -53,15 +53,20 @@
                                             <!--span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span-->
                                         {% } else { %}
                                             <select class="form-control" name="provider" id="provider" required>
-                                                {%
-                                                    foreach ($provider_details as $el) {
-                                                        $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
-                                                        $selected = ($current_provider == $str ? 'selected' : '');
-                                                        print "<option data-dept=\"". $el['dept'] ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
+                                            {%
+                                                foreach ($provider_details as $el) {
+                                                    $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
+                                                    $selected = ($current_provider == $str ? 'selected' : '');
+                                                    foreach($departments as $depts) {
+                                                        if($depts[0] == $el['dept']) {
+                                                            $sel_department = $depts[0].",".$depts[2];
+                                                            echo "<option data-dept=\"". $el['dept'] ."\" data-provider=\"". $sel_department ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
+                                                        }
                                                     }
-                                                %}
+                                                }
+                                            %}
                                             </select>
-                                        {% } %}
+					{% } %}
                                     {% } %}
 
                                     {% if (count($provider_details) == 0) { %}
