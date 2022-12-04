@@ -83,7 +83,7 @@ $context = [
     'brightspace_log_url' => $tool['brightspace_log_url'],
     'vula_url' => $tool['vula_url'],
     'jira_url' => $tool['jira_url'],
-    'conversion_test' => $LAUNCH->ltiRawParameter('conversion_test', false)
+    'conversion_test' => $LAUNCH->ltiRawParameter('custom_conversion_test', false)
 ];
 
 // Start of the output
