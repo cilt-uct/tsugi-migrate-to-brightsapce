@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$provider = isset($_POST['provider']) ? $_POST['provider'] : '';
 		$course = isset($_POST['course']) ? $_POST['course'] : (isset($_POST['provider']) ? $_POST['provider']:'');
                 $title = isset($_POST['title']) ? $_POST['title'] : $CONTEXT->title;
-                $target_course = $provider == '[]' ? $dept : $provider;
+                $target_course = isset($_POST['course']) ? $_POST['course'] : '';
 
                 $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id, 
                                             $_POST['notification'], $dept, $term, $provider, $_POST['is_test'],

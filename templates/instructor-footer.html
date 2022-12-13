@@ -75,9 +75,10 @@
             const organizer = $('#organizer').exists() ? $('#organizer').val().trim().replace(/\r?\n/g, ', ') : '',
                   notification = $('#'+ alt).exists() ?  $('#'+ alt).val().trim().replace(/\r?\n/g, ', ') : '',
                   _provider = $('#provider').exists() ? $('#provider') : undefined, 
-                  _provider_select = $('#provider_select').exists() ? $('#provider_select').val() : undefined;
+                  _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
             
-            let provider = _provider ? _provider : (provider_select != undefined ? $('#provider_select').find('option:selected').data('provider') : undefined),
+            let provider = _provider ? _provider.val() : (_provider_select ? _provider_select.val() : ''),
+		course = _provider ? (_provider.data('course')) : (_provider_select.prop('nodeName') == 'SELECT' ? _provider_select.find('option:selected').data('course') : _provider_select.find('option:selected').val()),
                 dept = _provider ? 
                             (_provider.prop('nodeName') == 'SELECT' ? _provider.find('option:selected').data('dept') : _provider.data('dept'))
                             : (_provider_select ? _provider_select.find('option:selected').data('dept') : $('#dept').exists() ? $('#dept').val() : ''),
@@ -88,8 +89,8 @@
                 "title": "{{ $title }}",
                 "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
                 "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
-                "provider": _provider.exists ? _provider.find('option:selected').data('provider') : undefined,
-		"course" : _provider.val(),
+                "provider": provider == '' ? (dept == 'other' ? dept : '[]') : provider,
+		"course" : course,
 		"dept": dept,
                 "term": term,
                 "create_course": $('#create_course').is(':checked') ? 1 : 0

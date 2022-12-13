@@ -166,12 +166,13 @@ function get_provider_object($provider, $title) {
     if (gettype($test) == "string") {
         $test = [ $test ];
     }
-
+    $course_sites_list = array();
+    $project_sites_list = array();
     $list = array();
     foreach($test as $t) {
         preg_match('/([A-Za-z]{3})\s?(\d)(\d{3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
         if (count($matches) >= 1) {
-            array_push($list, [ 'full' => $matches[0] ?? '',
+            array_push($course_sites_list, [ 'full' => $matches[0] ?? '',
                                 'dept' => $matches[1] ?? '', 
                                 'year' => $matches[2] ?? '', 
                                 'no' => $matches[3] ?? '', 
@@ -179,6 +180,24 @@ function get_provider_object($provider, $title) {
                                 'term' => $matches[5] ?? '' 
                             ]);
         }
+    }
+    
+    foreach($test as $t) {
+        preg_match('/([A-Za-z]{2})\s?(\d)(\d{2})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
+        if (count($matches) >= 1) {
+            array_push($project_sites_list, [ 'full' => $matches[0] ?? '',
+                                'dept' => $matches[1] ?? '',
+                                'year' => $matches[2] ?? '', 
+                                'no' => $matches[3] ?? '',  
+                                'term' => $matches[5] ?? '' 
+                            ]);
+        }
+    }
+
+    if(count($course_sites_list) >= 1) {
+        $list = $course_sites_list;
+    } else if (count($project_sites_list) >= 1) {
+        $list = $project_sites_list;
     }
     
     return $list;
@@ -239,6 +258,7 @@ $context = [
     'create_course_offering' => $current_migration['create_course_offering'],
 
     'departments' => $departments,
+    'all_departments' => $full_departments_list,
     'brightspace_url' => $tool['brightspace_url']
 ];
 
