@@ -901,11 +901,12 @@ $sites-height: 92px;
         }
 
         /* Button visibility */
-        /* Pause button visible in 'starting', 'exporting', 'running', 'importing' and 'updating'
+        /* Pause button visible in 'starting', 'exporting', 'running', 'importing', 'uploading' and 'updating'
             Reload and Delete are hidden */
         &[data-state="starting"],
         &[data-state="exporting"],
         &[data-state="running"],
+        &[data-state="uploading"],
         &[data-state="importing"],
         &[data-state="updating"] {
 
