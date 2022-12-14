@@ -3,7 +3,7 @@
     
     {% if ($state == "init") { %}
         <h2 class="tool-header">Conversion Setup</h2>
-        <blockquote>Choose how you would like this site converted to Amathuba</blockquote>
+        <blockquote>Choose how you would like this site to be converted to Amathuba</blockquote>
         <div class="row">
             <div class="col-md-8">
                 <form class="needs-validation" id="metadata">
@@ -13,20 +13,19 @@
             
                     <div class="row">
                         <div class="col-md-12">
-				            <label>In Amathuba</label>
+		            <label>In Amathuba</label>
                         </div>
                         <div class="col-md-12 secondary" id="course_provider">
                             <div class="radio">
                                 <label for="create_course">
                                     <input type="radio" name="select_type" id="create_course" checked="checked" />
-                                    Convert this site and create a new
+                                    Convert this site
                                     {% if (count($provider_details) == 0) { %}
-                                        site in
+                                         and create a new site in
                                     {% } else { %}
                                         {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
-                                            course site for
+                                          and create a new course site 
                                         {% } else { %}
-                                            Select primary course
                                         {% } %}
                                     {% } %}
                                 </label>
@@ -40,8 +39,9 @@
                                             }
                                         %}
                                         </select>
-                                    {% } else { %}
-                                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
+                                    {% } else { 
+                                         if (count($provider_details) == 1) { 
+					    $el = $provider_details[0]; %}
                                             <input type="hidden" name="provider" id="provider"
                                                 data-full="{{ $el['full'] }}"
                                                 data-dept="{{ $el['dept'] }}"
@@ -51,37 +51,78 @@
                                                 value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" class="form-control disabled" disabled
                                                 style="width: 100%;"/>
                                             <!--span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span-->
-                                        {% } else { %}
-                                            <select class="form-control" name="provider" id="provider" required>
-                                                {%
-                                                    foreach ($provider_details as $el) {
-                                                        $str = $el['dept'] . $el['year'] . $el['no'] . $el['period'];
-                                                        $selected = ($current_provider == $str ? 'selected' : '');
-                                                        print "<option data-dept=\"". $el['dept'] ."\" value=\"". $str ."\" ". $selected.">". $str ."</option>";
+				       {% } else {
+ 					    $course_site_depts = array();
+                                            $project_sites = array();
+
+					    foreach($provider_details as $el) {
+                                                if(strlen($el['dept']) == 2) {
+                                                    array_push($project_sites,$el['dept']);
+                                                } else if(strlen($el['dept']) == 3) {
+                                                    foreach($all_departments as $all_depts) {
+                                                        if($el['dept'] == $all_depts[0]) {
+                                                            array_push($course_site_depts, array($all_depts[0], $all_depts[1], $all_depts[2]));
+                                                        }
                                                     }
-                                                %}
-                                            </select>
-                                        {% } %}
-                                    {% } %}
-
-                                    {% if (count($provider_details) == 0) { %}
-                                    {% } else { %}
-                                        {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}    
-                                        {% } else { %}
-                                        <span class="desc">for teaching in</span>
-                                        {% } %}
-                                    {% } %}
-
-                                    {% if (count($provider_details) == 0) { %}
-                                        <input type="hidden" name="year" id="year" value="other" />
-                                    {% } else { %}
-                                        <select id="year" name="year" class="form-control" required>
-                                            {%  foreach ($years as $val) { $selected = ($current_term == $val ? 'selected' : ''); %}
-                                                <option value="{{$val}}" {{$selected}}>{{$val}}</option>
-                                            {% } %}
+                                                }
+                                    
+			                    }
+					    $unique_project_sites = array_unique($project_sites, SORT_REGULAR);
+                                    $unique_depts = array_unique($course_site_depts,SORT_REGULAR);
+                                    if(count($unique_project_sites) > 1) { %}
+                                        for <select class="form-control" name="provider_select" id="provider_select" required>
+                                            <option data-type="default" value="">Choose type of site ...</option>
+                                        {% foreach ($departments as $el) {
+                                                $selected = ($current_dept == $el[0] ? 'selected' : '');
+                                                print "<option value='".$el[0].",".$el[1]."' $selected data-dept='other' data-course='other'>". $el[1] ."</option>";
+                                            }
+                                        %}
                                         </select>
-                                        <i class="fas fa-question-circle" title="Subject to Faculty approval." style="margin-left: 8px;"></i>
-                                    {% } %}
+                                    {% }
+				    
+				    if(count($unique_depts) == 1) {
+                                        $el = $provider_details[0];
+                                        foreach($all_departments as $all_depts) {
+                                            if($el['dept'] == $all_depts[0]) {%}
+                                                <input type="hidden" name="provider" id="provider"
+                                                    data-dept="{{ $el['dept'] }}"
+                                                    data-course = "other"
+                                                    value = "{{ $el['dept'] }}, {{ $all_depts[2] }}"
+                                                    class="form-control readonly" disabled
+                                                    style="width: 100%;"/>
+                                                <!--span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span-->
+                                    {%      }
+                                        }
+                                    } else if(count($unique_depts) > 1) { %}
+                                            for <select class="form-control" name="provider_select" id="provider_select" required>
+                                            {%
+                                                foreach($unique_depts as $departs) {
+                                                    echo '<option value="'.$departs[0].','.$departs[2].'" data-dept="'.$departs[0].'" data-course="other">'.$departs[2].'</option>';
+                                                }
+                                            %}
+                                            </select>
+                                {%      }  
+
+					}
+					 
+
+                                        } 
+
+				        if (count($provider_details) > 0) { %}
+                                            <span class="desc">for teaching in</span>
+                                        {% } %}
+                                	
+					{% if (count($provider_details) == 0) { %}
+                                            <input type="hidden" name="year" id="year" value="other" />
+                                        {% } else { %}
+                                            <select id="year" name="year" class="form-control" required>
+                                        {%     foreach ($years as $val) { 
+                                                   $selected = ($current_term == $val ? 'selected' : ''); %}
+                                                        <option value="{{$val}}" {{$selected}}>{{$val}}</option>
+                                        {%     }  %}
+                                            </select>
+                                            <i class="fas fa-question-circle" title="Subject to Faculty approval." style="margin-left: 8px;"></i>
+                                        {% } %}
                                 </div>
                             </div>
                             <div class="radio">
