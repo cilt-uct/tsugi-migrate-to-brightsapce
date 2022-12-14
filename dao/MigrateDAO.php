@@ -147,7 +147,7 @@ class MigrateDAO {
                 :target_title, :target_course, :target_term, :target_dept, :create_course_offering);";
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id,
-                        ':term' => $term, ':provider' => $provider, ':dept' => $dept, ':is_test' => $is_test ? 1 : 0,
+                        ':term' => $term, ':provider' => '[]', ':dept' => $dept, ':is_test' => $is_test ? 1 : 0,
                         ':target_title' => $target_title, ':target_course' => $target_course, 
                         ':target_term' => $target_term, ':target_dept' => $target_dept, ':create_course_offering' => $create_course_offering,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
