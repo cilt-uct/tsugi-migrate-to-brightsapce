@@ -89,6 +89,7 @@
                                                     case 'running':
                                                         $cls = 'badge-primary';
                                                         break;
+                                                    case 'uploading':
                                                     case 'importing':
                                                     case 'updating':
                                                             $cls = 'badge-info';
@@ -145,7 +146,20 @@
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <textarea id="add_sites" names="add_sites" placeholder="Add Site ID per line ..."></textarea>
-
+                                        <div class="row">
+                                            <div class="col-md-12 col-xs-12">
+                                                <div class="form-check">
+                                                    <label class="form-check-label" for="conversion_test">
+                                                    <input type="checkbox" class="form-check-input" id="conversion_test" {% if ($conversion_test ==true) { %}checked{% } %}>
+                                                    Test conversion</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label" for="enrol">
+                                                    <input type="checkbox" class="form-check-input" id="enrol">
+                                                    Enrol site owners and support staff in the converted site</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-3 col-xs-12">
                                                 <button id="btnAccept" class="btn btn-success" type="button">
