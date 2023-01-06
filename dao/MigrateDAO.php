@@ -154,6 +154,16 @@ class MigrateDAO {
         return $this->PDOX->queryDie($query, $arr);
     }
 
+    function resetMigration($link_id, $user_id, $state) {
+
+        $query = "UPDATE {$this->p}migration_site
+        SET modified_at = NOW(), modified_by = :userId, `state` = :state, `active` = 0
+        WHERE link_id = :linkId";
+
+        $arr = array(':linkId' => $link_id, ':userId' => $user_id, ':state' => $state);
+        return $this->PDOX->queryDie($query, $arr);
+    }
+
     function updateMigration($link_id, $user_id, $notifications, $term) {
         $is_admin = FALSE; // Update all records at the same time
 

@@ -71,6 +71,29 @@
             }
         }
 
+	function resetMigration(a, type, alt) {
+	    var data = { 
+		    "type": type, 
+	    }
+	    
+	    var jqxhr = $.post('{{ $reset }}', data, function(result) {
+                hideHelp();
+                if (result.success === 1) {
+            	    window.location.reload();    
+		} else {
+                    showError(a);
+                }
+            }, 'json')
+            .fail(function() {
+                hideHelp();
+                showError(a);
+            })
+            .always(function() {
+                hideHelp();
+            });
+
+	}
+
         function migrateSite(a, type, alt) {
             const organizer = $('#organizer').exists() ? $('#organizer').val().trim().replace(/\r?\n/g, ', ') : '',
                   notification = $('#'+ alt).exists() ?  $('#'+ alt).val().trim().replace(/\r?\n/g, ', ') : '',
@@ -211,6 +234,13 @@
 
             migrateSite(_me.attr('id'), 'init', 'notifications_hidden');
         });
+
+	$('#reset_workflow').on('click', function(event) {
+            event.preventDefault();
+	    const _me = $(this);
+
+	   resetMigration(_me.attr('id'), 'init', 'notifications_hidden');
+	});
         
         $('#btn_start').click( function(event) {
             event.preventDefault();

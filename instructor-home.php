@@ -241,6 +241,7 @@ $context = [
     'state'      => $current_migration['state'],
     'workflow'   => $workflow,
     'years'      => range(date("Y"), date("Y")+1),
+    'reset'      => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/reset.php')) ),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $current_migration['report_url'],

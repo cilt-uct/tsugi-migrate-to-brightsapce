@@ -117,7 +117,7 @@ section {
     &[data-state="uploading"],
     &[data-state="importing"],
     &[data-state="updating"] {
-        a#restart_workflow {
+        a#reset_workflow {
             display: none;
         }
     }
@@ -128,12 +128,12 @@ section {
     &[data-state="completed"],
     &[data-state="error"],
     &[data-state="paused"] {
-        a#restart_workflow {
+        a#reset_workflow {
             display: inline-block;
         }
     }
 
-    a#restart_workflow {
+    a#reset_workflow {
         float: right;
         
     }
