@@ -78,25 +78,27 @@
                   _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
             
             let provider = _provider ? _provider.val() : (_provider_select ? _provider_select.val() : ''),
-		course = _provider ? (_provider.data('course')) : (_provider_select.prop('nodeName') == 'SELECT' ? _provider_select.find('option:selected').data('course') : _provider_select.find('option:selected').val()),
-                dept = _provider ? 
-                            (_provider.prop('nodeName') == 'SELECT' ? _provider.find('option:selected').data('dept') : _provider.data('dept'))
-                            : (_provider_select ? _provider_select.find('option:selected').data('dept') : $('#dept').exists() ? $('#dept').val() : ''),
-                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear();
-                
-            var data = { 
-                "type": type,
-                "title": "{{ $title }}",
-                "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
-                "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
-                "provider": provider == '' ? (dept == 'other' ? dept : '[]') : provider,
-		"course" : course,
-		"dept": dept,
-                "term": term,
-                "create_course": $('#create_course').is(':checked') ? 1 : 0
-            }
+		        course = _provider ? (_provider.data('course')) : 
+                                (_provider_select.prop('nodeName') == 'SELECT' ? 
+                                    _provider_select.find('option:selected').data('course') : 
+                                    _provider_select.find('option:selected').val()),
+                dept = _provider ? _provider.data('dept') : (_provider_select ? _provider_select.find('option:selected').data('dept') : ''),
+                term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear(),
+                create_course = $('#create_course').prop('type') == 'hidden' ? $('#create_course').val() : ($('#create_course').is(':checked') ? 1 : 0);
 
-            //console.log(data);
+            var data = { 
+                    "type": type,
+                    "title": "{{ $title }}",
+                    "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
+                    "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
+                    "provider": provider == '' ? (dept == 'other' ? dept : '[]') : provider,
+                    "course" : course,
+                    "dept": dept,
+                    "term": term,
+                    "create_course": create_course
+                }
+
+            // console.log(data);
             var jqxhr = $.post('{{ $submit }}', data, function(result) {
                 hideHelp();
                 if (result.success === 1) {
@@ -225,3 +227,4 @@
         can_submit();
     });
 </script>
+

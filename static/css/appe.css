@@ -39,6 +39,11 @@ body {
 
 section {
   padding-bottom: 30px;
+  /* Button visibility */
+  /* Pause button visible in 'starting', 'exporting', 'running', 'importing', 'uploading' and 'updating'
+  Reload and Delete are hidden */
+  /* Reload and Delete button visible in 'init', 'completed', 'error' and 'paused'
+      Pause is hidden */
 }
 section > div.row, section > form > div.row {
   margin-left: 0px;
@@ -87,6 +92,15 @@ section h1.splash-header:after {
 section h3 {
   color: #20376b;
   margin-top: 0px;
+}
+section[data-state=starting] a#restart_workflow, section[data-state=exporting] a#restart_workflow, section[data-state=running] a#restart_workflow, section[data-state=uploading] a#restart_workflow, section[data-state=importing] a#restart_workflow, section[data-state=updating] a#restart_workflow {
+  display: none;
+}
+section[data-state=init] a#restart_workflow, section[data-state=completed] a#restart_workflow, section[data-state=error] a#restart_workflow, section[data-state=paused] a#restart_workflow {
+  display: inline-block;
+}
+section a#restart_workflow {
+  float: right;
 }
 
 form#metadata div.row {
@@ -701,7 +715,7 @@ input.multi-input[type=text] {
   border-radius: 6px 2px 2px 6px;
   border-left: 4px solid transparent;
   /* Button visibility */
-  /* Pause button visible in 'starting', 'exporting', 'running', 'uploading', 'importing' and 'updating'
+  /* Pause button visible in 'starting', 'exporting', 'running', 'importing', 'uploading' and 'updating'
       Reload and Delete are hidden */
   /* Reload and Delete button visible in 'init', 'completed', 'error' and 'paused'
       Pause is hidden */
@@ -724,13 +738,13 @@ input.multi-input[type=text] {
 #sites > li[data-state=starting] a.reload,
 #sites > li[data-state=starting] a.delete, #sites > li[data-state=exporting] a.reload,
 #sites > li[data-state=exporting] a.delete, #sites > li[data-state=running] a.reload,
-#sites > li[data-state=running] a.delete, #sites > li[data-state=importing] a.reload,
+#sites > li[data-state=running] a.delete, #sites > li[data-state=uploading] a.reload,
+#sites > li[data-state=uploading] a.delete, #sites > li[data-state=importing] a.reload,
 #sites > li[data-state=importing] a.delete, #sites > li[data-state=updating] a.reload,
-#sites > li[data-state=uploading] a.delete, #sites > li[data-state=uploading] a.reload,
 #sites > li[data-state=updating] a.delete {
   display: none;
 }
-#sites > li[data-state=starting] a.pause, #sites > li[data-state=exporting] a.pause, #sites > li[data-state=running] a.pause, #sites > li[data-state=importing] a.pause, #sites > li[data-state=updating] a.pause {
+#sites > li[data-state=starting] a.pause, #sites > li[data-state=exporting] a.pause, #sites > li[data-state=running] a.pause, #sites > li[data-state=uploading] a.pause, #sites > li[data-state=importing] a.pause, #sites > li[data-state=updating] a.pause {
   display: block;
 }
 #sites > li[data-state=init] a.reload,
@@ -1112,7 +1126,7 @@ table#singlesites_tbl tbody tr:hover td {
   display: inline-block;
 }
 #do_course .desc {
-  padding: 0px 10px;
+  padding: 0px 0px;
 }
 #do_course label, #do_course select, #do_course input {
   display: inline-block !important;
