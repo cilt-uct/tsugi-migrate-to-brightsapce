@@ -16,3 +16,7 @@
 .add-margin {
     margin-right: 80px !important;
 }
+
+.small-margin > a {
+    margin-right: 5px !important;
+}
