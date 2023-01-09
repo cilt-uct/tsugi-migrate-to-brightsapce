@@ -19,6 +19,8 @@ $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 $course_providers  = $LAUNCH->ltiRawParameter('lis_course_section_sourcedid','none');
 $context_id = $LAUNCH->ltiRawParameter('context_id','none');
 $context_title = $LAUNCH->ltiRawParameter('context_title','No Title');
+$user_role = str_contains($LAUNCH->ltiRawParameter('roles', 'none'), 'Administrator') ? 1 : 0;
+
 $provider = "none";
 
 if ($course_providers != $context_id) {
@@ -169,32 +171,36 @@ function get_provider_object($provider, $title) {
     $course_sites_list = array();
     $project_sites_list = array();
     $list = array();
+
+    // To find full course codes
     foreach($test as $t) {
-        preg_match('/([A-Za-z]{3})\s?(\d)(\d{3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
+        preg_match('/^([A-Za-z]{3})\s?(\d)(\d{3})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
         if (count($matches) >= 1) {
             array_push($course_sites_list, [ 'full' => $matches[0] ?? '',
-                                'dept' => $matches[1] ?? '', 
-                                'year' => $matches[2] ?? '', 
-                                'no' => $matches[3] ?? '', 
-                                'period' => $matches[4] ?? '', 
-                                'term' => $matches[5] ?? '' 
+                                'dept' => $matches[1] ?? '',
+                                'year' => $matches[2] ?? '',
+                                'no' => $matches[3] ?? '',
+                                'period' => $matches[4] ?? '',
+                                'term' => $matches[5] ?? '',
+                                'course' => ($matches[1] ?? '') . ($matches[2] ?? '') . ($matches[3] ?? '') . ($matches[4] ?? '')
                             ]);
         }
     }
     
-    foreach($test as $t) {
-        preg_match('/([A-Za-z]{2})\s?(\d)(\d{2})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
-        if (count($matches) >= 1) {
-            array_push($project_sites_list, [ 'full' => $matches[0] ?? '',
-                                'dept' => $matches[1] ?? '',
-                                'year' => $matches[2] ?? '', 
-                                'no' => $matches[3] ?? '',  
-                                'term' => $matches[5] ?? '' 
-                            ]);
-        }
-    }
+    // to find program codes - We can use this later to determine Faculty if need be
+    // foreach($test as $t) {
+    //     preg_match('/([A-Za-z]{2})\s?(\d)(\d{2})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
+    //     if (count($matches) >= 1) {
+    //         array_push($project_sites_list, [ 'full' => $matches[0] ?? '',
+    //                             'dept' => $matches[1] ?? '',
+    //                             'year' => $matches[2] ?? '', 
+    //                             'no' => $matches[3] ?? '',  
+    //                             'term' => $matches[5] ?? '' 
+    //                         ]);
+    //     }
+    // }
 
-    if(count($course_sites_list) >= 1) {
+    if (count($course_sites_list) >= 1) {
         $list = $course_sites_list;
     } else if (count($project_sites_list) >= 1) {
         $list = $project_sites_list;
@@ -215,7 +221,8 @@ $provider_details = get_provider_object($provider, $title);
 }*/
 
 $context = [
-    'instructor' => $USER->instructor, 
+    'instructor' => $USER->instructor,
+    'user_role' => $user_role,
     'styles'     => [ addSession('static/css/app.min.css') ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), addSession('static/js/jquery.validate.min.js'),  ],
 
@@ -234,6 +241,7 @@ $context = [
     'state'      => $current_migration['state'],
     'workflow'   => $workflow,
     'years'      => range(date("Y"), date("Y")+1),
+    'reset'      => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/reset.php')) ),
     'submit'     => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $current_migration['report_url'],
@@ -287,3 +295,4 @@ Template::view('templates/instructor-footer.html', $context);
 $OUTPUT->footerEnd();
 
 ?>
+

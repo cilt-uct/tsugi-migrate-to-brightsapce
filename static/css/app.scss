@@ -106,6 +106,37 @@ section {
         color: #20376b;
         margin-top: 0px;
     }
+
+
+    /* Button visibility */
+    /* Pause button visible in 'starting', 'exporting', 'running', 'importing', 'uploading' and 'updating'
+    Reload and Delete are hidden */
+    &[data-state="starting"],
+    &[data-state="exporting"],
+    &[data-state="running"],
+    &[data-state="uploading"],
+    &[data-state="importing"],
+    &[data-state="updating"] {
+        a#reset_workflow {
+            display: none;
+        }
+    }
+
+    /* Reload and Delete button visible in 'init', 'completed', 'error' and 'paused'
+        Pause is hidden */
+    &[data-state="init"],
+    &[data-state="completed"],
+    &[data-state="error"],
+    &[data-state="paused"] {
+        a#reset_workflow {
+            display: inline-block;
+        }
+    }
+
+    a#reset_workflow {
+        float: right;
+        
+    }
 }
 
 form#metadata {
@@ -936,7 +967,6 @@ $sites-height: 92px;
                 display: none;
             }
         }
-
 
         div:first-child {
             // padding-right: 8px;
