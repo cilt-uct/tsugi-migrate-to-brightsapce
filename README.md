@@ -1,4 +1,4 @@
-# tsugi-migrate-to-brightsapce
+# tsugi-migrate-to-brightspace
 Used on a Sakai Site to invoke the archive webservice, and report back to user when the archive has been imported into brightspace.
 
 
