@@ -21,3 +21,9 @@ Create a local configuration file and then update it to your settings:
 ```
 cp tool-config_dist.php tool-config.php
 ```
+
+## SOAP
+For SoapClient to work make sure it is enabled and installed in PHP:
+```
+sudo apt install php8.0-soap
+```

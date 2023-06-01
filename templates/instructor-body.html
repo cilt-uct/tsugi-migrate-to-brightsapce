@@ -1,6 +1,7 @@
 <section data-state="{{ $state }}">
     <!-- <pre>|{{ json_encode($provider_details) }}|</pre> -->
     <!-- <pre>{{ $instructor }}|{{ $user_role }}</pre> -->
+    <!-- <pre>{{$site_size}} {{$size_result_st}} {{$size_limit_st}} {{$site_can_migrate}}</pre> -->
 
     {% if ($state == "init") { %}
         <h2 class="tool-header">Conversion Setup</h2>
@@ -149,8 +150,18 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
-                            <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                            {% if ($site_can_migrate) { %}
+                                <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
+                                <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                            {% } else { %}
+                                <br/>
+                                <div class="alert alert-warning" role="alert" style="padding: 8px;">
+                                    <i class="fas fa-exclamation" style="font-size: 2rem; opacity: 0.8; float: left; margin: 10px 15px 10px 8px;"></i>
+                                    The size of the course content ({{$size_result_st}}) exceeds the maximum allowed conversion size ({{$size_limit_st}}). 
+                                    <br/>
+                                    Please contact <a href="mailto:cilt-helpdesk@uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">cilt-helpdesk@uct.ac.za</a> so we can help you with this conversion.
+                                </div>
+                            {% } %}
                         </div>
                     </div>
                 </form>
