@@ -53,7 +53,7 @@ $title = $CONTEXT->title;
 // $provider = 'EDN4507F,2022';
 
 function formatBytes($size, $precision = 2) {
-    if ($size == 0) {
+    if ($size <= 0) {
         return '0KB';
     }
     $base = log($size, 1024);
