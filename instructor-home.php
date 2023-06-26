@@ -293,6 +293,7 @@ $context = [
     'size_limit_st'  => formatBytes($tool['site_size_limit']),
     'site_can_migrate' => $size_result < $tool['site_size_limit'],
 
+    'lesson_choice' => false, // for single conversions we hide lesson choice - for now
     'departments' => $departments,
     'all_departments' => $full_departments_list,
     'brightspace_url' => $tool['brightspace_url']

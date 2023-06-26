@@ -148,6 +148,41 @@
                             <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
                         </div>
                     </div>
+                    {% if ($lesson_choice) { %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="lessons">Lessons</label>
+                        </div>
+                        <div class="col-md-12 secondary" id="course_provider">
+                            <div class="radio" style="margin-top: 0px;">
+                                <label for="create_course">
+                                    <input type="radio" name="lesson_type" id="lesson_default" checked="checked" value="default" />
+                                    Default
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
+                                        title="The default conversion method, each of the item in a lesson page will be a separate content item in Amathuba."></i>                                   
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label for="create_course">
+                                    <input type="radio" name="lesson_type" id="lesson_single" value="single" />
+                                    Single Content Page
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
+                                        title="the text is collated on one HTML page and media files that “break the text up” in the current conversion will be included contextually as hyperlinks."></i>                                   
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label for="create_course">
+                                    <input type="radio" name="lesson_type" id="lesson_bottom" value="bottom" />
+                                    Content with Media at the Bottom
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
+                                        title="For this option, the text is collated on one HTML page and the media files are pushed below the text in sequence. "></i>                                   
+                                </label>
+                            </div>                            
+                        </div>
+                    </div>
+                    {% } else { %}
+                    <input type="hidden" name="lesson_type" value="default" />
+                    {% } %}
                     <div class="row">
                         <div class="col-xs-12">
                             {% if ($site_can_migrate) { %}

@@ -12,6 +12,8 @@
         var timeout = null;
         setStateClass(state);
 
+        $('[data-toggle="tooltip"]').tooltip();
+
         if (!static_state_array.includes(state)) {
             setTimeout("window.open(self.location, '_self');", 30000);
         }
@@ -99,6 +101,7 @@
                   notification = $('#'+ alt).exists() ?  $('#'+ alt).val().trim().replace(/\r?\n/g, ', ') : '',
                   _provider = $('#provider').exists() ? $('#provider') : undefined, 
                   _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
+                  lesson_type = $("input[name='lesson_type']:checked").val() == undefined ? $("input[name='lesson_type']").val() : $("input[name='lesson_type']:checked").val();
             
             let provider = _provider ? _provider.val() : (_provider_select ? _provider_select.val() : ''),
 		        course = _provider ? (_provider.data('course')) : 
@@ -118,7 +121,9 @@
                     "course" : course,
                     "dept": dept,
                     "term": term,
-                    "create_course": create_course
+                    "create_course": create_course,
+                    "enrol": 1, // for self conversion we enroll the site owners and support staff
+                    "lesson_type": lesson_type
                 }
 
             // console.log(data);
