@@ -28,7 +28,7 @@ if ($is_dev == FALSE) {
 if ($course_providers != $context_id) {
     // So we might have some providers to show
     $list = explode('+', $course_providers);
-        
+
     if (count($list) == 1) {
         $provider = $list[0];
     } else {
@@ -49,9 +49,9 @@ if ( $USER->instructor ) {
     if ($is_super_admin) {
         header( 'Location: '.addSession('superadmin-home.php') ) ;
     } else {
-        $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+        $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
         $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, $is_admin, $context_title);
-    
+
         if (($is_admin == 'true') || ($current_migration['is_admin'] === 1)) {
             header( 'Location: '.addSession('admin-home.php') ) ;
         } else {

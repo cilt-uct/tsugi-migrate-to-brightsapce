@@ -37,7 +37,7 @@ function getFilteredArray($params, $data) {
 
 $debug = $tool['debug'] == true || $LAUNCH->ltiRawParameter('custom_debug', false) == true;
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 $current_site_id = $LAUNCH->ltiRawParameter('context_id','none');
 
 $sites = $migrationDAO->getMigrationsPerLink($LINK->id);
@@ -50,16 +50,16 @@ $single_sites_all = $migrationDAO->getSingleSites();
 
 $admin_sites = array();
 foreach ($admin_sites_list as $v) {
-      
+
     $start = getFilteredArray(array('link_id' => $v['link_id']), $admin_site_stats_raw);
     $end = array();
     foreach ($start as $e) {
         $end[$e['state']] = $e['n'];
     }
 
-    $admin_sites[ $v['link_id'] ] = array('title' => $v['title'], 
-                                            'site_id' => $v['site_id'], 
-                                            'created' => $v['created_at'], 
+    $admin_sites[ $v['link_id'] ] = array('title' => $v['title'],
+                                            'site_id' => $v['site_id'],
+                                            'created' => $v['created_at'],
                                             'stats' => array_merge($states, $end));
 }
 
@@ -72,7 +72,7 @@ foreach ($single_site_stats_raw as $v) {
 $menu = false; // We are not using a menu
 
 $context = [
-    'instructor' => $USER->instructor, 
+    'instructor' => $USER->instructor,
     'styles'     => [ addSession('static/css/app.min.css'), ],
     'scripts'    => [ ],
     'debug'      => $debug,

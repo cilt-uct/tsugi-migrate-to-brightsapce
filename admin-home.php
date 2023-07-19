@@ -28,7 +28,7 @@ $provider = "none";
 if ($course_providers != $context_id) {
     // So we might have some providers to show
     $list = explode('+', $course_providers);
-        
+
     if (count($list) == 1) {
         $provider = $list[0];
     } else {
@@ -38,7 +38,7 @@ if ($course_providers != $context_id) {
 
 $debug = $tool['debug'] == true || $LAUNCH->ltiRawParameter('custom_debug', false) == true;
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 $current_site_id = $LAUNCH->ltiRawParameter('context_id','none');
 
 $migrationDAO->setAdmin($LINK->id, $USER->id, $current_site_id);
@@ -55,7 +55,7 @@ $stats = array('all' => count($sites), 'init' => 0,'starting' => 0,'exporting' =
 $menu = false; // We are not using a menu
 
 $context = [
-    'instructor' => $USER->instructor, 
+    'instructor' => $USER->instructor,
     'styles'     => [ addSession('static/css/app.min.css'), addSession('static/css/custom.css'), ],
     'scripts'    => [ addSession('static/js/jquery.email.multiple.js'), ],
     'debug'      => $debug,
@@ -78,7 +78,7 @@ $context = [
     'current_term'  => $current_migration['term'] < 2000 ? date("Y") : $current_migration['term'],
 
     'provider'   => $provider,
-    
+
     'brightspace_url' => $tool['brightspace_url'],
     'brightspace_log_url' => $tool['brightspace_log_url'],
     'vula_url' => $tool['vula_url'],

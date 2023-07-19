@@ -15,16 +15,16 @@ use \Migration\DAO\MigrateDAO;
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 
 $result = ['success' => 0, 'msg' => 'requires POST'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['page'])) {
-        $page = $_POST["page"];  
+        $page = $_POST["page"];
     } else {
-        $page = 1;  
+        $page = 1;
     }
 
     if (isset($_POST['state'])) {
@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $state = "all";
     }
-} else  {  
-    $page = 1;  
-}  
+} else  {
+    $page = 1;
+}
 
 $records_per_page = 10;
 $offset = ($page - 1) * $records_per_page;
@@ -42,7 +42,7 @@ $single_sites_by_state = $migrationDAO->getSingleSitesByState($LINK->id, $state,
 
 $page_result = $migrationDAO->getAllSingleSitesByState($LINK->id, $state);
 $total_records = count($page_result);
-$total_pages = ceil($total_records/$records_per_page);  
+$total_pages = ceil($total_records/$records_per_page);
 $previous_page = $page - 1;
 $next_page = $page + 1;
 

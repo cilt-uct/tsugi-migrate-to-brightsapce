@@ -10,7 +10,7 @@ $LAUNCH = LTIX::requireData();
 
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 
 $result = ['success' => 0, 'msg' => 'requires POST'];
 

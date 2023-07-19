@@ -26,7 +26,7 @@ $provider = "none";
 if ($course_providers != $context_id) {
     // So we might have some providers to show
     $list = explode('+', $course_providers);
-        
+
     if (count($list) == 1) {
         $provider = $list[0];
     } else {
@@ -34,7 +34,7 @@ if ($course_providers != $context_id) {
     }
 }
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 $current_migration = $migrationDAO->getMigration($LINK->id, $USER->id, $site_id, $provider, false, $context_title);
 
 $menu = false; // We are not using a menu
@@ -51,31 +51,6 @@ $title = $CONTEXT->title;
 
 // $title = 'EDN4507F,2022 Test';
 // $provider = 'EDN4507F,2022';
-
-function formatBytes($size, $precision = 2) {
-    if ($size <= 0) {
-        return '0KB';
-    }
-    $base = log($size, 1024);
-    $suffixes = array('', 'K', 'M', 'G', 'T');   
-
-    return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)] .'B';
-}
-
-$size_result = -1;
-if ($tool['SOAP_active']) {
-    try {
-        $login_client = new SoapClient($tool['SOAP_url'] . '/sakai-ws/soap/login?wsdl');//sakai-ws/soap/uct?wsdl');
-        $session_array = explode(',', $login_client->loginToServer($tool['SOAP_user'], $tool['SOAP_pass']));
-
-        $sakai_content = new SoapClient($tool['SOAP_url'] . '/sakai-ws/soap/contenthosting?wsdl');
-        $size_result = $sakai_content->getSiteCollectionSize($session_array[0], $site_id) * 1024;
-
-        $result = $login_client->logout($session_array[0]);
-    } catch(Exception $e) {
-        // so we can't get login details so no size stuff
-    }
-}
 
 function time_Ago($time) {
 
@@ -210,16 +185,16 @@ function get_provider_object($provider, $title) {
                             ]);
         }
     }
-    
+
     // to find program codes - We can use this later to determine Faculty if need be
     // foreach($test as $t) {
     //     preg_match('/([A-Za-z]{2})\s?(\d)(\d{2})([A-Z]{0,})[\s|,]?(\d{4})?/', $t, $matches);
     //     if (count($matches) >= 1) {
     //         array_push($project_sites_list, [ 'full' => $matches[0] ?? '',
     //                             'dept' => $matches[1] ?? '',
-    //                             'year' => $matches[2] ?? '', 
-    //                             'no' => $matches[3] ?? '',  
-    //                             'term' => $matches[5] ?? '' 
+    //                             'year' => $matches[2] ?? '',
+    //                             'no' => $matches[3] ?? '',
+    //                             'term' => $matches[5] ?? ''
     //                         ]);
     //     }
     // }
@@ -229,7 +204,7 @@ function get_provider_object($provider, $title) {
     } else if (count($project_sites_list) >= 1) {
         $list = $project_sites_list;
     }
-    
+
     return $list;
 }
 
@@ -239,7 +214,7 @@ $provider_details = get_provider_object($provider, $title);
 # single site == 1 (Working)
 # no provider / project site <= 0 (Working)
 # more than one provider > 1 (Coming soon)
-/*if (count($provider_details) > 1) { 
+/*if (count($provider_details) > 1) {
     header( 'Location: '.addSession('coming-soon.php') ) ;
     exit;
 }*/
@@ -270,7 +245,7 @@ $context = [
     'fetch_workflow' => addSession( str_replace("\\","/",$CFG->getCurrentFileUrl('actions/process.php')) ),
     'fetch_report'   => $current_migration['report_url'],
     'report_url' =>  $current_migration['report_url'],
-    
+
     'has_report' => strlen($current_migration['report_url'] ?? '') > 0,
     'provider'   => $provider,
     'provider_details'=> $provider_details,
@@ -288,10 +263,7 @@ $context = [
     'target_dept' => $current_migration['target_dept'],
     'create_course_offering' => $current_migration['create_course_offering'],
 
-    'site_size' => $size_result,
-    'size_result_st' => formatBytes($size_result),
-    'size_limit_st'  => formatBytes($tool['site_size_limit']),
-    'site_can_migrate' => $size_result < $tool['site_size_limit'],
+    'site_size' => MigrateDAO::getSiteSize($tool, $site_id),
 
     'lesson_choice' => false, // for single conversions we hide lesson choice - for now
     'departments' => $departments,
@@ -324,4 +296,3 @@ Template::view('templates/instructor-footer.html', $context);
 $OUTPUT->footerEnd();
 
 ?>
-

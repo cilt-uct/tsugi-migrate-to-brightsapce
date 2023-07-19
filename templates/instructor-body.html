@@ -12,7 +12,7 @@
                     <input type="hidden" name="state"  id="state" value="{{ $state }}" />
                     <input type="hidden" name="site-title" id="site-title" value="{{ $title }}" />
                     <input type="hidden" name="current_user"  id="current_user" value="{{ $current_email }}" />
-            
+
                     <div class="row">
                         <div class="col-md-12">
                             <label>In Amathuba</label>
@@ -26,7 +26,7 @@
                                          and create a new site in
                                     {% } else { %}
                                         {% if (count($provider_details) == 1) { $el = $provider_details[0]; %}
-                                          and create a new course site 
+                                          and create a new course site
                                         {% } else { %}
                                         {% } %}
                                     {% } %}
@@ -41,8 +41,8 @@
                                             }
                                         %}
                                         </select>
-                                    {% } else { 
-                                         if (count($provider_details) == 1) { 
+                                    {% } else {
+                                         if (count($provider_details) == 1) {
                                             $el = $provider_details[0]; %}
                                             <input type="hidden" name="provider" id="provider"
                                                 data-course="{{ $el['course'] }}"
@@ -51,7 +51,7 @@
                                                 data-year="{{ $el['year'] }}"
                                                 data-period="{{ $el['period'] }}"
                                                 data-term="{{ $el['term'] }}"
-                                                value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}" 
+                                                value="{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}"
                                                 class="form-control disabled" disabled
                                                 style="width: 100%;"/>
                                             <!--span>{{ $el['dept'] }}{{ $el['year'] }}{{ $el['no'] }}{{ $el['period'] }}</span-->
@@ -70,7 +70,7 @@
                                                         }
                                                     }
                                                 } // foreach provider
-                            
+
                                                 $unique_project_sites = array_unique($project_sites, SORT_REGULAR);
                                                 $unique_depts = array_unique($course_site_depts,SORT_REGULAR);
                                                 if (count($unique_project_sites) > 1) { %}
@@ -82,7 +82,7 @@
                                                         } %}
                                                     </select>
                                                 {% }
-                    
+
                                                 if (count($unique_depts) == 1) {
                                                     $el = $provider_details[0];
                                                     foreach ($all_departments as $all_depts) {
@@ -102,19 +102,19 @@
                                                             echo '<option value="'.$departs[0].'" data-dept="'.$departs[0].'" data-course="other">'.$departs[2].'</option>';
                                                         } %}
                                                     </select>
-                                                {% }  
+                                                {% }
                                         } // else if (count($provider_details) == 1)
-                                    } 
+                                    }
 
                                 if (count($provider_details) > 0) { %}
                                     <span class="desc">for teaching in</span>
                                 {% }
-                                    
+
                                 if (count($provider_details) == 0) { %}
                                     <input type="hidden" name="year" id="year" value="other" />
                                 {% } else { %}
                                     <select id="year" name="year" class="form-control" required>
-                                    {%  foreach ($years as $val) { 
+                                    {%  foreach ($years as $val) {
                                             $selected = ($current_term == $val ? 'selected' : ''); %}
                                             <option value="{{$val}}" {{$selected}}>{{$val}}</option>
                                     {%  }  %}
@@ -126,7 +126,7 @@
                             <div class="radio">
                                 <label for="just_convert">
                                     <input type="radio" name="select_type" id="just_convert" />
-                                    Convert this site, but do not create 
+                                    Convert this site, but do not create
                                     {% if (count($provider_details) == 0) { %}
                                         a new site
                                     {% } else { %}
@@ -136,14 +136,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-12">
                             <label for="notifications">Email Notifications for conversion updates</label>
                         </div>
                         <div class="col-md-12 secondary" >
                             <span class="multi-item" value="{{ $current_email }}"> {{ $current_email }}</span>
-                            <textarea class="form-control" name="notifications" id="notifications" 
+                            <textarea class="form-control" name="notifications" id="notifications"
                                 placeholder="Additional addresses to notify of this migration">{{ $notifications }}</textarea>
                             <button type="button" id="btn_add_me" style="display:none;">Add Me</button>
                         </div>
@@ -158,26 +158,26 @@
                                 <label for="create_course">
                                     <input type="radio" name="lesson_type" id="lesson_default" checked="checked" value="default" />
                                     Default
-                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
-                                        title="The default conversion method, each of the item in a lesson page will be a separate content item in Amathuba."></i>                                   
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+                                        title="The default conversion method, each of the item in a lesson page will be a separate content item in Amathuba."></i>
                                 </label>
                             </div>
                             <div class="radio">
                                 <label for="create_course">
                                     <input type="radio" name="lesson_type" id="lesson_single" value="single" />
                                     Single Content Page
-                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
-                                        title="the text is collated on one HTML page and media files that “break the text up” in the current conversion will be included contextually as hyperlinks."></i>                                   
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+                                        title="the text is collated on one HTML page and media files that “break the text up” in the current conversion will be included contextually as hyperlinks."></i>
                                 </label>
                             </div>
                             <div class="radio">
                                 <label for="create_course">
                                     <input type="radio" name="lesson_type" id="lesson_bottom" value="bottom" />
                                     Content with Media at the Bottom
-                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" 
-                                        title="For this option, the text is collated on one HTML page and the media files are pushed below the text in sequence. "></i>                                   
+                                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right"
+                                        title="For this option, the text is collated on one HTML page and the media files are pushed below the text in sequence. "></i>
                                 </label>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                     {% } else { %}
@@ -185,14 +185,14 @@
                     {% } %}
                     <div class="row">
                         <div class="col-xs-12">
-                            {% if ($site_can_migrate) { %}
+                            {% if ($site_size['site_can_migrate']) { %}
                                 <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
                                 <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
                             {% } else { %}
                                 <br/>
                                 <div class="alert alert-warning" role="alert" style="padding: 8px;">
                                     <i class="fas fa-exclamation" style="font-size: 2rem; opacity: 0.8; float: left; margin: 10px 15px 10px 8px;"></i>
-                                    The size of the course content ({{$size_result_st}}) exceeds the maximum allowed conversion size ({{$size_limit_st}}). 
+                                    {{$site_size['size_result_st']}}
                                     <br/>
                                     Please contact <a href="mailto:cilt-helpdesk@uct.ac.za?subject=Amathuba%20Conversion%3A%20{{ htmlentities($title) }}&body=Hi%20Support%20Team%2C%0D%0A%0D%0APlease%20help%20me%20with%20the%20migration%20of%20my%20site%3A%20{{ htmlentities($title) }}%20({{ htmlentities($site_id) }})%0D%0A%0D%0AThanks%20%3A)" title="Send help email">cilt-helpdesk@uct.ac.za</a> so we can help you with this conversion.
                                 </div>
@@ -207,7 +207,7 @@
         <input type="hidden" name="year" id="year" value="{{$current_term}}"/>
         <input type="hidden" name="create_course" id="create_course" value="{{ $create_course_offering }}"/>
 
-        {% if (in_array($state, ['starting','exporting','running', 'queued', 'uploading','importing','updating'])) { %} 
+        {% if (in_array($state, ['starting','exporting','running', 'queued', 'uploading','importing','updating'])) { %}
             <div class="row">
                 <h2 class="tool-header">Conversion in progress</h2>
                 <ul class="steps">
@@ -263,7 +263,7 @@
                         </div>
                         <div class="col-md-3 col-xs-4 col-sm-3 text-center" id="step_details">
                             {% if ($imported_site_id > 0) { %}
-                                <div id="step-image"> 
+                                <div id="step-image">
                                     <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank">
                                         <img src="./static/img/View_new_site.svg" alt="Converted Amathuba site" width="75px" />
                                     </a>
@@ -319,7 +319,7 @@
                 </h2>
                 <p>The conversion of this site to Amathuba ran into an unexpected error. We're looking into it, and will let you know as soon as there's an update</p>
             </div>
-        {% } 
+        {% }
     } %}
     <br/>
     <div class="contact-box">

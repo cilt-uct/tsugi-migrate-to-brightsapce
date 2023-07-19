@@ -12,7 +12,7 @@ use \Migration\DAO\MigrateDAO;
 if (isset($_GET["sid"]) || isset($_GET["tid"])) {
     $PDOX = LTIX::getConnection();
 
-    $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+    $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
     $list = $migrationDAO->getAllReports(isset($_GET["tid"]) ? $_GET["tid"] : $_GET["sid"]);
 
     if (count($list) == 0) {
@@ -27,7 +27,7 @@ if (isset($_GET["sid"]) || isset($_GET["tid"])) {
         } else {
             echo Template::view('templates/no-report.html');
             exit;
-        }    
+        }
     }
 
     $reports = array();
