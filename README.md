@@ -11,7 +11,7 @@ The UI just updates the database entry for the site in `migration` and `migratio
 ## Custom LTI Parameters
 The UI and functionality can change custom parameter that can be set for the tool:
  (ordered by importance).
- 
+
  1. `superadmin=true` : View changes to show ALL migration sites in this Tsugi installation.
  2. `admin=true` : Allows the batch migrations of sites.
  3. `dev=true` : Sets the tool into development mode, which shows the 'coming soon' page except if the site id is configured in the configuration file.
@@ -25,5 +25,10 @@ cp tool-config_dist.php tool-config.php
 ## SOAP
 For SoapClient to work make sure it is enabled and installed in PHP:
 ```
-sudo apt install php8.0-soap
+sudo apt install php8.2-soap
+```
+```
+sudo a2dismod php*
+sudo a2enmod php8.2
+sudo systemctl restart apache2
 ```

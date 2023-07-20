@@ -14,6 +14,10 @@
 
         $('[data-toggle="tooltip"]').tooltip();
 
+        // if ($("#workflow").exists()) {
+        //     console.log("workflow");
+        // }
+
         if (!static_state_array.includes(state)) {
             setTimeout("window.open(self.location, '_self');", 30000);
         }
@@ -52,10 +56,10 @@
                   _email = $('#current_user').val(),
                   _email_starter = $('#organizer').data('email'),
                   _notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ').split(';');
-            
+
             if (_email === _email_starter) return;
 
-            let in_list = _notification.includes(_email);      
+            let in_list = _notification.includes(_email);
 
             if ((in_list === false) && (_state !== 'init')) {
                 _el.show();
@@ -73,46 +77,43 @@
             }
         }
 
-	function resetMigration(a, type, alt) {
-	    var data = { 
-		    "type": type, 
-	    }
-	    
-	    var jqxhr = $.post('{{ $reset }}', data, function(result) {
-                hideHelp();
-                if (result.success === 1) {
-            	    window.location.reload();    
-		} else {
-                    showError(a);
-                }
-            }, 'json')
-            .fail(function() {
-                hideHelp();
-                showError(a);
-            })
-            .always(function() {
-                hideHelp();
-            });
+        function resetMigration(a, type, alt) {
+            var data = { "type": type };
 
-	}
+            var jqxhr = $.post('{{ $reset }}', data, function(result) {
+                    hideHelp();
+                    if (result.success === 1) {
+                        window.location.reload();
+                    } else {
+                        showError(a);
+                    }
+                }, 'json')
+                .fail(function() {
+                    hideHelp();
+                    showError(a);
+                })
+                .always(function() {
+                    hideHelp();
+                });
+        }
 
         function migrateSite(a, type, alt) {
             const organizer = $('#organizer').exists() ? $('#organizer').val().trim().replace(/\r?\n/g, ', ') : '',
                   notification = $('#'+ alt).exists() ?  $('#'+ alt).val().trim().replace(/\r?\n/g, ', ') : '',
-                  _provider = $('#provider').exists() ? $('#provider') : undefined, 
+                  _provider = $('#provider').exists() ? $('#provider') : undefined,
                   _provider_select = $('#provider_select').exists() ? $('#provider_select') : undefined;
                   lesson_type = $("input[name='lesson_type']:checked").val() == undefined ? $("input[name='lesson_type']").val() : $("input[name='lesson_type']:checked").val();
-            
+
             let provider = _provider ? _provider.val() : (_provider_select ? _provider_select.val() : ''),
-		        course = _provider ? (_provider.data('course')) : 
-                                (_provider_select.prop('nodeName') == 'SELECT' ? 
-                                    _provider_select.find('option:selected').data('course') : 
+                course = _provider ? (_provider.data('course')) :
+                                (_provider_select.prop('nodeName') == 'SELECT' ?
+                                    _provider_select.find('option:selected').data('course') :
                                     _provider_select.find('option:selected').val()),
                 dept = _provider ? _provider.data('dept') : (_provider_select ? _provider_select.find('option:selected').data('dept') : ''),
                 term = $('#year').exists ? $('#year').val() : (new Date()).getFullYear(),
                 create_course = $('#create_course').prop('type') == 'hidden' ? $('#create_course').val() : ($('#create_course').is(':checked') ? 1 : 0);
 
-            var data = { 
+            var data = {
                     "type": type,
                     "title": "{{ $title }}",
                     "organizer": (organizer.endsWith(', ') ? organizer.substring(0, organizer.length-2) : organizer),
@@ -162,7 +163,7 @@
                 return false;
             }
         }
-    
+
         function setStateClass(state) {
             let _current_step = state_array.indexOf(state) + 1;
             if(state == 'queued') {
@@ -174,7 +175,7 @@
             $(".steps > .step").addClass("is-pending").removeClass('is-active is-complete');
             // set the current step
             $(`#step${_current_step}`).addClass("is-active").removeClass('is-pending');
-	        $(`#step${_current_step}`).find("span").removeClass('hidden-xs');
+            $(`#step${_current_step}`).find("span").removeClass('hidden-xs');
             // set completed
             $(".steps > .step").filter(function() { return $(this).data("step") < _current_step; }).addClass("is-complete hidden-xs").removeClass('is-pending');
         }
@@ -199,7 +200,7 @@
                     check_if_im_in_notification(false);
 
                     var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
-                    var data = { 
+                    var data = {
                         "type": "updating",
                         "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
                         "term": $('#year').val()
@@ -232,7 +233,7 @@
             });
             check_if_im_in_notification(false);
         }
-        
+
         $('#restart_workflow').on('click', function(event) {
             event.preventDefault();
             const _me = $(this);
@@ -240,17 +241,17 @@
             migrateSite(_me.attr('id'), 'init', 'notifications_hidden');
         });
 
-	$('#reset_workflow').on('click', function(event) {
+        $('#reset_workflow').on('click', function(event) {
             event.preventDefault();
-	    const _me = $(this);
+            const _me = $(this);
 
-	   resetMigration(_me.attr('id'), 'init', 'notifications_hidden');
-	});
-        
+            resetMigration(_me.attr('id'), 'init', 'notifications_hidden');
+        });
+
         $('#btn_start').click( function(event) {
             event.preventDefault();
             const _me = $(this);
-    
+
             if (can_submit()) {
                 _me.html('<i class="fa fa-cog fa-spin"></i>Starting process...').addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);

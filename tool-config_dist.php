@@ -1,9 +1,14 @@
 <?php
 // Configuration file - copy from tool-config_dist.php to tool-config.php
-// and then edit. 
+// and then edit.
 
 if ((basename(__FILE__, '.php') != 'tool-config') && (file_exists('tool-config.php'))) {
     include 'tool-config.php';
+    return;
+}
+
+if ((basename(__FILE__, '.php') != 'tool-config') && (file_exists('../tool-config.php'))) {
+    include '../tool-config.php';
     return;
 }
 
@@ -20,7 +25,7 @@ $tool['jira_url'] = 'https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22
 $tool['site_size_limit'] = 104857600;   # 100MB
 $tool['site_size_limit'] = 1073741824;  # 1GB
 $tool['site_size_limit'] = 32212254720; # 30GB
-$tool['SOAP_active'] = TRUE; 
+$tool['SOAP_active'] = TRUE;
 $tool['SOAP_url'] = 'https://vula.uct.ac.za';
 $tool['SOAP_user'] = 'username';
 $tool['SOAP_pass'] = 'password';
@@ -40,7 +45,7 @@ $departments = [
     ['CHED','Centre for Higher Education Development']
 ];
 
-$full_departments_list = [    
+$full_departments_list = [
     ['ACC','COM','College of Accounting'],
     ['DOC','COM','Dean\'s Office: Commerce'],
     ['FTX','COM','Dept. of Finance & Tax'],
@@ -119,7 +124,7 @@ $full_departments_list = [
     ['PHY','SCI','PHY: Dept. of Physics'],
     ['SEA','SCI','SEA: Dept. of Oceanography'],
     ['STA','SCI','STA: Dept. of Statistical Sciences'],
-    
+
     ['GSB','GSB','Graduate School of Business (GSB)'],
     ['GPP','GSB','The Nelson Mandela School of Public Gov'],
 ];

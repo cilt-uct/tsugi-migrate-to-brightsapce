@@ -1,5 +1,6 @@
 <?php
 require_once "../../config.php";
+include "../tool-config_dist.php";
 require_once("../dao/MigrateDAO.php");
 
 use \Tsugi\Core\LTIX;
@@ -10,7 +11,7 @@ $LAUNCH = LTIX::requireData();
 
 $site_id = $LAUNCH->ltiRawParameter('context_id','none');
 
-$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix);
+$migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 
 $result = ['success' => 0, 'msg' => 'requires POST'];
 
