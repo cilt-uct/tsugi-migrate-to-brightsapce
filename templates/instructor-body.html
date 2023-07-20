@@ -1,7 +1,7 @@
 <section data-state="{{ $state }}">
     <!-- <pre>|{{ json_encode($provider_details) }}|</pre> -->
     <!-- <pre>{{ $instructor }}|{{ $user_role }}</pre> -->
-    <!-- <pre>{{$site_size}} {{$size_result_st}} {{$size_limit_st}} {{$site_can_migrate}}</pre> -->
+    <!-- <pre>{{ json_encode($site_size) }}</pre> -->
 
     {% if ($state == "init") { %}
         <h2 class="tool-header">Conversion Setup</h2>
@@ -185,7 +185,9 @@
                     {% } %}
                     <div class="row">
                         <div class="col-xs-12">
-                            {% if ($site_size['site_can_migrate']) { %}
+                            <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
+                            <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
+                        {% if ($site_size['site_can_migrate']) { %}
                                 <button id="btn_start" class="btn btn-success disabled" type="button" data-path="a" disabled>Start Conversion </button>
                                 <small id="info" class="text-info" style="display:none;">This might take a couple of seconds.</small>
                             {% } else { %}
@@ -307,6 +309,20 @@
                 {% } %}
                 <li>Edit content or update settings in the new site as needed to address any issues flagged in the conversion report.</li>
             </ol>
+        {% } elseif ($state == 'paused') { %}
+            <div class="row">
+                <h2 class="tool-header">Conversion Paused
+                    {% if ($user_role == 1) { %}
+                    <a class="btn btn-default btn-xs reload" href="#" id="reset_workflow" role="button" title="Re-set workflow ...">
+                        <i class="fas fa-redo"></i>
+                    </a>
+                    {% } %}
+                </h2>
+                <p>The conversion of this site to Amathuba was paused at a point in the workflow. We're looking into it, and will let you know as soon as there's an update</p>
+                <p id="workflow">
+                    {{ end($workflow) }}
+                </p>
+            </div>
         {% } else { %}
             <!-- ($state == '{{ $state }}') -->
             <div class="row">

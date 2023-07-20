@@ -263,7 +263,7 @@ $context = [
     'target_dept' => $current_migration['target_dept'],
     'create_course_offering' => $current_migration['create_course_offering'],
 
-    'site_size' => MigrateDAO::getSiteSize($tool, $site_id),
+    'site_size' => $migrationDAO->getSiteSize($site_id),
 
     'lesson_choice' => false, // for single conversions we hide lesson choice - for now
     'departments' => $departments,

@@ -119,7 +119,7 @@ class MigrateDAO {
                                 array(':linkId' => $link_id, ':siteId' => $site_id));
     }
 
-    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test,
+    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test, $enrol_users, $lesson_type,
                                 $target_title, $target_course, $target_term, $target_dept, $create_course_offering) {
         $now = date("Y-m-d H:i:s");
 
@@ -138,7 +138,7 @@ class MigrateDAO {
 
         # Add check for size before starting workflow ...
         $set_state_to = 'starting';
-        $site_size = $this->getSiteSize($this->tool, $site_id);
+        $site_size = $this->getSiteSize($site_id);
         if (!$site_size['site_can_migrate']) {
             $set_state_to = 'paused';
             $workflow = ["$now: ". $site_size['size_result_st']];
@@ -352,19 +352,19 @@ class MigrateDAO {
         return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)] .'B';
     }
 
-    public static function getSiteSize($tool, $site_id) {
+    public function getSiteSize($site_id) {
         $size_result = -1;
         $size_result_st = '';
-        if ($tool['SOAP_active']) {
+        if ($this->tool['SOAP_active']) {
             try {
-                $login_client = new SoapClient($tool['SOAP_url'] . '/sakai-ws/soap/login?wsdl');//sakai-ws/soap/uct?wsdl');
-                $session_array = explode(',', $login_client->loginToServer($tool['SOAP_user'], $tool['SOAP_pass']));
+                $login_client = new \SoapClient($this->tool['SOAP_url'] . '/sakai-ws/soap/login?wsdl');//sakai-ws/soap/uct?wsdl');
+                $session_array = explode(',', $login_client->loginToServer($this->tool['SOAP_user'], $this->tool['SOAP_pass']));
 
-                $sakai_content = new SoapClient($tool['SOAP_url'] . '/sakai-ws/soap/contenthosting?wsdl');
+                $sakai_content = new \SoapClient($this->tool['SOAP_url'] . '/sakai-ws/soap/contenthosting?wsdl');
                 $size_result = $sakai_content->getSiteCollectionSize($session_array[0], $site_id) * 1024;
 
-                $size_result_st = $this->formatBytes($size_result);
-                $size_limit_st  = $this->formatBytes($tool['site_size_limit']);
+                $size_result_st = MigrateDAO::formatBytes($size_result);
+                $size_limit_st  = MigrateDAO::formatBytes($this->tool['site_size_limit']);
                 $size_result_st = "The size of the course content ($size_result_st) exceeds the maximum allowed conversion size ($size_limit_st).";
 
                 $result = $login_client->logout($session_array[0]);
@@ -373,10 +373,11 @@ class MigrateDAO {
             }
         }
 
-        return {
+        return [
             'site_size' => $size_result,
             'size_result_st' => $size_result_st,
-            'site_can_migrate' => $size_result < $tool['site_size_limit']
-        };
+            'site_can_migrate' => $size_result < $this->tool['site_size_limit'],
+            'ss' => $this->tool['SOAP_user'] ." ". $this->tool['SOAP_pass']
+        ];
     }
 }

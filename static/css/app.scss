@@ -135,7 +135,7 @@ section {
 
     a#reset_workflow {
         float: right;
-        
+
     }
 }
 
@@ -390,9 +390,10 @@ input.multi-input[type=text] {
 
     #stats {
         display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-evenly;
+        flex-wrap: wrap;
+        justify-content: space-between;
         margin-bottom: 4px;
+        gap: 4px 4px;
 
         &>li>a {
             padding: 2px 5px;
@@ -1393,7 +1394,7 @@ table#singlesites_tbl tbody tr:hover td {
 //     border-radius: 30px;
 
 //     font-size: 14px;
-    
+
 //     label {
 //         position: absolute;
 //         top: 0px;
@@ -1500,16 +1501,16 @@ table#singlesites_tbl tbody tr:hover td {
         background: #fff;
         border: 1px solid #333435;
         border-radius: 4px;
-        
+
         display: inline-block;
         height: 18px;
         width: 18px;
         margin-right: 5px;
-    
+
         position: relative;
         top: 4px;
     }
-    
+
     .radio label {
         min-height: 20px;
         padding-left: 20px;
@@ -1564,12 +1565,12 @@ table#singlesites_tbl tbody tr:hover td {
         & > .secondary {
             padding-left: 15px;
         }
-    }    
+    }
 }
 
 #do_course {
     #provider_select, #provider, #year {
-        margin-left: 8px;        
+        margin-left: 8px;
     }
 
     #provider_select {
@@ -1581,7 +1582,7 @@ table#singlesites_tbl tbody tr:hover td {
     }
 
     #year {
-        width: 130px; 
+        width: 130px;
         text-align: center;
     }
 }
@@ -1607,7 +1608,7 @@ table#singlesites_tbl tbody tr:hover td {
     font-size: 1rem;
     font-weight: bold;
     color:#6D6875;
-}    
+}
 .step:before {
       content: attr(data-step);
       display: block;
@@ -1661,7 +1662,7 @@ table#singlesites_tbl tbody tr:hover td {
         color: #FFF;
         border:2px solid #1fa485;
         background: #73c8ac;
-       
+
 }
 .step.is-pending::before {
       color: white;
@@ -1718,7 +1719,7 @@ blockquote span {
 }
 #step-image img{
    height: auto;
-   
+
 }
 #step-description {
     padding:5px;
@@ -1747,7 +1748,7 @@ blockquote span {
     background-repeat: no-repeat;
     position:relative;
 }
-.icon_1 { 
+.icon_1 {
       background-image: url("../img/Headphones.svg");
       float:left !important;
       margin-left: 10px;
@@ -1757,8 +1758,8 @@ blockquote span {
       margin:0 10px;
       float:right !important;
 }
-  
-.contact-box { 
+
+.contact-box {
     position:relative;
     width: 100%;
     float:left;
