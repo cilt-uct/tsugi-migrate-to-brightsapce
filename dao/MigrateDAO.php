@@ -506,19 +506,17 @@ class MigrateDAO {
     }
 
     function getClickupTaskByName($task_name) {
-        $endpoint = "{$this->tool['base_url']}team/{$this->tool['workspace_id']}/task?include_closed=true";
+        $endpoint = "{$this->tool['base_url']}list/{$this->tool['list_id']}/task?archived=false&include_closed=true&reverse=true";
+
         try {
             $response = $this->makeRequest('GET', $endpoint);
-            if (!empty($response['tasks'])) {
-                foreach ($response['tasks'] as $task) {
-                    if ($task['name'] === $task_name) {
-                        return $task;
-                    }
+            $tasks = $response['tasks'];
+            foreach ($tasks as $task) {
+                if ($task['name'] === $task_name) {
+                    return $task;
                 }
-                return null;
-            } else {
-                return null;
             }
+        
         } catch (Exception $e) {
             $error_message = 'Error occurred while getting ClickUp task: ' . $e->getMessage();
             return $error_message;
