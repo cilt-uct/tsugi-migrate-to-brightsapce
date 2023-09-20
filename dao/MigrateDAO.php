@@ -8,7 +8,7 @@ class MigrateDAO {
     private $PDOX;
     private $p;
     private $tool;
-    public static $clickup_option_id;
+    public static $clickup_option_id; //This refers to a specific clickup column
 
     public function __construct($PDOX, $p, $tool) {
         $this->PDOX = $PDOX;
@@ -385,7 +385,7 @@ class MigrateDAO {
             }
         }
 
-	    return [
+        return [
             'site_size' => $size_result,
             'size_result_st' => $size_result_st,
             'site_can_migrate' => $size_result < $this->tool['site_size_limit'],
@@ -460,9 +460,8 @@ class MigrateDAO {
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);	
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);    
 
-	
         if (in_array($method, array('POST', 'PUT'))) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -470,9 +469,9 @@ class MigrateDAO {
 
         $response = curl_exec($ch);
         if (curl_errno($ch)) {
-	        curl_close($ch);
+            curl_close($ch);
             throw new Exception('cURL Error: ' . curl_error($ch));
-	    }
+        }
 
         curl_close($ch);
         return json_decode($response, true);

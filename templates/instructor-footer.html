@@ -18,7 +18,7 @@
         const has_clickup_task = '{{ $has_clickup_task}}';
         const clickup_task = '{{ json_encode($clickup_task) }}';
 
-        if(has_site_properties && has_clickup_task) {
+        if (has_site_properties && has_clickup_task) {
             var clickup_task_id = '{{ $task_id }}';
             var clickup_custom_fields = '{{ json_encode($clickup_custom_fields) }}';
             var clickup_option_id = '{{ $clickup_option_id }}';
@@ -39,7 +39,7 @@
                 var selectedMigrationOption = selected_option ? selected_option.name : 'No option';
                 var changeable_options = ["Option 1 ", "Option 2 ", "DEFAULT option 2", "No response", "No option"];
 
-                if(changeable_options.includes(selectedMigrationOption)) {
+                if (changeable_options.includes(selectedMigrationOption)) {
                     $("#active_migration_message").html(`
                         <i class="fas fa-exclamation-circle fa-2x align-middle d-inline" style="float: left; padding-right:10px; vertical-align:middle; line-height: 50px;"></i>
                         This site is part of an active managed conversion phase. The site has
@@ -222,7 +222,7 @@
             $(".steps > .step").filter(function() { return $(this).data("step") < _current_step; }).addClass("is-complete hidden-xs").removeClass('is-pending');
         }
 
-	    function getSelectedMigrationOption(customFieldId) {
+        function getSelectedMigrationOption(customFieldId) {
             const customField = clickup_details.custom_fields.find(field => field.id === customFieldId);
             if (customField && customField.type === 'drop_down') {
                 const optionValue = customField.value;

@@ -245,10 +245,7 @@ function get_provider_object($provider, $title) {
     return $list;
 }
 
-
-
 $provider_details = get_provider_object($provider, $title);
-
 
 ## For multiple providers we are not doing that for now
 # single site == 1 (Working)
@@ -258,7 +255,6 @@ $provider_details = get_provider_object($provider, $title);
     header( 'Location: '.addSession('coming-soon.php') ) ;
     exit;
 }*/
-
 
 $context = [
     'instructor' => $USER->instructor,
