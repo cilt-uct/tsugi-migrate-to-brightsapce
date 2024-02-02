@@ -279,12 +279,12 @@
                             {% } %}
                         </div>
                         <div class="col-md-1 col-xs-12 text-center hidden-xs hidden-sm">
-                            {% if($target_site_id >  0) { %}
+                            {% if($target_site_id >  0 && $target_site_created == 1) { %}
                                 <i class="fas fa-chevron-circle-right fa-2x text-success chev"></i>
                             {% } %}
                         </div>
                         <div class="col-md-3 col-xs-4 col-sm-4 text-center" id="step_details">
-                            {% if ($target_site_id > 0 )  { %}
+                            {% if ($target_site_id > 0 && $target_site_created == 1)  { %}
                                 <div id="step-image">
                                     <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank" >
                                         <img src="./static/img/Step 3.svg" alt="New Amathuba site" width="75px" />

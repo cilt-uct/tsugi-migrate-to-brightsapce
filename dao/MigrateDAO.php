@@ -30,6 +30,7 @@ class MigrateDAO {
             `site`.imported_site_id,
             `site`.transfer_site_id,
             `site`.target_site_id,
+            `site`.target_site_created,
             ifnull(`site`.`provider`, '') as `provider`,
             ifnull(`site`.`term`, 0) as `term`,
             ifnull(`site`.`dept`, '') as `dept`,

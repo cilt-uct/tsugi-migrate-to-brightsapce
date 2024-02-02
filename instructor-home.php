@@ -230,6 +230,7 @@ $context = [
     'imported_site_id' => $current_migration['imported_site_id'],
     'transfer_site_id' => $current_migration['transfer_site_id'],
     'target_site_id' => $current_migration['target_site_id'],
+    'target_site_created' => $current_migration['target_site_created'],
 
     'current_email' => $USER->email,
     'email'      => $current_migration['state'] == 'init' ? $USER->email : $current_migration['email'],
