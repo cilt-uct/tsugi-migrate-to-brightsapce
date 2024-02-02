@@ -376,8 +376,7 @@ class MigrateDAO {
         return [
             'site_size' => $size_result,
             'size_result_st' => $size_result_st,
-            'site_can_migrate' => $size_result < $this->tool['site_size_limit'],
-            'ss' => $this->tool['SOAP_user'] ." ". $this->tool['SOAP_pass']
+            'site_can_migrate' => $size_result < $this->tool['site_size_limit']
         ];
     }
 }
