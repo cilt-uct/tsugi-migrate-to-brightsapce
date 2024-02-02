@@ -79,6 +79,7 @@ $full_departments_list = [
     ['PRY','FHS','PRY: Dept. of Psychiatry & Mental Health'],
     ['RAY','FHS','RAD: Dept. of Radiation Medicine'],
     ['CHM','FHS','SUR: Dept. of Surgery'],
+    ['FCE','FHS','Family, Community and Emergency Care'],
 
     ['AGI','HUM','African Gender Institute'],
     ['ALL','HUM','African Languages & Literature'],
