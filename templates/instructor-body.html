@@ -91,7 +91,7 @@
                                                             if ($el['dept'] == $all_depts[0]) { %}
                                                                 <input type="hidden" name="provider" id="provider"
                                                                     data-dept="{{ $el['dept'] }}"
-                                                                    data-course = "other"
+                                                                    data-course = "{{ $el['course'] }}"
                                                                     value = "{{ $el['dept'] }}, {{ $all_depts[2] }}"
                                                                     class="form-control readonly" disabled
                                                                     style="width: 100%;"/>
