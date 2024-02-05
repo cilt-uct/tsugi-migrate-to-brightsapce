@@ -305,8 +305,10 @@
             <ol>
                 <li>Read the <a href="{{ $report_url }}" target="_blank">conversion report</a> which provides details on any issues that may need attention.</li>
                 <li>Visit the <a href="https://amathuba.uct.ac.za/d2l/home/{{ $imported_site_id}}" target="_blank" >converted reference  site</a> on Amathuba to review how the Vula content has converted to Amathuba tools.</li>
-                {% if ($target_site_id > 0) { %}
+                {% if ($target_site_id > 0 && $target_site_created == 1) { %}
                     <li>Build your <a href="https://amathuba.uct.ac.za/d2l/home/{{ $target_site_id}}" target="_blank">new Amathuba site</a> by importing content from the converted reference site as needed.</li>
+                {% } else if ($target_site_id > 0 && $target_site_created == 0) {%}
+                    <li>Build your new Amathuba site by importing content from the converted reference site as needed.</li>
                 {% } else {%}
                     <li>Create a new Amathuba site, and import content from the converted reference site as needed.</li>
                 {% } %}
