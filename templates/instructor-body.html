@@ -1,5 +1,6 @@
 <section data-state="{{ $state }}">
-    {% $count_provider_details = count($provider_details); %}
+    {% $unique_providers = array_unique($provider_details, SORT_REGULAR);
+       $count_provider_details = count($unique_providers); %}
     <!-- <pre>|{{ json_encode($provider_details) }}|</pre> -->
     <!-- <pre>{{ $instructor }}|{{ $user_role }}</pre> -->
     <!-- <pre>{{ json_encode($site_size) }}</pre> -->
@@ -91,7 +92,7 @@
                                                             if ($el['dept'] == $all_depts[0]) { %}
                                                                 <input type="hidden" name="provider" id="provider"
                                                                     data-dept="{{ $el['dept'] }}"
-                                                                    data-course = "{{ $el['course'] }}"
+                                                                    data-course = "other"
                                                                     value = "{{ $el['dept'] }}, {{ $all_depts[2] }}"
                                                                     class="form-control readonly" disabled
                                                                     style="width: 100%;"/>
