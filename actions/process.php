@@ -35,10 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $title = isset($_POST['title']) ? $_POST['title'] : $CONTEXT->title;
                 $target_course = isset($_POST['course']) ? $_POST['course'] : '';
                 $enrol_users = isset($_POST['enrol']) ? $_POST['enrol'] : 1; # Enrol site owners and support staff in the converted site
-                $lesson_type = isset($_POST['lesson_type']) ? $_POST['lesson_type'] : 'default';
 
                 $result['success'] = $migrationDAO->startMigration($LINK->id, $USER->id, $site_id,
-                                            $_POST['notification'], $dept, $term, $provider, $_POST['is_test'], $enrol_users, $lesson_type,
+                                            $_POST['notification'], $dept, $term, $provider, $_POST['is_test'], $enrol_users,
                                             $title, $target_course, $term, $dept, $create_course) ? 1 : 0;
                 break;
             case 'updating':
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $result['success'] = $migrationDAO->addSitesMigration($LINK->id, $USER->id,
                                                                         $_POST['sites'], $term,
-                                                                        $_POST['is_test'], $_POST['enrol'], $_POST['lesson_type']) ? 1 : 0;
+                                                                        $_POST['is_test'], $_POST['enrol']) ? 1 : 0;
                 break;
             case 'delete':
                 $result['success'] = $migrationDAO->removeSite($LINK->id, $USER->id, $_POST['site']) ? 1 : 0;

@@ -53,8 +53,7 @@
                                             title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" 
                                             data-title="{{ $site['title'] }}"
                                             data-istest="{{ $site['test_conversion'] }}"
-                                            data-enrol="{{ $site['enrol_users'] }}"
-                                            data-lesson="{{ $site['lesson_type'] }}">
+                                            data-enrol="{{ $site['enrol_users'] }}">
                                             <i class="fas fa-redo"></i>
                                         </a>
                                         <a class="btn btn-default btn-xs pause disabled" href="#" role="button" disabled="true"
@@ -160,24 +159,6 @@
                                                     <label class="form-check-label" for="enrol">
                                                     <input type="checkbox" class="form-check-input" id="enrol">
                                                     Enrol site owners and support staff in the converted site</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <h5 style="margin-bottom: 4px;">Lesson:</h5>
-                                                    <label style="font-weight: normal;margin-left: 16px;margin-bottom: 0px;">
-                                                        <input type="radio" name="lesson_type" id="lesson_default" checked="checked" value="default"
-                                                            style="position: relative;top: 2px;"/>
-                                                        Default
-                                                    </label>
-                                                    <label style="font-weight: normal;margin-left: 16px;margin-bottom: 0px;">
-                                                        <input type="radio" name="lesson_type" id="lesson_single" value="single"
-                                                            style="position: relative;top: 2px;"/>
-                                                        Single Content Page
-                                                    </label>
-                                                    <label style="font-weight: normal;margin-left: 16px;margin-bottom: 0px;">
-                                                        <input type="radio" name="lesson_type" id="lesson_bottom" value="bottom"
-                                                            style="position: relative;top: 2px;"/>
-                                                        Content with Media at the Bottom
-                                                    </label>
                                                 </div>
                                             </div>
                                         </div>

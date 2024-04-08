@@ -42,7 +42,7 @@
             $('#message').html('<p class="bg-danger">An error occurred while performing this action, please contact Admin.</p>');
         }
 
-        function submit_sites(sites, btn, text, enrol, lesson_type) {
+        function submit_sites(sites, btn, text, enrol) {
             const re = /[{(]?[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?/i;
             
             if (sites.length > 0) {
@@ -53,8 +53,7 @@
                                                         'sites': sites.map(x => x.match(re)[0]),
                                                         'term': $('#year').val(),
                                                         'is_test': btn === 'test_conversion' ? 1 : 0,
-                                                        'enrol': enrol? 1: 0,
-                                                        'lesson_type' : lesson_type
+                                                        'enrol': enrol? 1: 0
                 }, function(result) {
                     hideHelp();
                     if (result.success === 1) {
@@ -74,8 +73,8 @@
             }
         }
 
-        function doPost(btn, text, enrol, lesson_type) {
-            submit_sites( $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 }), btn, text, enrol, lesson_type);
+        function doPost(btn, text, enrol) {
+            submit_sites( $('#add_sites').val().split(/\r?\n/g).filter( (x) => { return x.length  > 2 }), btn, text, enrol);
         }
 
         function getworkflow(site) {
@@ -319,8 +318,7 @@
             event.preventDefault();
             var btn_type =$('#conversion_test').is(':checked') ? 'test_conversion' : 'btnAccept';
             const enrol = $('#enrol').is(':checked');
-            const lesson_type = $("input[name='lesson_type']:checked").val();
-            doPost(btn_type, 'Adding sites ...', enrol, lesson_type);
+            doPost(btn_type, 'Adding sites ...', enrol);
         });
 
         $('#sites').on('click', 'a.site', function(event) {
