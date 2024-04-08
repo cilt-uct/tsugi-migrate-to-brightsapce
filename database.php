@@ -65,7 +65,6 @@ array( "{$CFG->dbprefix}migration_site",
     `zip_size` bigint(20) unsigned DEFAULT NULL,
     `failure_type` enum('exception','expired','import-error') DEFAULT NULL,
     `failure_detail` VARCHAR(255) DEFAULT NULL,
-    `lesson_type` NUM('default', 'single', 'bottom') NOT NULL DEFAULT 'default',
     `enrol_users` TINYINT(1) NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`site_id`,`link_id`),
@@ -133,7 +132,6 @@ $DATABASE_UPGRADE = function($oldversion) {
         array('migration_site', 'zip_size', 'bigint(20) unsigned DEFAULT NULL'),
         array('migration_site', 'failure_type', "enum('exception','expired','import-error') DEFAULT NULL"),
         array('migration_site', 'failure_detail', 'VARCHAR(255) DEFAULT NULL'),
-        array('migration_site', 'lesson_type', "NUM('default', 'single', 'bottom') NOT NULL DEFAULT 'default'"),
         array('migration_site', 'enrol_users', 'TINYINT(1) NOT NULL DEFAULT 0'),
 
         // drop report

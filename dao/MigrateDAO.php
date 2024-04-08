@@ -94,7 +94,7 @@ class MigrateDAO {
 
         $query = "SELECT `site`.site_id, `site`.title, `site`.state, `site`.imported_site_id, `site`.modified_at, target_site_id,
             ifnull(`site`.report_url,'') as report_url,
-            `site`.test_conversion, `site`.enrol_users, `site`.lesson_type
+            `site`.test_conversion, `site`.enrol_users
             FROM {$this->p}migration_site `site`
             where `site`.link_id = :linkId
             having `site`.state <> 'admin';";
@@ -120,7 +120,7 @@ class MigrateDAO {
                                 array(':linkId' => $link_id, ':siteId' => $site_id));
     }
 
-    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test, $enrol_users, $lesson_type,
+    function startMigration($link_id, $user_id, $site_id, $notifications, $dept, $term, $provider, $is_test, $enrol_users,
                                 $target_title, $target_course, $target_term, $target_dept, $create_course_offering) {
         $now = date("Y-m-d H:i:s");
 
@@ -148,17 +148,17 @@ class MigrateDAO {
         $query = "REPLACE INTO {$this->p}migration_site
                     (site_id, link_id, modified_at, modified_by, started_at, started_by, uploaded_at,
                     active, state, workflow, notification, term, provider, dept, report_url, files,
-                    imported_site_id, transfer_site_id, test_conversion, enrol_users, lesson_type,
+                    imported_site_id, transfer_site_id, test_conversion, enrol_users,
                     target_title, target_course, target_term, target_dept, create_course_offering)
                 VALUES
                 (:siteId, :linkId, NOW(), :userId, NOW(), :userId, NULL,
                 1, :state, :workflow, :notifications, :term, :provider, :dept, NULL, NULL,
-                0, NULL, :is_test, :enrol_users, :lesson_type,
+                0, NULL, :is_test, :enrol_users,
                 :target_title, :target_course, :target_term, :target_dept, :create_course_offering);";
 
         $arr = array(':linkId' => $link_id, ':siteId' => $site_id, ':userId' => $user_id, ':state' => $set_state_to,
                         ':term' => $term, ':provider' => '[]', ':dept' => $dept,
-                        ':is_test' => $is_test ? 1 : 0, ':enrol_users' => $enrol_users ? 1 : 0, ':lesson_type' => $lesson_type,
+                        ':is_test' => $is_test ? 1 : 0, ':enrol_users' => $enrol_users ? 1 : 0,
                         ':target_title' => $target_title, ':target_course' => $target_course,
                         ':target_term' => $target_term, ':target_dept' => $target_dept, ':create_course_offering' => $create_course_offering,
                         ':notifications' => $notifications, ':workflow' => json_encode($workflow));
@@ -195,7 +195,7 @@ class MigrateDAO {
         return $this->PDOX->queryDie($query, $arr);
     }
 
-    function addSitesMigration($link_id, $user_id, $sites, $term, $is_test, $enrol_users, $lesson_type) {
+    function addSitesMigration($link_id, $user_id, $sites, $term, $is_test, $enrol_users) {
 
         $notifications = $this->PDOX->rowDie("SELECT notification FROM {$this->p}migration_site where state = 'admin' and link_id = :linkId limit 1;",
                                             array(':linkId' => $link_id));
@@ -210,7 +210,7 @@ class MigrateDAO {
         foreach ($sites as $site) {
 
             if (strlen($site) > 3) {
-                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $is_test, $enrol_users, $lesson_type, '', '', $term, '', 0) ? 1 : 0;
+                $output = $this->startMigration($link_id, $user_id, $site, $notifications, '', $term, '[]', $is_test, $enrol_users, '', '', $term, '', 0) ? 1 : 0;
                 array_push($result, $output);
             }
         }
