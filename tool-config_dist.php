@@ -22,9 +22,7 @@ $tool['brightspace_log_url'] = 'https://amathuba.uct.ac.za/d2l/le/conversion/imp
 $tool['vula_url'] = 'https://vula.uct.ac.za/portal/site/';
 $tool['jira_url'] = 'https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22';
 
-$tool['site_size_limit'] = 104857600;   # 100MB
-$tool['site_size_limit'] = 1073741824;  # 1GB
-$tool['site_size_limit'] = 32212254720; # 30GB
+$tool['site_size_limit'] = 37580963840; # 35GB
 $tool['SOAP_active'] = TRUE;
 $tool['SOAP_url'] = 'https://vula.uct.ac.za';
 $tool['SOAP_user'] = 'username';
