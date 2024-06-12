@@ -99,8 +99,8 @@
                 if (result.report_url.length > 2) {
                     _btn.show();
                     _btn_open_report.show();
-                    _btn_open_report.attr('href', _report_url + '?sid=' + site);
-                    _iframe.attr('src', _report_url + '?sid=' + site);
+                    _btn_open_report.attr('href', result.report_url);
+                    _iframe.attr('src', result.report_url);
                 } else {
                     _btn.hide();
                 }
