@@ -1023,9 +1023,10 @@ $sites-height: 92px;
 
 $admin-button-size: 42px;
 
-#show-report.btn-primary {
+#show-report {
     margin-top: 20px;
     padding-left: 36px;
+    background-color: lightgrey;
 
     i {
         position: absolute;

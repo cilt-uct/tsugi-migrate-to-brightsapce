@@ -85,9 +85,6 @@
                       _btn_amathuba = $('#show-amathuba'),
                       _btn_jira = $('#show-jira'),
                       _btn_import_log = $('#show-import-log'),
-                      _btn_open_report = $('#btn_open_report'),
-                      _iframe = $('#reportModal-iframe'),
-                      _report_url = '{{ $fetch_report }}',
                       _amathuba_url = '{{ $brightspace_url }}',
                       _vula_url = '{{ $vula_url }}',
                       _import_log_url = '{{ $brightspace_log_url }}',
@@ -98,9 +95,7 @@
 
                 if (result.report_url.length > 2) {
                     _btn.show();
-                    _btn_open_report.show();
-                    _btn_open_report.attr('href', result.report_url);
-                    _iframe.attr('src', result.report_url);
+                    _btn.attr('href', result.report_url);
                 } else {
                     _btn.hide();
                 }

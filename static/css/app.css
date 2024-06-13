@@ -799,11 +799,12 @@ input.multi-input[type=text] {
   min-width: 68px;
 }
 
-#show-report.btn-primary {
+#show-report {
   margin-top: 20px;
   padding-left: 36px;
+  background-color: lightgrey;
 }
-#show-report.btn-primary i {
+#show-report i {
   position: absolute;
   font-size: 1.8rem;
   font-weight: normal;
@@ -811,7 +812,7 @@ input.multi-input[type=text] {
   left: 21px;
   top: 24px;
 }
-#show-report.btn-primary.admin {
+#show-report.admin {
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
   top: 2px;
@@ -820,7 +821,7 @@ input.multi-input[type=text] {
   width: 42px;
   height: 42px;
 }
-#show-report.btn-primary.admin i {
+#show-report.admin i {
   position: relative;
   left: 45%;
   top: 50%;
