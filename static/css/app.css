@@ -803,14 +803,7 @@ input.multi-input[type=text] {
   margin-top: 20px;
   padding-left: 36px;
   background-color: lightgrey;
-}
-#show-report i {
-  position: absolute;
-  font-size: 1.8rem;
-  font-weight: normal;
-  padding: 4px;
-  left: 21px;
-  top: 24px;
+  text-align: center !important;
 }
 #show-report.admin {
   border-top-right-radius: 0px;
@@ -820,12 +813,6 @@ input.multi-input[type=text] {
   padding: 4px;
   width: 42px;
   height: 42px;
-}
-#show-report.admin i {
-  position: relative;
-  left: 45%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 #test_conversion {
