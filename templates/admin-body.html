@@ -52,6 +52,7 @@
                                         <a class="btn btn-default btn-xs reload" href="#" role="button"
                                             title="Re-submit workflow ..." rel="{{ $site['site_id'] }}" 
                                             data-title="{{ $site['title'] }}"
+                                            data-state="{{ $site['state'] }}"
                                             data-istest="{{ $site['test_conversion'] }}"
                                             data-enrol="{{ $site['enrol_users'] }}">
                                             <i class="fas fa-redo"></i>
@@ -151,7 +152,7 @@
                                                 <div class="form-check">
                                                     <label class="form-check-label" for="conversion_test">
                                                     <input type="checkbox" class="form-check-input" id="conversion_test" {% if ($conversion_test ==true) { %}checked{% } %}>
-                                                    Test conversion</label>
+                                                    Test conversion (create conversion report but do not import into Amathuba)</label>
                                                 </div>
                                                 <div class="form-check">
                                                     <label class="form-check-label" for="enrol">
