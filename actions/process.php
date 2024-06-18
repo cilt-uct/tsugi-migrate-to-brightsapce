@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'completed':
                 $result['success'] = $migrationDAO->updateMigration($LINK->id, $USER->id, $_POST['notification'], $_POST['term']) ? 1 : 0;
             case 'error':
+                $result['success'] = $migrationDAO->restartMigration($LINK->id, $USER->id, $_POST['site'], 'starting') ? 1 : 0;
                 break;
             case 'add_sites':
                 $term = isset($_POST['term']) ? $_POST['term'] : date("Y");

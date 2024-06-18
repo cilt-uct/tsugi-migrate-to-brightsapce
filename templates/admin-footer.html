@@ -335,8 +335,27 @@
             const _me = $(this);
             var btn_type = _me.attr('data-istest') === 1 ? 'test_conversion' : 'btnAccept';
             var enrol = _me.attr('data-enrol') === 1 ? true : false;
+            var _state = _me.attr('data-state');
+            var _title = _me.data('title') === '' ? _me.attr('rel') : _me.data('title');
 
-            submit_sites([_me.attr('rel')], btn_type , 'Adding sites ...', enrol, _me.attr('data-lesson'));
+            if(_state === "error") {
+               var jqxhr = $.post('{{ $submit }}', { "type": 'error', "site": _me.attr('rel') }, function(result) {
+                   if (result.success === 1) {
+                        location.reload();
+                    } else {
+                        alert('Error restarting: ' + _title);
+                    }
+                })
+                .fail(function(xhr, status, error) {
+                    console.error(xhr.status + ': ' + error);
+                   alert('Error restarting this : ' + _title);
+                })
+                .always(function() {
+                    hideHelp();
+                });
+           } else {
+                submit_sites([_me.attr('rel')], btn_type , 'Adding sites ...', enrol, _me.attr('data-lesson'));
+            }
         });
 
         $('#sites').on('click', 'a.delete', function(event) {
