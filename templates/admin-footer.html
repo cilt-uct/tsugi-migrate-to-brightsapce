@@ -339,8 +339,9 @@
             var _title = _me.data('title') === '' ? _me.attr('rel') : _me.data('title');
 
             if(_state === "error") {
-               var jqxhr = $.post('{{ $submit }}', { "type": 'error', "site": _me.attr('rel') }, function(result) {
-                   if (result.success === 1) {
+               var jqxhr = $.post('{{ $submit }}', { "type": 'error', "site": _me.attr('rel') }, function(response) {
+                    var result = JSON.parse(response);
+                    if (result.success === 1) {
                         location.reload();
                     } else {
                         alert('Error restarting: ' + _title);
@@ -348,7 +349,7 @@
                 })
                 .fail(function(xhr, status, error) {
                     console.error(xhr.status + ': ' + error);
-                   alert('Error restarting this : ' + _title);
+                    alert('Error restarting this : ' + _title);
                 })
                 .always(function() {
                     hideHelp();
