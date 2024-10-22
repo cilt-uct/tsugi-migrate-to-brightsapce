@@ -6,7 +6,7 @@
     jQuery.fn.exists = function(){ return this.length > 0; }
 
     $(function() {
-        $("small.date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); }); 
+        $("small.date").each(function(j, e){ let _l = $(e); _l.html($.timeago(_l.attr('datetime'))); });
 
         const progress_interval = 60000;
         let timeout = null,
@@ -44,12 +44,12 @@
 
         function submit_sites(sites, btn, text, enrol) {
             const re = /[{(]?[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}[)}]?/i;
-            
+
             if (sites.length > 0) {
                 $('#' + btn).html('<i class="fa fa-cog fa-spin"></i>' + text).addClass('disabled').attr('disabled', true);
                 timeout = setTimeout(function(){ $('#info').show(); }, 300);
 
-                var jqxhr = $.post('{{ $submit }}', { 'type': 'add_sites', 
+                var jqxhr = $.post('{{ $submit }}', { 'type': 'add_sites',
                                                         'sites': sites.map(x => x.match(re)[0]),
                                                         'term': $('#year').val(),
                                                         'is_test': btn === 'test_conversion' ? 1 : 0,
@@ -145,7 +145,7 @@
                 if ($('#sites .active a').exists()) {
                     const _me = $('#sites .active a'),
                           _pre = $('#pre');
-                    
+
                     _pre.html("Loading ("+ (_me.data('title') ? _me.data('title') +" : " : "" ) + _me.attr('rel') +") ...");
                     getworkflow(_me.attr('rel'));
                 }
@@ -158,7 +158,7 @@
             progress = 0;
             progress_inc = _container.width() / 100 / 2;
             _container.children('.progress').width((progress / _container.width() * 100) + '%');
-            
+
             window.clearInterval(progress_timer);
             if (run && _autoreload) {
                 progress_timer = window.setInterval(doTimer, progress_interval / 600);
@@ -171,10 +171,10 @@
                   _email = $('#current_user').val(),
                   _email_starter = $('#organizer').data('email'),
                   _notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ').split(';');
-            
+
             if (_email === _email_starter) return;
 
-            let in_list = _notification.includes(_email);      
+            let in_list = _notification.includes(_email);
 
             if ((in_list === false) && (_state !== 'init')) {
                 _el.show();
@@ -207,7 +207,7 @@
 
                     console.log($(this).data('title') +" "+ $(this).data('state'));
                     console.log((in_title || in_siteid) +" " + in_state +" = "+ ((in_title || in_siteid)  && in_state));
-                    (in_title || in_siteid)  && in_state ? $(this).show() : $(this).hide();    
+                    (in_title || in_siteid)  && in_state ? $(this).show() : $(this).hide();
                 });
 
             } else {
@@ -239,7 +239,7 @@
                     check_if_im_in_notification(false);
 
                     var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
-                    var data = { 
+                    var data = {
                         "type": "updating",
                         "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
                         "term": $('#year').val()
@@ -276,7 +276,7 @@
         $('#year').on('change', function(event){
             const _y = $('#year');
             var notification = $('#notifications').val().trim().replace(/\r?\n/g, ', ');
-            var data = { 
+            var data = {
                 "type": "updating",
                 "notification": (notification.endsWith(', ') ? notification.substring(0, notification.length-2) : notification),
                 "term": $('#year').val()
@@ -329,7 +329,7 @@
                 getworkflow(_me.attr('rel'));
             }
         });
-        
+
         $('#sites').on('click', 'a.reload', function(event) {
             event.preventDefault();
             const _me = $(this);
@@ -419,11 +419,11 @@
             const _me = $(this),
                   _sites = $('#sites'),
                   _pre = $('#pre');
-            
+
             if (!_me.parent().hasClass('active')) {
                 _me.parent().siblings().removeClass('active');
                 _me.parent().addClass('active');
-                
+
                 _sites.children().removeClass('active');
                 _pre.html('');
                 if (_me.attr('rel') == 'all') {

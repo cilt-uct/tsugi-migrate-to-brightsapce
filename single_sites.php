@@ -18,6 +18,8 @@ $LAUNCH = LTIX::requireData();
 $migrationDAO = new MigrateDAO($PDOX, $CFG->dbprefix, $tool);
 
 $result = ['success' => 0, 'msg' => 'requires POST'];
+$state = "all";
+$page = 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -32,8 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $state = "all";
     }
-} else  {
-    $page = 1;
 }
 
 $records_per_page = 10;
@@ -57,6 +57,7 @@ $context = [
     'total_pages' => $total_pages,
     'previous_page' => $previous_page,
     'next_page' => $next_page,
+    'jira_url' => $tool['jira_url']
 ];
 
 echo Template::view('templates/singlesites-body.html', $context);

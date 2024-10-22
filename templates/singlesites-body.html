@@ -1,7 +1,7 @@
 <table class='table flex-wrap' id='singlesites_tbl'>
     <tbody>
     {% foreach($single_sites_by_state as $row): %}
-        <tr>  
+        <tr>
             <td><span>{% print($row['started_at']); %}</span></td>
             {% if($row['state'] == "completed") { %}
                 <td colspan="2"><span class="label alert-success"><strong>State: </strong>{% print($row["state"]); %}</span></td>
@@ -12,9 +12,9 @@
             {% } else if($row['state'] == "error") { %}
                 <td colspan="2"><span class="label alert-danger"><strong>State: </strong> {% print($row["state"]); %}</span></td>
             {% } %}
-            
+
             <td colspan="2"><a href="https://vula.uct.ac.za/portal/site/{% print($row['site_id']); %}" target="_blank" title="Open Vula site">{% print($row['title']); %}</a></td>
-        
+
             {% if($row["imported_site_id"] > 0) { %}
                 <td colspan="2"><a href="https://amathuba.uct.ac.za/d2l/home/{% print($row['imported_site_id']); %}" target="_blank" class="img" title="View Amathuba site">
                                 <img src="./static/img/amathuba_woodmark.svg" class="img-fluid"/>
@@ -32,7 +32,7 @@
             {% } else { %}
                 <td colspan="2">&nbsp;</td>
             {% } %}
-        
+
             {% if($row["report_url"] != '' || $row["report_url"] != NULL) { %}
                 <td colspan="2"><i class="fas fa-file-alt fa-2x text-primary show_report" data-="modal" rel="{% print($row['report_url']); %}" title="View conversion report" data-target="#reportModal" id="{% print($row['site_id']); %}"></i></td>
             {% } else { %}
@@ -40,7 +40,7 @@
             {% } %}
 
             {% if($row["state"] == 'error') { %}
-                <td colspan="2"><a href="https://jira.cilt.uct.ac.za/issues/?jql=project%3D%22MIG%22%20and%20%22Site%20ID%22%20%20~%20%22{% print($row['site_id']); %}%22" target="_blank" class="img" title="View JIRA">
+                <td colspan="2"><a href="{{ $jira_url }}{{ $row['site_id'] }}%22" target="_blank" class="img" title="View JIRA">
                     <img src="./static/img/jira.svg" class="img-fluid"/>
                     </a>
                 </td>
